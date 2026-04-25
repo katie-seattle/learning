@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CalcIQ — Free AP Calculus Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b0c10;
+    --surface: #13141a;
+    --surface2: #1c1d26;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --orange: #ff6b35;
+    --orange-dim: rgba(255,107,53,0.12);
+    --teal: #00c9a7;
+    --teal-dim: rgba(0,201,167,0.1);
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.1);
+    --red: #ff4f4f;
+    --red-dim: rgba(255,79,79,0.12);
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.12);
+    --text: #f0f0f0;
+    --muted: #6b7280;
+    --muted2: #9ca3af;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(16px);
+    background: rgba(11,12,16,0.85);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: var(--orange); }
+
+  .nav-stats {
+    display: flex; gap: 1.5rem; align-items: center;
+    font-size: 0.8rem; color: var(--muted2);
+  }
+
+  .stat-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+
+  /* ── HERO ── */
+  #home-screen {
+    position: relative; z-index: 1;
+    max-width: 900px; margin: 0 auto;
+    padding: 5rem 2rem 3rem;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--orange);
+    border: 1px solid rgba(255,107,53,0.3);
+    border-radius: 20px; padding: 4px 14px;
+    margin-bottom: 1.5rem;
+    background: var(--orange-dim);
+  }
+
+  h1.hero {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.6rem, 6vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    margin-bottom: 1.2rem;
+  }
+
+  h1.hero .accent-o { color: var(--orange); }
+  h1.hero .accent-t { color: var(--teal); }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--muted2);
+    max-width: 540px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── TOPIC GRID ── */
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .topic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 3rem;
+  }
+
+  .topic-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.4rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    position: relative; overflow: hidden;
+  }
+
+  .topic-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    border-radius: 16px 16px 0 0;
+    opacity: 0;
+    transition: opacity 0.22s;
+  }
+
+  .topic-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .topic-card:hover::before { opacity: 1; }
+
+  .tc-orange::before { background: var(--orange); }
+  .tc-teal::before   { background: var(--teal); }
+  .tc-purple::before { background: var(--purple); }
+
+  .topic-card:hover.tc-orange { box-shadow: 0 8px 32px rgba(255,107,53,0.1); }
+  .topic-card:hover.tc-teal   { box-shadow: 0 8px 32px rgba(0,201,167,0.1); }
+  .topic-card:hover.tc-purple { box-shadow: 0 8px 32px rgba(167,139,250,0.1); }
+
+  .topic-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .ti-orange { background: var(--orange-dim); color: var(--orange); }
+  .ti-teal   { background: var(--teal-dim);   color: var(--teal); }
+  .ti-purple { background: var(--purple-dim); color: var(--purple); }
+
+  .topic-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .topic-count {
+    font-size: 0.78rem; color: var(--muted2);
+  }
+
+  .topic-difficulty {
+    position: absolute; top: 1rem; right: 1rem;
+    font-size: 0.67rem; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 10px;
+  }
+
+  .diff-easy   { background: rgba(34,197,94,0.12);  color: #22c55e; }
+  .diff-med    { background: rgba(251,191,36,0.12); color: #fbbf24; }
+  .diff-hard   { background: rgba(255,79,79,0.12);  color: var(--red); }
+
+  .play-all-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem; font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 12px; border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .play-all-btn:hover { background: #ff8558; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,107,53,0.3); }
+
+  /* ── QUIZ SCREEN ── */
+  #quiz-screen {
+    display: none;
+    position: relative; z-index: 1;
+    max-width: 780px; margin: 0 auto;
+    padding: 2.5rem 2rem;
+  }
+
+  .quiz-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .back-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    padding: 8px 16px; border-radius: 8px;
+    cursor: pointer; transition: all 0.18s;
+  }
+
+  .back-btn:hover { border-color: var(--border2); color: var(--text); }
+
+  .quiz-meta {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.82rem; color: var(--muted2);
+  }
+
+  .topic-badge {
+    font-size: 0.72rem; font-weight: 600;
+    padding: 4px 12px; border-radius: 12px;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 2rem;
+  }
+
+  .progress-info {
+    display: flex; justify-content: space-between;
+    font-size: 0.8rem; color: var(--muted2);
+    margin-bottom: 8px;
+  }
+
+  .progress-bar-bg {
+    height: 5px; background: var(--surface2);
+    border-radius: 3px; overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%; border-radius: 3px;
+    background: var(--orange);
+    transition: width 0.4s ease;
+  }
+
+  /* Question card */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.2rem 2.4rem;
+    margin-bottom: 1.5rem;
+    animation: cardIn 0.35s ease;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-category {
+    font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+
+  .q-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem; font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 0.6rem;
+  }
+
+  .q-formula {
+    font-family: 'DM Mono', 'Courier New', monospace;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--orange);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 1rem;
+    color: var(--teal);
+    margin: 1rem 0;
+    letter-spacing: 0.5px;
+  }
+
+  /* Options */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 540px) { .options-grid { grid-template-columns: 1fr; } }
+
+  .option-btn {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.93rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex; align-items: flex-start; gap: 12px;
+    line-height: 1.45;
+  }
+
+  .option-letter {
+    min-width: 26px; height: 26px;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem; font-weight: 700;
+    color: var(--muted2);
+    transition: all 0.18s;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .option-btn:hover:not(.answered) {
+    border-color: var(--border2);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .option-btn:hover:not(.answered) .option-letter {
+    background: var(--orange-dim);
+    border-color: var(--orange);
+    color: var(--orange);
+  }
+
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-dim);
+  }
+
+  .option-btn.correct .option-letter {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+
+  .option-btn.wrong {
+    border-color: var(--red);
+    background: var(--red-dim);
+  }
+
+  .option-btn.wrong .option-letter {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff;
+  }
+
+  .option-btn.dimmed {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  /* Feedback */
+  .feedback-box {
+    border-radius: 14px;
+    padding: 1.3rem 1.5rem;
+    margin-top: 0;
+    display: none;
+    animation: feedIn 0.3s ease;
+  }
+
+  @keyframes feedIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .feedback-box.correct {
+    background: var(--green-dim);
+    border: 1px solid rgba(34,197,94,0.25);
+  }
+
+  .feedback-box.wrong {
+    background: var(--red-dim);
+    border: 1px solid rgba(255,79,79,0.25);
+  }
+
+  .feedback-header {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem; font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .feedback-header.correct { color: var(--green); }
+  .feedback-header.wrong   { color: var(--red); }
+
+  .feedback-explanation {
+    font-size: 0.88rem;
+    color: var(--muted2);
+    line-height: 1.6;
+  }
+
+  .feedback-formula {
+    font-family: 'Courier New', monospace;
+    background: rgba(0,0,0,0.25);
+    padding: 8px 12px; border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--teal);
+    margin-top: 8px;
+    display: inline-block;
+  }
+
+  /* Next / actions */
+  .quiz-actions {
+    display: flex; justify-content: flex-end; gap: 12px;
+    margin-top: 1.5rem;
+  }
+
+  .btn-next {
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem; font-weight: 700;
+    padding: 12px 26px; border-radius: 10px;
+    border: none; cursor: pointer;
+    transition: all 0.18s;
+    display: none;
+  }
+
+  .btn-next:hover { background: #ff8558; transform: translateY(-1px); }
+
+  .btn-skip {
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    padding: 12px 20px; border-radius: 10px;
+    cursor: pointer; transition: all 0.18s;
+  }
+
+  .btn-skip:hover { border-color: var(--border2); color: var(--text); }
+
+  /* ── RESULTS SCREEN ── */
+  #results-screen {
+    display: none;
+    position: relative; z-index: 1;
+    max-width: 680px; margin: 0 auto;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .results-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 5rem; font-weight: 800;
+    line-height: 1;
+    margin: 1rem 0;
+  }
+
+  .results-label {
+    font-size: 0.8rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .results-msg {
+    font-size: 1rem; color: var(--muted2); margin-bottom: 2.5rem; line-height: 1.6;
+  }
+
+  .results-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-bottom: 2.5rem;
+  }
+
+  .result-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.2rem;
+  }
+
+  .result-stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem; font-weight: 800;
+  }
+
+  .result-stat-label { font-size: 0.75rem; color: var(--muted2); margin-top: 4px; }
+
+  .results-btns {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--orange); color: #fff;
+    font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700;
+    padding: 13px 28px; border-radius: 11px; border: none;
+    cursor: pointer; transition: all 0.18s;
+  }
+
+  .btn-primary:hover { background: #ff8558; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: var(--surface2); color: var(--text);
+    border: 1px solid var(--border2);
+    font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+    padding: 13px 24px; border-radius: 11px;
+    cursor: pointer; transition: all 0.18s;
+  }
+
+  .btn-secondary:hover { border-color: var(--muted); }
+
+  /* ── STREAK ── */
+  .streak-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .streak-label { font-size: 0.8rem; color: var(--muted2); }
+
+  .streak-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700; color: var(--orange);
+  }
+
+  .hearts {
+    display: flex; gap: 5px;
+  }
+
+  .heart {
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+
+  .heart.lost { filter: grayscale(1); opacity: 0.3; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Calc<span>IQ</span></div>
+  <div class="nav-stats">
+    <span class="stat-pill" id="total-answered">0 answered</span>
+    <span class="stat-pill" id="total-correct-nav">0 correct</span>
+  </div>
+</nav>
+
+<!-- HOME SCREEN -->
+<div id="home-screen">
+  <div class="hero-tag">Free AP Calculus Practice</div>
+  <h1 class="hero">
+    Master <span class="accent-o">AP Calc</span><br>
+    one question <span class="accent-t">at a time.</span>
+  </h1>
+  <p class="hero-sub">
+    100+ practice questions across every AP Calculus topic. Instant feedback, full explanations, totally free. No account needed.
+  </p>
+
+  <div style="margin-bottom: 2.5rem;">
+    <button class="play-all-btn" onclick="startQuiz('all')">
+      <span>&#9654;</span> Practice All Topics
+    </button>
+  </div>
+
+  <div class="section-label">Choose a Topic</div>
+  <div class="topic-grid" id="topic-grid"></div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quiz-screen">
+  <div class="quiz-header">
+    <button class="back-btn" onclick="goHome()">&#8592; Back</button>
+    <div class="quiz-meta">
+      <span class="topic-badge" id="quiz-topic-badge"></span>
+      <span id="q-counter" style="font-size:0.82rem; color: var(--muted2);"></span>
+    </div>
+  </div>
+
+  <div class="streak-bar">
+    <div>
+      <div class="streak-label">Streak</div>
+      <div class="streak-val" id="streak-display">0 in a row</div>
+    </div>
+    <div class="hearts" id="hearts-display"></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span id="progress-text">Question 1</span>
+      <span id="score-text">0 / 0</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="question-card" id="question-card">
+    <div class="q-category" id="q-category"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="q-formula" id="q-formula" style="display:none;"></div>
+    <div class="options-grid" id="options-grid"></div>
+  </div>
+
+  <div class="feedback-box" id="feedback-box">
+    <div class="feedback-header" id="feedback-header"></div>
+    <div class="feedback-explanation" id="feedback-explanation"></div>
+    <div class="feedback-formula" id="feedback-formula" style="display:none;"></div>
+  </div>
+
+  <div class="quiz-actions">
+    <button class="btn-skip" id="btn-skip" onclick="skipQuestion()">Skip</button>
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next Question &#8594;</button>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div id="results-screen">
+  <div class="hero-tag" id="results-tag">Session Complete</div>
+  <div class="results-label">Your Score</div>
+  <div class="results-score" id="results-score"></div>
+  <div class="results-msg" id="results-msg"></div>
+
+  <div class="results-grid">
+    <div class="result-stat">
+      <div class="result-stat-val" id="res-correct" style="color: var(--green)"></div>
+      <div class="result-stat-label">Correct</div>
+    </div>
+    <div class="result-stat">
+      <div class="result-stat-val" id="res-wrong" style="color: var(--red)"></div>
+      <div class="result-stat-label">Incorrect</div>
+    </div>
+    <div class="result-stat">
+      <div class="result-stat-val" id="res-streak" style="color: var(--orange)"></div>
+      <div class="result-stat-label">Best Streak</div>
+    </div>
+  </div>
+
+  <div class="results-btns">
+    <button class="btn-primary" onclick="restartSame()">Try Again</button>
+    <button class="btn-secondary" onclick="goHome()">Back to Topics</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  QUESTION BANK
+// ══════════════════════════════════════════════════════════════
+const TOPICS = {
+  limits: {
+    name: "Limits",
+    icon: "lim",
+    color: "teal",
+    difficulty: "easy",
+    count: 0
+  },
+  derivatives: {
+    name: "Derivatives",
+    icon: "f'",
+    color: "orange",
+    difficulty: "med",
+    count: 0
+  },
+  derivative_apps: {
+    name: "Derivative Applications",
+    icon: "opt",
+    color: "purple",
+    difficulty: "med",
+    count: 0
+  },
+  integrals: {
+    name: "Integrals",
+    icon: "∫",
+    color: "teal",
+    difficulty: "med",
+    count: 0
+  },
+  ftc: {
+    name: "Fundamental Theorem",
+    icon: "FTC",
+    color: "orange",
+    difficulty: "hard",
+    count: 0
+  },
+  series: {
+    name: "Series & Sequences",
+    icon: "Σ",
+    color: "purple",
+    difficulty: "hard",
+    count: 0
+  }
+};
+
+const QUESTIONS = [
+  // ── LIMITS ──────────────────────────────────────────────────
+  {
+    topic: "limits",
+    category: "Limits",
+    text: "What is the value of lim(x→3) of (x² - 9) / (x - 3)?",
+    formula: "lim(x→3)  (x² - 9) / (x - 3)",
+    options: ["0", "3", "6", "Undefined"],
+    correct: 2,
+    explanation: "Factor the numerator: x² - 9 = (x-3)(x+3). Cancel (x-3) to get lim(x→3) (x+3) = 3+3 = 6.",
+    expFormula: "(x²-9)/(x-3) = (x-3)(x+3)/(x-3) = x+3  →  3+3 = 6"
+  },
+  {
+    topic: "limits",
+    category: "Limits",
+    text: "What does lim(x→∞) of (3x² + 2x) / (5x²) equal?",
+    formula: "lim(x→∞)  (3x² + 2x) / (5x²)",
+    options: ["0", "3/5", "2/5", "∞"],
+    correct: 1,
+    explanation: "Divide numerator and denominator by x² (the highest degree). The 2x/x² term goes to 0, leaving 3/5.",
+    expFormula: "(3 + 2/x) / 5  →  3/5 as x→∞"
+  },
+  {
+    topic: "limits",
+    category: "Limits",
+    text: "What is lim(x→0) of sin(x) / x?",
+    formula: "lim(x→0)  sin(x) / x",
+    options: ["0", "∞", "1", "Undefined"],
+    correct: 2,
+    explanation: "This is one of the most important limits in calculus. By the squeeze theorem (or geometric proof), lim(x→0) sin(x)/x = 1.",
+    expFormula: "lim(x→0) sin(x)/x = 1  (standard limit — memorize this!)"
+  },
+  {
+    topic: "limits",
+    category: "Limits",
+    text: "If lim(x→2⁻) f(x) = 5 and lim(x→2⁺) f(x) = 5, what can we conclude?",
+    options: ["f(2) = 5", "f is continuous at x=2", "lim(x→2) f(x) = 5", "Both A and C"],
+    correct: 2,
+    explanation: "When both one-sided limits are equal, the two-sided limit exists and equals that value. However, we cannot conclude f(2) = 5 or continuity without knowing the function value at x=2.",
+    expFormula: "Left limit = Right limit = 5  ⟹  lim(x→2) f(x) = 5"
+  },
+  {
+    topic: "limits",
+    category: "Limits — L'Hôpital",
+    text: "Use L'Hôpital's Rule to find lim(x→0) of (e^x - 1) / x.",
+    formula: "lim(x→0)  (eˣ - 1) / x",
+    options: ["0", "e", "1", "Does not exist"],
+    correct: 2,
+    explanation: "This is a 0/0 form. Applying L'Hôpital: differentiate top and bottom. d/dx(eˣ-1) = eˣ, d/dx(x) = 1. So the limit becomes lim(x→0) eˣ/1 = e⁰ = 1.",
+    expFormula: "lim(x→0) eˣ/1 = e⁰ = 1"
+  },
+  {
+    topic: "limits",
+    category: "Limits",
+    text: "What is lim(x→∞) of (2x³ - x) / (x³ + 7)?",
+    formula: "lim(x→∞)  (2x³ - x) / (x³ + 7)",
+    options: ["0", "1", "2", "∞"],
+    correct: 2,
+    explanation: "The leading terms dominate as x→∞. Both numerator and denominator have degree 3, so divide: ratio of leading coefficients = 2/1 = 2.",
+    expFormula: "Leading terms: 2x³ / x³ = 2"
+  },
+  {
+    topic: "limits",
+    category: "Limits — Continuity",
+    text: "A function f is continuous at x = a if which of the following holds?",
+    options: [
+      "f(a) is defined only",
+      "lim(x→a) f(x) exists only",
+      "f(a) = lim(x→a) f(x) and both exist",
+      "f'(a) exists"
+    ],
+    correct: 2,
+    explanation: "Three conditions must hold for continuity at x=a: (1) f(a) is defined, (2) the limit exists, (3) they are equal: f(a) = lim(x→a) f(x).",
+    expFormula: "Continuity: f(a) defined, lim exists, and f(a) = lim(x→a) f(x)"
+  },
+  {
+    topic: "limits",
+    category: "Limits",
+    text: "What is lim(x→0⁺) of ln(x)?",
+    options: ["0", "1", "-∞", "∞"],
+    correct: 2,
+    explanation: "As x approaches 0 from the right, ln(x) decreases without bound. The natural log has a vertical asymptote at x = 0, going to -∞.",
+    expFormula: "lim(x→0⁺) ln(x) = -∞"
+  },
+
+  // ── DERIVATIVES ─────────────────────────────────────────────
+  {
+    topic: "derivatives",
+    category: "Derivatives — Power Rule",
+    text: "Find f'(x) if f(x) = 4x³ - 2x² + 7x - 5.",
+    formula: "f(x) = 4x³ - 2x² + 7x - 5",
+    options: ["12x² - 4x + 7", "4x² - 2x + 7", "12x² - 4x - 5", "12x³ - 4x² + 7"],
+    correct: 0,
+    explanation: "Apply the power rule term by term: d/dx(4x³) = 12x², d/dx(-2x²) = -4x, d/dx(7x) = 7, d/dx(-5) = 0.",
+    expFormula: "f'(x) = 12x² - 4x + 7"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Chain Rule",
+    text: "Find the derivative of f(x) = sin(3x²).",
+    formula: "f(x) = sin(3x²)",
+    options: ["cos(3x²)", "6x·cos(3x²)", "3x·cos(3x²)", "-6x·cos(3x²)"],
+    correct: 1,
+    explanation: "Chain rule: d/dx[sin(g(x))] = cos(g(x))·g'(x). Here g(x) = 3x², so g'(x) = 6x. Result: cos(3x²)·6x = 6x·cos(3x²).",
+    expFormula: "f'(x) = cos(3x²) · 6x = 6x cos(3x²)"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Product Rule",
+    text: "Find the derivative of f(x) = x²·eˣ.",
+    formula: "f(x) = x²eˣ",
+    options: ["2x·eˣ", "x²·eˣ + 2x·eˣ", "2x·eˣ + x²", "2x + eˣ"],
+    correct: 1,
+    explanation: "Product rule: (uv)' = u'v + uv'. Here u = x², v = eˣ. So f'(x) = 2x·eˣ + x²·eˣ = eˣ(2x + x²).",
+    expFormula: "f'(x) = 2x·eˣ + x²·eˣ = eˣ(x² + 2x)"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Quotient Rule",
+    text: "Find f'(x) if f(x) = (x² + 1) / (x - 1).",
+    formula: "f(x) = (x² + 1) / (x - 1)",
+    options: [
+      "(2x(x-1) - (x²+1)) / (x-1)²",
+      "(2x + 1) / 1",
+      "(x² - 2x - 1) / (x-1)²",
+      "2x / 1"
+    ],
+    correct: 0,
+    explanation: "Quotient rule: (u/v)' = (u'v - uv') / v². Here u = x²+1, u' = 2x, v = x-1, v' = 1. So f'(x) = (2x(x-1) - (x²+1)) / (x-1)².",
+    expFormula: "f'(x) = [2x(x-1) - (x²+1)] / (x-1)²"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Trig",
+    text: "What is d/dx[tan(x)]?",
+    options: ["sin(x)", "-csc²(x)", "sec²(x)", "cos(x)"],
+    correct: 2,
+    explanation: "The derivative of tan(x) = sin(x)/cos(x). Using quotient rule: (cos²x + sin²x)/cos²x = 1/cos²x = sec²(x).",
+    expFormula: "d/dx[tan(x)] = sec²(x)"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Exponential",
+    text: "What is d/dx[eˣ]?",
+    options: ["x·eˣ⁻¹", "eˣ", "e", "eˣ · ln(e)"],
+    correct: 1,
+    explanation: "The exponential function eˣ is its own derivative — this is one of its defining properties. d/dx[eˣ] = eˣ.",
+    expFormula: "d/dx[eˣ] = eˣ  (unique to base e)"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Logarithm",
+    text: "What is d/dx[ln(x)]?",
+    formula: "f(x) = ln(x),  x > 0",
+    options: ["ln(x)", "1/x²", "1/x", "x·ln(x)"],
+    correct: 2,
+    explanation: "The derivative of the natural logarithm is d/dx[ln(x)] = 1/x, for x > 0.",
+    expFormula: "d/dx[ln(x)] = 1/x"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Implicit",
+    text: "For the curve x² + y² = 25, find dy/dx using implicit differentiation.",
+    formula: "x² + y² = 25",
+    options: ["x/y", "-x/y", "2x/2y", "-2x"],
+    correct: 1,
+    explanation: "Differentiate both sides with respect to x: 2x + 2y(dy/dx) = 0. Solve for dy/dx: dy/dx = -2x/(2y) = -x/y.",
+    expFormula: "2x + 2y(dy/dx) = 0  ⟹  dy/dx = -x/y"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives",
+    text: "What is the slope of the tangent line to f(x) = x³ at x = 2?",
+    formula: "f(x) = x³  at  x = 2",
+    options: ["4", "8", "12", "6"],
+    correct: 2,
+    explanation: "First find f'(x) = 3x². Then evaluate at x = 2: f'(2) = 3(2)² = 3·4 = 12. The tangent line has slope 12.",
+    expFormula: "f'(x) = 3x²  →  f'(2) = 3(4) = 12"
+  },
+
+  // ── DERIVATIVE APPLICATIONS ─────────────────────────────────
+  {
+    topic: "derivative_apps",
+    category: "Applications — Increasing/Decreasing",
+    text: "For f(x) = x³ - 3x, on which interval is f increasing?",
+    formula: "f(x) = x³ - 3x",
+    options: ["(-1, 1)", "(-∞, -1) and (1, ∞)", "All reals", "(0, ∞)"],
+    correct: 1,
+    explanation: "Find f'(x) = 3x² - 3 = 3(x²-1) = 3(x-1)(x+1). f'(x) > 0 when x < -1 or x > 1. So f is increasing on (-∞,-1) ∪ (1,∞).",
+    expFormula: "f'(x) = 3(x-1)(x+1) > 0  ⟹  x < -1 or x > 1"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Critical Points",
+    text: "How do you find critical points of a function f(x)?",
+    options: [
+      "Set f(x) = 0 and solve",
+      "Set f'(x) = 0 or find where f'(x) is undefined",
+      "Set f''(x) = 0 and solve",
+      "Find where f is continuous"
+    ],
+    correct: 1,
+    explanation: "Critical points occur where f'(x) = 0 OR where f'(x) is undefined (but f(x) is defined). These are candidates for local maxima and minima.",
+    expFormula: "Critical points: f'(x) = 0  OR  f'(x) undefined"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Second Derivative Test",
+    text: "If f'(c) = 0 and f''(c) > 0, what can we conclude about c?",
+    options: ["Local maximum at c", "Local minimum at c", "Inflection point at c", "Cannot determine"],
+    correct: 1,
+    explanation: "The second derivative test: if f'(c) = 0 and f''(c) > 0, the function is concave up at c, indicating a local minimum. Think of it as the curve 'holding water' at that point.",
+    expFormula: "f'(c)=0 and f''(c)>0  ⟹  local minimum at c"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Related Rates",
+    text: "A ladder 10 ft long leans against a wall. Its base slides away at 2 ft/s. When the base is 6 ft from the wall, how fast is the top sliding down?",
+    options: ["-3/2 ft/s", "-2/3 ft/s", "-3/4 ft/s", "-4/3 ft/s"],
+    correct: 0,
+    explanation: "By Pythagorean: x² + y² = 100. Differentiate: 2x(dx/dt) + 2y(dy/dt) = 0. When x=6: y=8. So 6(2) + 8(dy/dt) = 0 → dy/dt = -12/8 = -3/2 ft/s.",
+    expFormula: "6(2) + 8(dy/dt) = 0  ⟹  dy/dt = -3/2 ft/s"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Mean Value Theorem",
+    text: "The Mean Value Theorem guarantees a point c in (a,b) where f'(c) equals what?",
+    options: ["f(a) + f(b)", "f(b) - f(a)", "[f(b) - f(a)] / (b - a)", "f'(a) + f'(b)"],
+    correct: 2,
+    explanation: "MVT states: if f is continuous on [a,b] and differentiable on (a,b), there exists c in (a,b) such that f'(c) = [f(b)-f(a)]/(b-a). This is the instantaneous rate equaling the average rate.",
+    expFormula: "f'(c) = [f(b) - f(a)] / (b - a)"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Concavity",
+    text: "An inflection point occurs where:",
+    options: ["f'(x) = 0", "f(x) = 0", "f''(x) changes sign", "f'(x) changes sign"],
+    correct: 2,
+    explanation: "An inflection point is where concavity changes — the second derivative changes sign (from positive to negative or vice versa). f''(x) = 0 is a necessary but not sufficient condition.",
+    expFormula: "Inflection point: f''(x) changes sign"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Optimization",
+    text: "To maximize area of a rectangle with fixed perimeter P = 100, what dimensions give the maximum area?",
+    options: ["10 × 40", "25 × 25", "20 × 30", "50 × 0"],
+    correct: 1,
+    explanation: "With perimeter 2l + 2w = 100, so l + w = 50. Area = l·w = l(50-l). Maximize: dA/dl = 50 - 2l = 0, so l = 25, w = 25. A square gives maximum area.",
+    expFormula: "A = l(50-l), dA/dl = 50-2l = 0  ⟹  l = w = 25"
+  },
+
+  // ── INTEGRALS ───────────────────────────────────────────────
+  {
+    topic: "integrals",
+    category: "Integrals — Basic",
+    text: "Find ∫ 3x² dx.",
+    formula: "∫ 3x² dx",
+    options: ["6x + C", "x³ + C", "3x³ + C", "x²/2 + C"],
+    correct: 1,
+    explanation: "Power rule for integration: ∫ xⁿ dx = xⁿ⁺¹/(n+1) + C. Here ∫ 3x² dx = 3·x³/3 + C = x³ + C.",
+    expFormula: "∫ 3x² dx = 3·(x³/3) + C = x³ + C"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Basic",
+    text: "Evaluate ∫₀² (2x + 1) dx.",
+    formula: "∫₀² (2x + 1) dx",
+    options: ["4", "5", "6", "3"],
+    correct: 2,
+    explanation: "Antiderivative: x² + x. Evaluate from 0 to 2: (2² + 2) - (0² + 0) = 4 + 2 - 0 = 6.",
+    expFormula: "[x² + x]₀² = (4+2) - (0+0) = 6"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — u-substitution",
+    text: "Evaluate ∫ 2x·cos(x²) dx using substitution.",
+    formula: "∫ 2x cos(x²) dx",
+    options: ["sin(x²) + C", "2cos(x²) + C", "-sin(x²) + C", "cos(2x) + C"],
+    correct: 0,
+    explanation: "Let u = x², then du = 2x dx. The integral becomes ∫ cos(u) du = sin(u) + C = sin(x²) + C.",
+    expFormula: "u = x², du = 2x dx  ⟹  ∫ cos(u)du = sin(u)+C = sin(x²)+C"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Basic",
+    text: "What is ∫ eˣ dx?",
+    formula: "∫ eˣ dx",
+    options: ["eˣ/x + C", "eˣ + C", "x·eˣ + C", "eˣ·ln(x) + C"],
+    correct: 1,
+    explanation: "The exponential function eˣ is its own antiderivative, just like it's its own derivative. ∫ eˣ dx = eˣ + C.",
+    expFormula: "∫ eˣ dx = eˣ + C"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Area",
+    text: "The definite integral ∫ₐᵇ f(x) dx represents:",
+    options: [
+      "The length of f from a to b",
+      "The net signed area between f and the x-axis from a to b",
+      "The average value of f",
+      "The slope of f at b"
+    ],
+    correct: 1,
+    explanation: "The definite integral represents the net signed area — areas above the x-axis are positive, areas below are negative. Total area would use |f(x)|.",
+    expFormula: "∫ₐᵇ f(x) dx = net signed area under f from a to b"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Basic",
+    text: "Find ∫ (1/x) dx.",
+    formula: "∫ (1/x) dx",
+    options: ["x⁻² + C", "ln|x| + C", "-1/x² + C", "1/(2x²) + C"],
+    correct: 1,
+    explanation: "∫ (1/x) dx = ln|x| + C. The absolute value is needed since ln is only defined for positive numbers, but 1/x can integrate over negative domains too.",
+    expFormula: "∫ (1/x) dx = ln|x| + C"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Average Value",
+    text: "The average value of f(x) on [a, b] is given by:",
+    options: [
+      "[f(a) + f(b)] / 2",
+      "1/(b-a) · ∫ₐᵇ f(x) dx",
+      "∫ₐᵇ f(x) dx",
+      "f((a+b)/2)"
+    ],
+    correct: 1,
+    explanation: "The average value formula is f_avg = 1/(b-a) · ∫ₐᵇ f(x) dx. This divides the total 'area' by the length of the interval.",
+    expFormula: "f_avg = (1/(b-a)) · ∫ₐᵇ f(x) dx"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — u-substitution",
+    text: "Evaluate ∫ sin(x)·cos(x) dx.",
+    formula: "∫ sin(x)cos(x) dx",
+    options: ["-cos²(x) + C", "sin²(x)/2 + C", "cos(2x)/2 + C", "-sin(x)cos(x) + C"],
+    correct: 1,
+    explanation: "Let u = sin(x), du = cos(x) dx. Integral becomes ∫ u du = u²/2 + C = sin²(x)/2 + C. (Also: use sin(2x) = 2sin(x)cos(x) identity.)",
+    expFormula: "u = sin(x), du = cos(x)dx  ⟹  u²/2 + C = sin²(x)/2 + C"
+  },
+
+  // ── FTC ─────────────────────────────────────────────────────
+  {
+    topic: "ftc",
+    category: "FTC — Part 1",
+    text: "If F(x) = ∫₀ˣ sin(t) dt, what is F'(x)?",
+    formula: "F(x) = ∫₀ˣ sin(t) dt",
+    options: ["cos(x)", "sin(x)", "-cos(x)", "∫sin(x)dx"],
+    correct: 1,
+    explanation: "By FTC Part 1: if F(x) = ∫ₐˣ f(t) dt, then F'(x) = f(x). Here f(t) = sin(t), so F'(x) = sin(x).",
+    expFormula: "FTC Part 1: d/dx ∫ₐˣ f(t)dt = f(x)  ⟹  F'(x) = sin(x)"
+  },
+  {
+    topic: "ftc",
+    category: "FTC — Part 2",
+    text: "Evaluate ∫₁⁴ (2x) dx using the Fundamental Theorem.",
+    formula: "∫₁⁴ 2x dx",
+    options: ["8", "12", "15", "16"],
+    correct: 2,
+    explanation: "Antiderivative of 2x is x². By FTC Part 2: [x²]₁⁴ = 4² - 1² = 16 - 1 = 15.",
+    expFormula: "[x²]₁⁴ = 16 - 1 = 15"
+  },
+  {
+    topic: "ftc",
+    category: "FTC — Chain Rule Version",
+    text: "Find d/dx[∫₀^(x³) sin(t) dt].",
+    formula: "d/dx [ ∫₀^(x³) sin(t) dt ]",
+    options: ["sin(x³)", "3x²·sin(x³)", "cos(x³)", "3x²·cos(x³)"],
+    correct: 1,
+    explanation: "FTC Part 1 with chain rule: if F(x) = ∫ₐ^g(x) f(t) dt, then F'(x) = f(g(x))·g'(x). Here g(x) = x³, g'(x) = 3x². So answer is sin(x³)·3x².",
+    expFormula: "sin(x³)·(3x²) = 3x² sin(x³)"
+  },
+  {
+    topic: "ftc",
+    category: "FTC — Net Change",
+    text: "If v(t) represents velocity, what does ∫ₐᵇ v(t) dt represent?",
+    options: ["Total speed traveled", "Net displacement from a to b", "Average velocity", "Acceleration at b"],
+    correct: 1,
+    explanation: "By FTC, ∫ₐᵇ v(t) dt = position(b) - position(a) = net displacement. Total distance (not displacement) would require ∫|v(t)|dt.",
+    expFormula: "∫ₐᵇ v(t) dt = position(b) - position(a) = net displacement"
+  },
+  {
+    topic: "ftc",
+    category: "FTC",
+    text: "What does the Fundamental Theorem of Calculus establish?",
+    options: [
+      "That all functions are integrable",
+      "The relationship between differentiation and integration",
+      "That limits always exist",
+      "Derivatives are always positive"
+    ],
+    correct: 1,
+    explanation: "The FTC is the central theorem of calculus — it proves that differentiation and integration are inverse operations. This bridges the two major branches of calculus.",
+    expFormula: "∫ₐᵇ f(x)dx = F(b) - F(a)  where F' = f"
+  },
+  {
+    topic: "ftc",
+    category: "FTC — Accumulation",
+    text: "Given F(x) = ∫₂ˣ (3t²) dt, find F(3).",
+    formula: "F(x) = ∫₂ˣ 3t² dt",
+    options: ["27", "19", "8", "25"],
+    correct: 1,
+    explanation: "Antiderivative of 3t² is t³. By FTC: F(3) = [t³]₂³ = 3³ - 2³ = 27 - 8 = 19.",
+    expFormula: "[t³]₂³ = 27 - 8 = 19"
+  },
+
+  // ── SERIES & SEQUENCES ──────────────────────────────────────
+  {
+    topic: "series",
+    category: "Series — Convergence",
+    text: "A geometric series Σar^n converges when:",
+    formula: "Σ a·rⁿ  (n from 0 to ∞)",
+    options: ["|r| < 1", "|r| > 1", "r > 0", "a > 0"],
+    correct: 0,
+    explanation: "A geometric series converges if and only if |r| < 1 (the common ratio has absolute value less than 1). When it converges, the sum is a/(1-r).",
+    expFormula: "|r| < 1  ⟹  sum = a/(1-r)"
+  },
+  {
+    topic: "series",
+    category: "Series — Tests",
+    text: "The nth-Term Test (Divergence Test) says: if lim(n→∞) aₙ ≠ 0, then Σaₙ:",
+    options: ["Converges", "Diverges", "May converge or diverge", "Equals zero"],
+    correct: 1,
+    explanation: "If the terms don't approach zero, the series cannot possibly converge. However, the converse is false: if aₙ → 0, the series might still diverge (e.g. harmonic series).",
+    expFormula: "lim aₙ ≠ 0  ⟹  Σaₙ diverges"
+  },
+  {
+    topic: "series",
+    category: "Series — Taylor",
+    text: "The Taylor series for eˣ centered at 0 is:",
+    formula: "eˣ  (Maclaurin series)",
+    options: [
+      "1 + x + x²/2 + x³/6 + ...",
+      "1 - x + x²/2 - x³/6 + ...",
+      "x + x³/6 + x⁵/120 + ...",
+      "1 + x + x² + x³ + ..."
+    ],
+    correct: 0,
+    explanation: "The Maclaurin series (Taylor at 0) for eˣ = Σ xⁿ/n! = 1 + x + x²/2! + x³/3! + ... This converges for all x.",
+    expFormula: "eˣ = Σ xⁿ/n! = 1 + x + x²/2! + x³/3! + ..."
+  },
+  {
+    topic: "series",
+    category: "Series — p-series",
+    text: "The p-series Σ 1/nᵖ converges when:",
+    formula: "Σ (1/nᵖ)  (n from 1 to ∞)",
+    options: ["p < 1", "p = 1", "p > 1", "All p > 0"],
+    correct: 2,
+    explanation: "The p-series Σ 1/nᵖ converges if and only if p > 1. When p = 1, it's the harmonic series which diverges. When p ≤ 1 it diverges.",
+    expFormula: "p > 1  ⟹  Σ 1/nᵖ converges"
+  },
+  {
+    topic: "series",
+    category: "Series — Taylor",
+    text: "The Taylor series for sin(x) centered at 0 begins:",
+    formula: "sin(x)  Maclaurin series",
+    options: [
+      "1 - x²/2 + x⁴/24 - ...",
+      "x - x³/6 + x⁵/120 - ...",
+      "x + x³/6 + x⁵/120 + ...",
+      "1 + x - x²/2 - x³/6 ..."
+    ],
+    correct: 1,
+    explanation: "sin(x) = Σ (-1)ⁿ x^(2n+1)/(2n+1)! = x - x³/3! + x⁵/5! - ... Note: only odd powers, alternating signs.",
+    expFormula: "sin(x) = x - x³/6 + x⁵/120 - ..."
+  },
+  {
+    topic: "series",
+    category: "Series — Ratio Test",
+    text: "The Ratio Test uses L = lim|a_{n+1}/aₙ|. The series converges absolutely when:",
+    options: ["L > 1", "L = 1", "L < 1", "L = 0"],
+    correct: 2,
+    explanation: "Ratio Test: if L < 1, the series converges absolutely. If L > 1, it diverges. If L = 1, the test is inconclusive.",
+    expFormula: "L = lim|a_{n+1}/aₙ|: L<1 converges, L>1 diverges, L=1 inconclusive"
+  }
+];
+
+// Count questions per topic
+QUESTIONS.forEach(q => { if (TOPICS[q.topic]) TOPICS[q.topic].count++; });
+
+// ══════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = 0;
+let streak = 0;
+let bestStreak = 0;
+let lives = 3;
+let answered_total = 0;
+let correct_total = 0;
+let currentTopic = 'all';
+let sessionAnswered = 0;
+let sessionCorrect = 0;
+let sessionWrong = 0;
+
+// ══════════════════════════════════════════════════════════════
+//  RENDER HOME
+// ══════════════════════════════════════════════════════════════
+function renderHome() {
+  const grid = document.getElementById('topic-grid');
+  grid.innerHTML = '';
+  Object.entries(TOPICS).forEach(([key, t]) => {
+    const colorMap = { orange: 'tc-orange', teal: 'tc-teal', purple: 'tc-purple' };
+    const iconMap  = { orange: 'ti-orange', teal: 'ti-teal', purple: 'ti-purple' };
+    const diffMap  = { easy: 'diff-easy', med: 'diff-med', hard: 'diff-hard' };
+    const diffLabel = { easy: 'Easier', med: 'Medium', hard: 'Hard' };
+    grid.innerHTML += `
+      <div class="topic-card ${colorMap[t.color]}" onclick="startQuiz('${key}')">
+        <span class="topic-difficulty ${diffMap[t.difficulty]}">${diffLabel[t.difficulty]}</span>
+        <div class="topic-icon ${iconMap[t.color]}">${t.icon}</div>
+        <div class="topic-name">${t.name}</div>
+        <div class="topic-count">${t.count} questions</div>
+      </div>`;
+  });
+}
+
+// ══════════════════════════════════════════════════════════════
+//  QUIZ LOGIC
+// ══════════════════════════════════════════════════════════════
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz(topic) {
+  currentTopic = topic;
+  currentQuestions = shuffle(topic === 'all' ? QUESTIONS : QUESTIONS.filter(q => q.topic === topic));
+  currentIndex = 0;
+  score = 0;
+  streak = 0;
+  bestStreak = 0;
+  lives = 3;
+  sessionAnswered = 0;
+  sessionCorrect = 0;
+  sessionWrong = 0;
+
+  document.getElementById('home-screen').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+
+  const badge = document.getElementById('quiz-topic-badge');
+  badge.textContent = topic === 'all' ? 'All Topics' : TOPICS[topic].name;
+  const colorMap = { all: '#ff6b35', limits: '#00c9a7', derivatives: '#ff6b35', derivative_apps: '#a78bfa', integrals: '#00c9a7', ftc: '#ff6b35', series: '#a78bfa' };
+  badge.style.background = colorMap[topic] + '22';
+  badge.style.color = colorMap[topic];
+  badge.style.border = `1px solid ${colorMap[topic]}44`;
+  badge.style.padding = '4px 12px';
+  badge.style.borderRadius = '12px';
+  badge.style.fontSize = '0.75rem';
+  badge.style.fontWeight = '600';
+
+  updateHearts();
+  renderQuestion();
+}
+
+function updateHearts() {
+  const h = document.getElementById('hearts-display');
+  h.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    h.innerHTML += `<span class="heart${i >= lives ? ' lost' : ''}">♥</span>`;
+  }
+}
+
+function renderQuestion() {
+  if (currentIndex >= currentQuestions.length) {
+    showResults();
+    return;
+  }
+
+  const q = currentQuestions[currentIndex];
+  document.getElementById('q-category').textContent = q.category;
+  document.getElementById('q-text').textContent = q.text;
+
+  const formulaEl = document.getElementById('q-formula');
+  if (q.formula) {
+    formulaEl.textContent = q.formula;
+    formulaEl.style.display = 'block';
+  } else {
+    formulaEl.style.display = 'none';
+  }
+
+  const opts = document.getElementById('options-grid');
+  opts.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    opts.innerHTML += `
+      <button class="option-btn" onclick="selectOption(${i})">
+        <span class="option-letter">${letters[i]}</span>
+        <span>${opt}</span>
+      </button>`;
+  });
+
+  const fb = document.getElementById('feedback-box');
+  fb.style.display = 'none';
+  fb.className = 'feedback-box';
+
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('btn-skip').style.display = 'inline-flex';
+
+  const progress = ((currentIndex) / currentQuestions.length) * 100;
+  document.getElementById('progress-fill').style.width = progress + '%';
+  document.getElementById('progress-text').textContent = `Question ${currentIndex + 1} of ${currentQuestions.length}`;
+  document.getElementById('score-text').textContent = `${sessionCorrect} correct`;
+  document.getElementById('q-counter').textContent = `${currentIndex + 1} / ${currentQuestions.length}`;
+
+  document.getElementById('streak-display').textContent = streak > 0 ? `${streak} in a row 🔥` : '0 in a row';
+
+  document.getElementById('question-card').style.animation = 'none';
+  setTimeout(() => { document.getElementById('question-card').style.animation = 'cardIn 0.35s ease'; }, 10);
+}
+
+function selectOption(selected) {
+  const q = currentQuestions[currentIndex];
+  const btns = document.querySelectorAll('.option-btn');
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('answered');
+    if (i === q.correct) btn.classList.add('correct');
+    else if (i === selected && selected !== q.correct) btn.classList.add('wrong');
+    else btn.classList.add('dimmed');
+  });
+
+  sessionAnswered++;
+  answered_total++;
+
+  const fb = document.getElementById('feedback-box');
+  const fbHeader = document.getElementById('feedback-header');
+  const fbExp = document.getElementById('feedback-explanation');
+  const fbFormula = document.getElementById('feedback-formula');
+
+  if (selected === q.correct) {
+    score++;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+    sessionCorrect++;
+    correct_total++;
+    fb.className = 'feedback-box correct';
+    fbHeader.className = 'feedback-header correct';
+    fbHeader.textContent = '✓ Correct!';
+  } else {
+    lives--;
+    streak = 0;
+    sessionWrong++;
+    updateHearts();
+    fb.className = 'feedback-box wrong';
+    fbHeader.className = 'feedback-header wrong';
+    fbHeader.textContent = `✗ Incorrect — the answer was ${['A','B','C','D'][q.correct]}: ${q.options[q.correct]}`;
+  }
+
+  fbExp.textContent = q.explanation;
+  if (q.expFormula) {
+    fbFormula.textContent = q.expFormula;
+    fbFormula.style.display = 'inline-block';
+  } else {
+    fbFormula.style.display = 'none';
+  }
+
+  fb.style.display = 'block';
+  document.getElementById('btn-next').style.display = 'inline-flex';
+  document.getElementById('btn-skip').style.display = 'none';
+  document.getElementById('streak-display').textContent = streak > 0 ? `${streak} in a row 🔥` : '0 in a row';
+  updateNavStats();
+
+  if (lives <= 0) {
+    setTimeout(() => showResults(), 1200);
+  }
+}
+
+function skipQuestion() {
+  currentIndex++;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  currentIndex++;
+  renderQuestion();
+}
+
+// ══════════════════════════════════════════════════════════════
+//  RESULTS
+// ══════════════════════════════════════════════════════════════
+function showResults() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'block';
+
+  const pct = sessionAnswered > 0 ? Math.round((sessionCorrect / sessionAnswered) * 100) : 0;
+  const scoreEl = document.getElementById('results-score');
+  scoreEl.textContent = pct + '%';
+  scoreEl.style.color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--orange)' : 'var(--red)';
+
+  const msgs = {
+    high: ["Excellent! You're AP-exam ready. 🎉", "That's a 5-level performance! Keep it up.", "Outstanding! You clearly know this material."],
+    mid:  ["Good effort! Review the ones you missed.", "Solid work — a bit more practice and you'll ace it.", "Getting there! Focus on the explanations for wrong answers."],
+    low:  ["Keep going — every question makes you stronger.", "Don't give up! Review the concepts and try again.", "Calculus takes practice. Read through the explanations carefully."]
+  };
+
+  const cat = pct >= 80 ? 'high' : pct >= 60 ? 'mid' : 'low';
+  document.getElementById('results-msg').textContent = msgs[cat][Math.floor(Math.random() * 3)];
+
+  document.getElementById('res-correct').textContent = sessionCorrect;
+  document.getElementById('res-wrong').textContent = sessionWrong;
+  document.getElementById('res-streak').textContent = bestStreak;
+}
+
+function restartSame() {
+  startQuiz(currentTopic);
+}
+
+function goHome() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'none';
+  document.getElementById('home-screen').style.display = 'block';
+}
+
+function updateNavStats() {
+  document.getElementById('total-answered').textContent = answered_total + ' answered';
+  document.getElementById('total-correct-nav').textContent = correct_total + ' correct';
+}
+
+// ══════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════
+renderHome();
+</script>
+</body>
+</html>

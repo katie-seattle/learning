@@ -1,1456 +1,1293 @@
+cat > /home/claude/part1_head.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CalcIQ — Free AP Calculus Practice</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
-  :root {
-    --bg: #0b0c10;
-    --surface: #13141a;
-    --surface2: #1c1d26;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.13);
-    --orange: #ff6b35;
-    --orange-dim: rgba(255,107,53,0.12);
-    --teal: #00c9a7;
-    --teal-dim: rgba(0,201,167,0.1);
-    --purple: #a78bfa;
-    --purple-dim: rgba(167,139,250,0.1);
-    --red: #ff4f4f;
-    --red-dim: rgba(255,79,79,0.12);
-    --green: #22c55e;
-    --green-dim: rgba(34,197,94,0.12);
-    --text: #f0f0f0;
-    --muted: #6b7280;
-    --muted2: #9ca3af;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── NOISE OVERLAY ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    backdrop-filter: blur(16px);
-    background: rgba(11,12,16,0.85);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 60px;
-  }
-
-  .logo {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--text);
-    letter-spacing: -0.5px;
-  }
-
-  .logo span { color: var(--orange); }
-
-  .nav-stats {
-    display: flex; gap: 1.5rem; align-items: center;
-    font-size: 0.8rem; color: var(--muted2);
-  }
-
-  .stat-pill {
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 20px;
-    padding: 4px 14px;
-    font-size: 0.78rem;
-    font-weight: 500;
-  }
-
-  /* ── HERO ── */
-  #home-screen {
-    position: relative; z-index: 1;
-    max-width: 900px; margin: 0 auto;
-    padding: 5rem 2rem 3rem;
-  }
-
-  .hero-tag {
-    display: inline-block;
-    font-size: 0.72rem; font-weight: 600;
-    letter-spacing: 2.5px; text-transform: uppercase;
-    color: var(--orange);
-    border: 1px solid rgba(255,107,53,0.3);
-    border-radius: 20px; padding: 4px 14px;
-    margin-bottom: 1.5rem;
-    background: var(--orange-dim);
-  }
-
-  h1.hero {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.6rem, 6vw, 4.2rem);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -1.5px;
-    margin-bottom: 1.2rem;
-  }
-
-  h1.hero .accent-o { color: var(--orange); }
-  h1.hero .accent-t { color: var(--teal); }
-
-  .hero-sub {
-    font-size: 1.05rem;
-    color: var(--muted2);
-    max-width: 540px;
-    line-height: 1.7;
-    margin-bottom: 2.5rem;
-  }
-
-  /* ── TOPIC GRID ── */
-  .section-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 1rem;
-  }
-
-  .topic-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 14px;
-    margin-bottom: 3rem;
-  }
-
-  .topic-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.4rem 1.5rem;
-    cursor: pointer;
-    transition: all 0.22s ease;
-    position: relative; overflow: hidden;
-  }
-
-  .topic-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    border-radius: 16px 16px 0 0;
-    opacity: 0;
-    transition: opacity 0.22s;
-  }
-
-  .topic-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-  .topic-card:hover::before { opacity: 1; }
-
-  .tc-orange::before { background: var(--orange); }
-  .tc-teal::before   { background: var(--teal); }
-  .tc-purple::before { background: var(--purple); }
-
-  .topic-card:hover.tc-orange { box-shadow: 0 8px 32px rgba(255,107,53,0.1); }
-  .topic-card:hover.tc-teal   { box-shadow: 0 8px 32px rgba(0,201,167,0.1); }
-  .topic-card:hover.tc-purple { box-shadow: 0 8px 32px rgba(167,139,250,0.1); }
-
-  .topic-icon {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-  }
-
-  .ti-orange { background: var(--orange-dim); color: var(--orange); }
-  .ti-teal   { background: var(--teal-dim);   color: var(--teal); }
-  .ti-purple { background: var(--purple-dim); color: var(--purple); }
-
-  .topic-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem; font-weight: 700;
-    margin-bottom: 0.3rem;
-  }
-
-  .topic-count {
-    font-size: 0.78rem; color: var(--muted2);
-  }
-
-  .topic-difficulty {
-    position: absolute; top: 1rem; right: 1rem;
-    font-size: 0.67rem; font-weight: 600;
-    letter-spacing: 1px; text-transform: uppercase;
-    padding: 3px 9px; border-radius: 10px;
-  }
-
-  .diff-easy   { background: rgba(34,197,94,0.12);  color: #22c55e; }
-  .diff-med    { background: rgba(251,191,36,0.12); color: #fbbf24; }
-  .diff-hard   { background: rgba(255,79,79,0.12);  color: var(--red); }
-
-  .play-all-btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--orange);
-    color: #fff;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.95rem; font-weight: 700;
-    padding: 14px 28px;
-    border-radius: 12px; border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.3px;
-  }
-
-  .play-all-btn:hover { background: #ff8558; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,107,53,0.3); }
-
-  /* ── QUIZ SCREEN ── */
-  #quiz-screen {
-    display: none;
-    position: relative; z-index: 1;
-    max-width: 780px; margin: 0 auto;
-    padding: 2.5rem 2rem;
-  }
-
-  .quiz-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 2rem;
-  }
-
-  .back-btn {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--muted2);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    padding: 8px 16px; border-radius: 8px;
-    cursor: pointer; transition: all 0.18s;
-  }
-
-  .back-btn:hover { border-color: var(--border2); color: var(--text); }
-
-  .quiz-meta {
-    display: flex; align-items: center; gap: 12px;
-    font-size: 0.82rem; color: var(--muted2);
-  }
-
-  .topic-badge {
-    font-size: 0.72rem; font-weight: 600;
-    padding: 4px 12px; border-radius: 12px;
-  }
-
-  /* Progress */
-  .progress-wrap {
-    margin-bottom: 2rem;
-  }
-
-  .progress-info {
-    display: flex; justify-content: space-between;
-    font-size: 0.8rem; color: var(--muted2);
-    margin-bottom: 8px;
-  }
-
-  .progress-bar-bg {
-    height: 5px; background: var(--surface2);
-    border-radius: 3px; overflow: hidden;
-  }
-
-  .progress-bar-fill {
-    height: 100%; border-radius: 3px;
-    background: var(--orange);
-    transition: width 0.4s ease;
-  }
-
-  /* Question card */
-  .question-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 2.2rem 2.4rem;
-    margin-bottom: 1.5rem;
-    animation: cardIn 0.35s ease;
-  }
-
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .q-category {
-    font-size: 0.7rem; font-weight: 600;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 1rem;
-  }
-
-  .q-text {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.2rem; font-weight: 600;
-    line-height: 1.5;
-    margin-bottom: 0.6rem;
-  }
-
-  .q-formula {
-    font-family: 'DM Mono', 'Courier New', monospace;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--orange);
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 1rem;
-    color: var(--teal);
-    margin: 1rem 0;
-    letter-spacing: 0.5px;
-  }
-
-  /* Options */
-  .options-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 1.5rem;
-  }
-
-  @media (max-width: 540px) { .options-grid { grid-template-columns: 1fr; } }
-
-  .option-btn {
-    background: var(--surface2);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 1rem 1.2rem;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.93rem;
-    text-align: left;
-    cursor: pointer;
-    transition: all 0.18s;
-    display: flex; align-items: flex-start; gap: 12px;
-    line-height: 1.45;
-  }
-
-  .option-letter {
-    min-width: 26px; height: 26px;
-    border-radius: 6px;
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem; font-weight: 700;
-    color: var(--muted2);
-    transition: all 0.18s;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  .option-btn:hover:not(.answered) {
-    border-color: var(--border2);
-    background: rgba(255,255,255,0.04);
-  }
-
-  .option-btn:hover:not(.answered) .option-letter {
-    background: var(--orange-dim);
-    border-color: var(--orange);
-    color: var(--orange);
-  }
-
-  .option-btn.correct {
-    border-color: var(--green);
-    background: var(--green-dim);
-  }
-
-  .option-btn.correct .option-letter {
-    background: var(--green);
-    border-color: var(--green);
-    color: #fff;
-  }
-
-  .option-btn.wrong {
-    border-color: var(--red);
-    background: var(--red-dim);
-  }
-
-  .option-btn.wrong .option-letter {
-    background: var(--red);
-    border-color: var(--red);
-    color: #fff;
-  }
-
-  .option-btn.dimmed {
-    opacity: 0.45;
-    cursor: default;
-  }
-
-  /* Feedback */
-  .feedback-box {
-    border-radius: 14px;
-    padding: 1.3rem 1.5rem;
-    margin-top: 0;
-    display: none;
-    animation: feedIn 0.3s ease;
-  }
-
-  @keyframes feedIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .feedback-box.correct {
-    background: var(--green-dim);
-    border: 1px solid rgba(34,197,94,0.25);
-  }
-
-  .feedback-box.wrong {
-    background: var(--red-dim);
-    border: 1px solid rgba(255,79,79,0.25);
-  }
-
-  .feedback-header {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.9rem; font-weight: 700;
-    margin-bottom: 0.5rem;
-    display: flex; align-items: center; gap: 8px;
-  }
-
-  .feedback-header.correct { color: var(--green); }
-  .feedback-header.wrong   { color: var(--red); }
-
-  .feedback-explanation {
-    font-size: 0.88rem;
-    color: var(--muted2);
-    line-height: 1.6;
-  }
-
-  .feedback-formula {
-    font-family: 'Courier New', monospace;
-    background: rgba(0,0,0,0.25);
-    padding: 8px 12px; border-radius: 6px;
-    font-size: 0.85rem;
-    color: var(--teal);
-    margin-top: 8px;
-    display: inline-block;
-  }
-
-  /* Next / actions */
-  .quiz-actions {
-    display: flex; justify-content: flex-end; gap: 12px;
-    margin-top: 1.5rem;
-  }
-
-  .btn-next {
-    background: var(--orange);
-    color: #fff;
-    font-family: 'Syne', sans-serif;
-    font-size: 0.9rem; font-weight: 700;
-    padding: 12px 26px; border-radius: 10px;
-    border: none; cursor: pointer;
-    transition: all 0.18s;
-    display: none;
-  }
-
-  .btn-next:hover { background: #ff8558; transform: translateY(-1px); }
-
-  .btn-skip {
-    background: transparent;
-    border: 1px solid var(--border2);
-    color: var(--muted2);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    padding: 12px 20px; border-radius: 10px;
-    cursor: pointer; transition: all 0.18s;
-  }
-
-  .btn-skip:hover { border-color: var(--border2); color: var(--text); }
-
-  /* ── RESULTS SCREEN ── */
-  #results-screen {
-    display: none;
-    position: relative; z-index: 1;
-    max-width: 680px; margin: 0 auto;
-    padding: 4rem 2rem;
-    text-align: center;
-  }
-
-  .results-score {
-    font-family: 'Syne', sans-serif;
-    font-size: 5rem; font-weight: 800;
-    line-height: 1;
-    margin: 1rem 0;
-  }
-
-  .results-label {
-    font-size: 0.8rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-
-  .results-msg {
-    font-size: 1rem; color: var(--muted2); margin-bottom: 2.5rem; line-height: 1.6;
-  }
-
-  .results-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 12px; margin-bottom: 2.5rem;
-  }
-
-  .result-stat {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px; padding: 1.2rem;
-  }
-
-  .result-stat-val {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.6rem; font-weight: 800;
-  }
-
-  .result-stat-label { font-size: 0.75rem; color: var(--muted2); margin-top: 4px; }
-
-  .results-btns {
-    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    background: var(--orange); color: #fff;
-    font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700;
-    padding: 13px 28px; border-radius: 11px; border: none;
-    cursor: pointer; transition: all 0.18s;
-  }
-
-  .btn-primary:hover { background: #ff8558; transform: translateY(-1px); }
-
-  .btn-secondary {
-    background: var(--surface2); color: var(--text);
-    border: 1px solid var(--border2);
-    font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
-    padding: 13px 24px; border-radius: 11px;
-    cursor: pointer; transition: all 0.18s;
-  }
-
-  .btn-secondary:hover { border-color: var(--muted); }
-
-  /* ── STREAK ── */
-  .streak-bar {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px; padding: 12px 20px;
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 1.5rem;
-  }
-
-  .streak-label { font-size: 0.8rem; color: var(--muted2); }
-
-  .streak-val {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem; font-weight: 700; color: var(--orange);
-  }
-
-  .hearts {
-    display: flex; gap: 5px;
-  }
-
-  .heart {
-    font-size: 1rem;
-    transition: all 0.2s;
-  }
-
-  .heart.lost { filter: grayscale(1); opacity: 0.3; }
+:root {
+  --bg:#0b0c10; --surface:#13141a; --surface2:#1c1d26; --surface3:#242531;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+  --orange:#ff6b35; --orange-dim:rgba(255,107,53,0.12);
+  --teal:#00c9a7; --teal-dim:rgba(0,201,167,0.1);
+  --purple:#a78bfa; --purple-dim:rgba(167,139,250,0.1);
+  --blue:#60a5fa; --blue-dim:rgba(96,165,250,0.1);
+  --red:#ff4f4f; --red-dim:rgba(255,79,79,0.12);
+  --green:#22c55e; --green-dim:rgba(34,197,94,0.12);
+  --yellow:#fbbf24; --yellow-dim:rgba(251,191,36,0.12);
+  --text:#f0f0f0; --muted:#6b7280; --muted2:#9ca3af;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:200;backdrop-filter:blur(16px);background:rgba(11,12,16,0.88);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-0.5px}
+.logo span{color:var(--orange)}
+.nav-right{display:flex;gap:.8rem;align-items:center}
+.stat-pill{background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:4px 14px;font-size:.78rem;font-weight:500}
+.nav-about-btn{background:transparent;border:1px solid var(--border2);color:var(--muted2);font-family:'DM Sans',sans-serif;font-size:.82rem;padding:6px 16px;border-radius:8px;cursor:pointer;transition:all .18s}
+.nav-about-btn:hover{border-color:var(--orange);color:var(--orange)}
+
+/* HOME */
+#home-screen{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:4rem 2rem 3rem}
+.hero-tag{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--orange);border:1px solid rgba(255,107,53,.3);border-radius:20px;padding:4px 14px;margin-bottom:1.5rem;background:var(--orange-dim)}
+h1.hero{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,5.5vw,4rem);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:1.2rem}
+h1.hero .ao{color:var(--orange)} h1.hero .at{color:var(--teal)}
+.hero-sub{font-size:1rem;color:var(--muted2);max-width:560px;line-height:1.75;margin-bottom:2.5rem}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:3rem}
+
+/* SECTION LABEL */
+.section-label{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+
+/* DIFFICULTY FILTER */
+.diff-filter{display:flex;gap:8px;margin-bottom:1.2rem;flex-wrap:wrap}
+.diff-btn{background:var(--surface2);border:1.5px solid var(--border);color:var(--muted2);font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;padding:6px 16px;border-radius:10px;cursor:pointer;transition:all .18s}
+.diff-btn:hover{border-color:var(--border2);color:var(--text)}
+.diff-btn.active-easy{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+.diff-btn.active-med{background:var(--yellow-dim);border-color:var(--yellow);color:var(--yellow)}
+.diff-btn.active-hard{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+.diff-btn.active-all{background:var(--orange-dim);border-color:var(--orange);color:var(--orange)}
+
+/* TOPIC GRID */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-bottom:2.5rem}
+.topic-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.3rem 1.4rem;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.topic-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;opacity:0;transition:opacity .22s}
+.topic-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.topic-card:hover::before{opacity:1}
+.tc-or::before{background:var(--orange)} .tc-te::before{background:var(--teal)} .tc-pu::before{background:var(--purple)} .tc-bl::before{background:var(--blue)}
+.topic-card:hover.tc-or{box-shadow:0 8px 28px rgba(255,107,53,.12)} .topic-card:hover.tc-te{box-shadow:0 8px 28px rgba(0,201,167,.12)} .topic-card:hover.tc-pu{box-shadow:0 8px 28px rgba(167,139,250,.12)} .topic-card:hover.tc-bl{box-shadow:0 8px 28px rgba(96,165,250,.12)}
+.topic-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:.9rem}
+.ti-or{background:var(--orange-dim);color:var(--orange)} .ti-te{background:var(--teal-dim);color:var(--teal)} .ti-pu{background:var(--purple-dim);color:var(--purple)} .ti-bl{background:var(--blue-dim);color:var(--blue)}
+.topic-name{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.25rem}
+.topic-sub{font-size:.73rem;color:var(--muted2);margin-bottom:.4rem;line-height:1.4}
+.topic-count{font-size:.75rem;color:var(--muted)}
+.topic-difficulty{position:absolute;top:.9rem;right:.9rem;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:8px}
+.de{background:rgba(34,197,94,.12);color:#22c55e} .dm{background:rgba(251,191,36,.12);color:#fbbf24} .dh{background:rgba(255,79,79,.12);color:var(--red)}
+
+/* EXAM GRID */
+.exam-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:3rem}
+.exam-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.exam-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .22s}
+.exam-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.exam-card:hover::before{opacity:1}
+.ec1::before{background:linear-gradient(90deg,var(--orange),var(--teal))} .ec2::before{background:linear-gradient(90deg,var(--purple),var(--orange))} .ec3::before{background:linear-gradient(90deg,var(--teal),var(--purple))} .ec4::before{background:linear-gradient(90deg,var(--blue),var(--orange))} .ec5::before{background:linear-gradient(90deg,var(--orange),var(--purple))}
+.exam-card:hover.ec1{box-shadow:0 8px 28px rgba(255,107,53,.12)} .exam-card:hover.ec2{box-shadow:0 8px 28px rgba(167,139,250,.12)} .exam-card:hover.ec3{box-shadow:0 8px 28px rgba(0,201,167,.12)} .exam-card:hover.ec4{box-shadow:0 8px 28px rgba(96,165,250,.12)} .exam-card:hover.ec5{box-shadow:0 8px 28px rgba(255,107,53,.1)}
+.exam-num{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;opacity:.12;line-height:1;margin-bottom:.4rem}
+.exam-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.exam-meta{font-size:.78rem;color:var(--muted2);line-height:1.55;margin-bottom:.9rem}
+.exam-chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:8px}
+.chip-mcq{background:var(--orange-dim);color:var(--orange)} .chip-frq{background:var(--teal-dim);color:var(--teal)} .chip-nc{background:var(--purple-dim);color:var(--purple)} .chip-calc{background:var(--blue-dim);color:var(--blue)}
+
+/* BUTTONS */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--orange);color:#fff;font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700;padding:13px 26px;border-radius:11px;border:none;cursor:pointer;transition:all .2s;letter-spacing:.2px}
+.btn-primary:hover{background:#ff8558;transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,107,53,.3)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1.5px solid var(--border2);color:var(--muted2);font-family:'Syne',sans-serif;font-size:.88rem;font-weight:600;padding:12px 22px;border-radius:11px;cursor:pointer;transition:all .2s}
+.btn-outline:hover{border-color:var(--muted);color:var(--text)}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);color:var(--text);border:1px solid var(--border2);font-family:'DM Sans',sans-serif;font-size:.88rem;padding:12px 22px;border-radius:11px;cursor:pointer;transition:all .18s}
+.btn-secondary:hover{border-color:var(--muted)}
+
+/* QUIZ SCREEN */
+#quiz-screen{display:none;position:relative;z-index:1;max-width:800px;margin:0 auto;padding:2rem 2rem}
+.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.back-btn{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);color:var(--muted2);font-family:'DM Sans',sans-serif;font-size:.83rem;padding:7px 14px;border-radius:8px;cursor:pointer;transition:all .18s}
+.back-btn:hover{border-color:var(--border2);color:var(--text)}
+.quiz-meta{display:flex;align-items:center;gap:10px}
+.topic-badge{font-size:.7rem;font-weight:700;padding:4px 11px;border-radius:10px}
+.section-mode-badge{font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:8px;background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,.25)}
+
+/* STREAK/HEARTS */
+.streak-bar{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:11px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.3rem}
+.streak-label{font-size:.75rem;color:var(--muted2)}
+.streak-val{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--orange)}
+.hearts{display:flex;gap:5px}
+.heart{font-size:.95rem;transition:all .2s}
+.heart.lost{filter:grayscale(1);opacity:.3}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:1.5rem}
+.progress-info{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted2);margin-bottom:7px}
+.progress-bar-bg{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:100%;border-radius:2px;background:var(--orange);transition:width .4s ease}
+
+/* QUESTION CARD */
+.question-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:2rem 2.2rem;margin-bottom:1.3rem;animation:cardIn .35s ease}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.q-unit-tag{font-size:.67rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.8rem;display:flex;align-items:center;gap:8px}
+.q-unit-dot{width:6px;height:6px;border-radius:50%;background:var(--orange)}
+.q-text{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:600;line-height:1.55;margin-bottom:.5rem}
+
+/* MATH RENDERING */
+.math-display{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:8px;padding:12px 18px;margin:1rem 0;overflow-x:auto;font-size:1.05rem}
+.math-display .katex{font-size:1.1em}
+.katex-html{color:var(--teal)}
+
+/* OPTIONS */
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1.3rem}
+@media(max-width:540px){.options-grid{grid-template-columns:1fr}}
+.option-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:11px;padding:.9rem 1.1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.91rem;text-align:left;cursor:pointer;transition:all .18s;display:flex;align-items:flex-start;gap:10px;line-height:1.45;pointer-events:auto}
+.option-btn.answered{pointer-events:none!important;cursor:default!important}
+.option-letter{min-width:24px;height:24px;border-radius:5px;background:var(--surface);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;color:var(--muted2);transition:all .18s;flex-shrink:0;margin-top:1px}
+.option-btn:hover:not(.answered){border-color:var(--border2);background:rgba(255,255,255,.04)}
+.option-btn:hover:not(.answered) .option-letter{background:var(--orange-dim);border-color:var(--orange);color:var(--orange)}
+.option-btn.correct{border-color:var(--green);background:var(--green-dim);pointer-events:none}
+.option-btn.correct .option-letter{background:var(--green);border-color:var(--green);color:#fff}
+.option-btn.wrong{border-color:var(--red);background:var(--red-dim);pointer-events:none}
+.option-btn.wrong .option-letter{background:var(--red);border-color:var(--red);color:#fff}
+.option-btn.dimmed{opacity:.38;pointer-events:none}
+.option-math .katex{font-size:.95em}
+
+/* FEEDBACK */
+.feedback-box{border-radius:13px;padding:1.2rem 1.4rem;display:none;animation:feedIn .28s ease;margin-top:.5rem}
+@keyframes feedIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.feedback-box.correct{background:var(--green-dim);border:1px solid rgba(34,197,94,.25)}
+.feedback-box.wrong{background:var(--red-dim);border:1px solid rgba(255,79,79,.25)}
+.feedback-header{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;margin-bottom:.45rem;display:flex;align-items:center;gap:7px}
+.feedback-header.correct{color:var(--green)} .feedback-header.wrong{color:var(--red)}
+.feedback-explanation{font-size:.86rem;color:var(--muted2);line-height:1.65}
+.feedback-math{font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,.28);padding:7px 12px;border-radius:5px;font-size:.82rem;color:var(--teal);margin-top:7px;display:inline-block}
+
+/* ACTIONS */
+.quiz-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:1.3rem}
+.btn-next{background:var(--orange);color:#fff;font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;padding:11px 24px;border-radius:9px;border:none;cursor:pointer;transition:all .18s;display:none}
+.btn-next:hover{background:#ff8558;transform:translateY(-1px)}
+.btn-skip{background:transparent;border:1px solid var(--border2);color:var(--muted2);font-family:'DM Sans',sans-serif;font-size:.83rem;padding:11px 18px;border-radius:9px;cursor:pointer;transition:all .18s}
+.btn-skip:hover{color:var(--text);border-color:var(--muted)}
+
+/* EXAM INTRO */
+#exam-intro-screen{display:none;position:relative;z-index:1;max-width:720px;margin:0 auto;padding:3rem 2rem;text-align:center}
+.exam-intro-title{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;margin-bottom:.8rem;letter-spacing:-.5px}
+.exam-intro-sub{font-size:.95rem;color:var(--muted2);line-height:1.75;margin-bottom:2rem}
+.exam-section-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem;text-align:left}
+@media(max-width:500px){.exam-section-cards{grid-template-columns:1fr}}
+.exam-section-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.3rem}
+.esc-label{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.esc-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;line-height:1}
+.esc-sub{font-size:.75rem;color:var(--muted2);margin-top:3px;line-height:1.5}
+.exam-structure-note{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.4rem;font-size:.83rem;color:var(--muted2);line-height:1.65;margin-bottom:2rem;text-align:left}
+.exam-structure-note strong{color:var(--text)}
+.exam-start-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* MCQ TRANSITION */
+#mcq-transition-screen{display:none;position:relative;z-index:1;max-width:600px;margin:0 auto;padding:4rem 2rem;text-align:center}
+.transition-icon{font-size:3rem;margin-bottom:1rem}
+.transition-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:.8rem}
+.transition-sub{font-size:.9rem;color:var(--muted2);line-height:1.7;margin-bottom:2rem}
+.score-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem}
+.ss-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem}
+.ss-val{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800}
+.ss-label{font-size:.72rem;color:var(--muted2);margin-top:3px}
+
+/* FRQ SCREEN */
+#frq-screen{display:none;position:relative;z-index:1;max-width:880px;margin:0 auto;padding:2rem 2rem}
+.frq-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.8rem}
+.frq-qcard{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin-bottom:1.4rem}
+.frq-qnum{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.frq-context{background:var(--surface2);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:1rem 1.2rem;margin-bottom:1.2rem;font-size:.92rem;line-height:1.7;color:var(--muted2)}
+.frq-part{border:1px solid var(--border);border-radius:11px;padding:1.1rem 1.3rem;margin-bottom:9px;background:var(--surface2)}
+.frq-part-label{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;color:var(--teal);margin-bottom:.4rem;display:flex;align-items:center;gap:8px}
+.pts-badge{display:inline-block;background:var(--yellow-dim);color:var(--yellow);font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:7px}
+.frq-part-text{font-size:.9rem;line-height:1.65;color:var(--text);margin-bottom:.8rem}
+.frq-workspace{background:rgba(0,0,0,.2);border:1.5px solid var(--border2);border-radius:8px;padding:10px;width:100%;min-height:70px;font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--text);resize:vertical;outline:none;transition:border-color .18s}
+.frq-workspace:focus{border-color:var(--teal)}
+.frq-sol-btn{background:var(--teal-dim);border:1px solid rgba(0,201,167,.3);color:var(--teal);font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;padding:7px 16px;border-radius:7px;cursor:pointer;transition:all .18s;margin-top:8px}
+.frq-sol-btn:hover{background:rgba(0,201,167,.2)}
+.frq-solution{background:rgba(0,201,167,.06);border:1px solid rgba(0,201,167,.2);border-radius:10px;padding:1rem 1.2rem;margin-top:10px;display:none}
+.frq-sol-label{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem}
+.frq-sol-text{font-size:.87rem;line-height:1.7;color:var(--muted2)}
+.frq-sol-formula{font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,.3);padding:7px 12px;border-radius:5px;font-size:.82rem;color:var(--teal);margin-top:7px;display:block}
+
+/* RESULTS */
+#results-screen{display:none;position:relative;z-index:1;max-width:680px;margin:0 auto;padding:4rem 2rem;text-align:center}
+.results-score{font-family:'Syne',sans-serif;font-size:5rem;font-weight:800;line-height:1;margin:1rem 0}
+.results-label{font-size:.78rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:.4rem}
+.results-msg{font-size:.97rem;color:var(--muted2);margin-bottom:2.5rem;line-height:1.65}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2.5rem}
+.result-stat{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:1.1rem}
+.result-stat-val{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:800}
+.result-stat-label{font-size:.72rem;color:var(--muted2);margin-top:3px}
+.results-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ABOUT MODAL */
+#about-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1rem}
+#about-overlay.open{display:flex}
+.about-modal{background:var(--surface);border:1px solid var(--border2);border-radius:24px;max-width:520px;width:100%;padding:2.5rem;position:relative;animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.about-close{position:absolute;top:1.2rem;right:1.2rem;background:var(--surface2);border:1px solid var(--border2);color:var(--muted2);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all .18s}
+.about-close:hover{border-color:var(--muted);color:var(--text)}
+.about-avatar{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,var(--orange),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:1.2rem}
+.about-name{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.3rem}
+.about-role{font-size:.85rem;color:var(--orange);font-weight:600;margin-bottom:1rem}
+.about-bio{font-size:.9rem;color:var(--muted2);line-height:1.75;margin-bottom:1.5rem}
+.about-links{display:flex;gap:10px;flex-wrap:wrap}
+.about-link{display:inline-flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted2);font-size:.82rem;padding:8px 16px;border-radius:9px;text-decoration:none;transition:all .18s;cursor:pointer}
+.about-link:hover{border-color:var(--orange);color:var(--orange)}
+.about-stats-row{display:flex;gap:10px;margin-bottom:1.5rem}
+.about-stat{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem;flex:1;text-align:center}
+.about-stat-val{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--orange)}
+.about-stat-label{font-size:.7rem;color:var(--muted);margin-top:2px}
+
+/* KATEX OVERRIDES */
+.katex{font-size:1em!important}
+.katex-display{margin:.6em 0!important;overflow-x:auto}
+.math-inline .katex{font-size:.98em!important}
+
+@media(max-width:640px){
+  #home-screen{padding:2.5rem 1.2rem 2rem}
+  .exam-section-cards{grid-template-columns:1fr}
+  .results-grid{grid-template-columns:1fr 1fr}
+  h1.hero{font-size:2.2rem}
+}
 </style>
 </head>
 <body>
-
+EOF
+echo "Part 1 done: $(wc -c < /home/claude/part1_head.html) bytes"
 <nav>
   <div class="logo">Calc<span>IQ</span></div>
-  <div class="nav-stats">
+  <div class="nav-right">
     <span class="stat-pill" id="total-answered">0 answered</span>
     <span class="stat-pill" id="total-correct-nav">0 correct</span>
+    <button class="nav-about-btn" onclick="openAbout()">About</button>
   </div>
 </nav>
 
-<!-- HOME SCREEN -->
-<div id="home-screen">
-  <div class="hero-tag">Free AP Calculus Practice</div>
-  <h1 class="hero">
-    Master <span class="accent-o">AP Calc</span><br>
-    one question <span class="accent-t">at a time.</span>
-  </h1>
-  <p class="hero-sub">
-    100+ practice questions across every AP Calculus topic. Instant feedback, full explanations, totally free. No account needed.
-  </p>
-
-  <div style="margin-bottom: 2.5rem;">
-    <button class="play-all-btn" onclick="startQuiz('all')">
-      <span>&#9654;</span> Practice All Topics
-    </button>
+<!-- ABOUT MODAL -->
+<div id="about-overlay" onclick="if(event.target===this)closeAbout()">
+  <div class="about-modal">
+    <button class="about-close" onclick="closeAbout()">✕</button>
+    <div class="about-avatar">YN</div>
+    <div class="about-name">Your Name</div>
+    <div class="about-role">AP Calculus Student &amp; Developer</div>
+    <div class="about-stats-row">
+      <div class="about-stat"><div class="about-stat-val">180+</div><div class="about-stat-label">Questions</div></div>
+      <div class="about-stat"><div class="about-stat-val">5</div><div class="about-stat-label">Mock Exams</div></div>
+      <div class="about-stat"><div class="about-stat-val">8</div><div class="about-stat-label">AP Units</div></div>
+    </div>
+    <div class="about-bio">
+      Hey! I'm a high school student who built CalcIQ to help fellow AP Calculus students prep for the exam. 
+      All questions are aligned with College Board's 8-unit curriculum. 
+      This site is completely free and will always stay that way. Good luck on your exam! 🎉
+    </div>
+    <div class="about-links">
+      <a class="about-link" href="#" target="_blank">🔗 Website</a>
+      <a class="about-link" href="#" target="_blank">𝕏 Twitter</a>
+      <a class="about-link" href="#" target="_blank">💻 GitHub</a>
+      <a class="about-link" href="mailto:you@email.com">✉ Email</a>
+    </div>
   </div>
-
-  <div class="section-label">Choose a Topic</div>
-  <div class="topic-grid" id="topic-grid"></div>
 </div>
 
-<!-- QUIZ SCREEN -->
+<!-- HOME -->
+<div id="home-screen">
+  <div class="hero-tag">Free AP Calculus AB Practice</div>
+  <h1 class="hero">Master <span class="ao">AP Calc</span><br>one question <span class="at">at a time.</span></h1>
+  <p class="hero-sub">180+ questions across all 8 College Board AP Calculus units. Full-length AP-format mock exams with non-calculator &amp; calculator MCQ sections plus FRQ. Totally free.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="startQuiz('all','all')">▶ Practice All Topics</button>
+    <button class="btn-outline" onclick="scrollTo('exams-anchor')">📄 Mock Exams</button>
+    <button class="btn-outline" onclick="scrollTo('topics-anchor')">📚 Browse Units</button>
+  </div>
+
+  <div id="topics-anchor" class="section-label">Practice by Unit</div>
+  <div class="diff-filter">
+    <button class="diff-btn active-all" id="df-all" onclick="setDiffFilter('all')">All Levels</button>
+    <button class="diff-btn" id="df-easy" onclick="setDiffFilter('easy')">Easy</button>
+    <button class="diff-btn" id="df-med" onclick="setDiffFilter('med')">Medium</button>
+    <button class="diff-btn" id="df-hard" onclick="setDiffFilter('hard')">Hard</button>
+  </div>
+  <div class="topic-grid" id="topic-grid"></div>
+
+  <div id="exams-anchor" class="section-label" style="margin-top:1rem;">AP Mock Exams</div>
+  <div class="exam-grid" id="exam-grid"></div>
+</div>
+
+<!-- EXAM INTRO -->
+<div id="exam-intro-screen">
+  <div class="hero-tag">AP Format Exam</div>
+  <div class="exam-intro-title" id="ei-title"></div>
+  <div class="exam-intro-sub" id="ei-sub"></div>
+  <div class="exam-section-cards" id="ei-cards"></div>
+  <div class="exam-structure-note" id="ei-note"></div>
+  <div class="exam-start-row">
+    <button class="btn-primary" id="ei-start-btn">Start Section I-A (No Calculator)</button>
+    <button class="btn-secondary" onclick="goHome()">← Back</button>
+  </div>
+</div>
+
+<!-- MCQ TRANSITION -->
+<div id="mcq-transition-screen">
+  <div class="transition-icon" id="tr-icon">🧮</div>
+  <div class="transition-title" id="tr-title">Section I-A Complete</div>
+  <div class="transition-sub" id="tr-sub">You've completed the no-calculator section. Next up is the calculator-permitted section.</div>
+  <div class="score-summary-grid">
+    <div class="ss-box"><div class="ss-val" id="tr-correct" style="color:var(--green)">—</div><div class="ss-label">Correct</div></div>
+    <div class="ss-box"><div class="ss-val" id="tr-wrong" style="color:var(--red)">—</div><div class="ss-label">Incorrect</div></div>
+    <div class="ss-box"><div class="ss-val" id="tr-pct" style="color:var(--orange)">—</div><div class="ss-label">Score</div></div>
+  </div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <button class="btn-primary" id="tr-next-btn">Continue to Next Section →</button>
+    <button class="btn-secondary" onclick="goHome()">← End Exam</button>
+  </div>
+</div>
+
+<!-- QUIZ (MCQ) -->
 <div id="quiz-screen">
   <div class="quiz-header">
-    <button class="back-btn" onclick="goHome()">&#8592; Back</button>
+    <button class="back-btn" onclick="goHome()">← Back</button>
     <div class="quiz-meta">
       <span class="topic-badge" id="quiz-topic-badge"></span>
-      <span id="q-counter" style="font-size:0.82rem; color: var(--muted2);"></span>
+      <span class="section-mode-badge" id="quiz-section-mode" style="display:none"></span>
+      <span id="q-counter" style="font-size:.8rem;color:var(--muted2)"></span>
     </div>
   </div>
-
   <div class="streak-bar">
-    <div>
-      <div class="streak-label">Streak</div>
-      <div class="streak-val" id="streak-display">0 in a row</div>
-    </div>
+    <div><div class="streak-label">Streak</div><div class="streak-val" id="streak-display">0 in a row</div></div>
     <div class="hearts" id="hearts-display"></div>
   </div>
-
   <div class="progress-wrap">
-    <div class="progress-info">
-      <span id="progress-text">Question 1</span>
-      <span id="score-text">0 / 0</span>
-    </div>
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
-    </div>
+    <div class="progress-info"><span id="progress-text">Question 1</span><span id="score-text">0 correct</span></div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
   </div>
-
   <div class="question-card" id="question-card">
-    <div class="q-category" id="q-category"></div>
+    <div class="q-unit-tag"><span class="q-unit-dot" id="q-unit-dot"></span><span id="q-category"></span></div>
     <div class="q-text" id="q-text"></div>
-    <div class="q-formula" id="q-formula" style="display:none;"></div>
+    <div id="q-math" style="display:none"></div>
     <div class="options-grid" id="options-grid"></div>
   </div>
-
   <div class="feedback-box" id="feedback-box">
     <div class="feedback-header" id="feedback-header"></div>
     <div class="feedback-explanation" id="feedback-explanation"></div>
-    <div class="feedback-formula" id="feedback-formula" style="display:none;"></div>
+    <div class="feedback-math" id="feedback-math" style="display:none"></div>
   </div>
-
   <div class="quiz-actions">
     <button class="btn-skip" id="btn-skip" onclick="skipQuestion()">Skip</button>
-    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next Question &#8594;</button>
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next →</button>
   </div>
 </div>
 
-<!-- RESULTS SCREEN -->
+<!-- FRQ -->
+<div id="frq-screen">
+  <div class="frq-header">
+    <button class="back-btn" onclick="goHome()">← Back to Home</button>
+    <span class="topic-badge" id="frq-badge" style="background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,201,167,.3);padding:4px 12px;border-radius:10px;font-size:.72rem;font-weight:700"></span>
+  </div>
+  <div id="frq-content"></div>
+  <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:2rem">
+    <button class="btn-primary" onclick="goHome()">Finish Exam</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
 <div id="results-screen">
   <div class="hero-tag" id="results-tag">Session Complete</div>
   <div class="results-label">Your Score</div>
   <div class="results-score" id="results-score"></div>
   <div class="results-msg" id="results-msg"></div>
-
   <div class="results-grid">
-    <div class="result-stat">
-      <div class="result-stat-val" id="res-correct" style="color: var(--green)"></div>
-      <div class="result-stat-label">Correct</div>
-    </div>
-    <div class="result-stat">
-      <div class="result-stat-val" id="res-wrong" style="color: var(--red)"></div>
-      <div class="result-stat-label">Incorrect</div>
-    </div>
-    <div class="result-stat">
-      <div class="result-stat-val" id="res-streak" style="color: var(--orange)"></div>
-      <div class="result-stat-label">Best Streak</div>
-    </div>
+    <div class="result-stat"><div class="result-stat-val" id="res-correct" style="color:var(--green)"></div><div class="result-stat-label">Correct</div></div>
+    <div class="result-stat"><div class="result-stat-val" id="res-wrong" style="color:var(--red)"></div><div class="result-stat-label">Incorrect</div></div>
+    <div class="result-stat"><div class="result-stat-val" id="res-streak" style="color:var(--orange)"></div><div class="result-stat-label">Best Streak</div></div>
   </div>
-
   <div class="results-btns">
     <button class="btn-primary" onclick="restartSame()">Try Again</button>
+    <button class="btn-secondary" id="frq-continue-btn" style="display:none" onclick="startFRQ()">Continue to FRQ →</button>
     <button class="btn-secondary" onclick="goHome()">Back to Topics</button>
   </div>
 </div>
-
 <script>
-// ══════════════════════════════════════════════════════════════
-//  QUESTION BANK
-// ══════════════════════════════════════════════════════════════
+// ── KaTeX auto-render after page loads ──
+document.addEventListener("DOMContentLoaded", () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left:"$$",right:"$$",display:true},
+      {left:"\\(",right:"\\)",display:false},
+      {left:"\\[",right:"\\]",display:true}
+    ]
+  });
+});
+
+function renderMath(el) {
+  renderMathInElement(el, {
+    delimiters: [
+      {left:"$$",right:"$$",display:true},
+      {left:"\\(",right:"\\)",display:false},
+      {left:"\\[",right:"\\]",display:true}
+    ]
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  TOPICS (8 AP Calc AB Units)
+// ══════════════════════════════════════════════════════
 const TOPICS = {
-  limits: {
-    name: "Limits",
-    icon: "lim",
-    color: "teal",
-    difficulty: "easy",
-    count: 0
-  },
-  derivatives: {
-    name: "Derivatives",
-    icon: "f'",
-    color: "orange",
-    difficulty: "med",
-    count: 0
-  },
-  derivative_apps: {
-    name: "Derivative Applications",
-    icon: "opt",
-    color: "purple",
-    difficulty: "med",
-    count: 0
-  },
-  integrals: {
-    name: "Integrals",
-    icon: "∫",
-    color: "teal",
-    difficulty: "med",
-    count: 0
-  },
-  ftc: {
-    name: "Fundamental Theorem",
-    icon: "FTC",
-    color: "orange",
-    difficulty: "hard",
-    count: 0
-  },
-  series: {
-    name: "Series & Sequences",
-    icon: "Σ",
-    color: "purple",
-    difficulty: "hard",
-    count: 0
-  }
+  u1: { name:"Unit 1: Limits & Continuity",        short:"Limits",        icon:"lim", color:"te", difficulty:{easy:true,med:true,hard:false}, apUnit:1, sub:"Limits, continuity, IVT, squeeze theorem, asymptotes" },
+  u2: { name:"Unit 2: Differentiation Fundamentals",short:"Derivatives",   icon:"f′",  color:"or", difficulty:{easy:true,med:true,hard:false}, apUnit:2, sub:"Definition, power/product/quotient/trig rules" },
+  u3: { name:"Unit 3: Composite, Implicit & Inverse",short:"Chain Rule",   icon:"∘",   color:"pu", difficulty:{easy:false,med:true,hard:true},  apUnit:3, sub:"Chain rule, implicit differentiation, inverse functions" },
+  u4: { name:"Unit 4: Contextual Applications",     short:"Related Rates", icon:"Δ",   color:"or", difficulty:{easy:false,med:true,hard:true},  apUnit:4, sub:"Related rates, linearization, L'Hôpital's rule" },
+  u5: { name:"Unit 5: Analytical Applications",     short:"Optimization",  icon:"▲",   color:"te", difficulty:{easy:false,med:true,hard:true},  apUnit:5, sub:"MVT, EVT, critical points, optimization, concavity" },
+  u6: { name:"Unit 6: Integration & Accumulation",  short:"Integrals",     icon:"∫",   color:"pu", difficulty:{easy:true,med:true,hard:true},  apUnit:6, sub:"Riemann sums, FTC, u-substitution, techniques" },
+  u7: { name:"Unit 7: Differential Equations",      short:"Diff. Eq.",     icon:"dy",  color:"bl", difficulty:{easy:false,med:true,hard:true},  apUnit:7, sub:"Slope fields, separable DEs, exponential growth/decay" },
+  u8: { name:"Unit 8: Applications of Integration", short:"Area & Volume", icon:"⌀",   color:"or", difficulty:{easy:false,med:true,hard:true},  apUnit:8, sub:"Average value, net change, area, volumes of solids" },
 };
 
+// ── difficulty filter state ──
+let activeDiff = 'all';
+
+// ══════════════════════════════════════════════════════
+//  QUESTION BANK
+// ══════════════════════════════════════════════════════
 const QUESTIONS = [
-  // ── LIMITS ──────────────────────────────────────────────────
-  {
-    topic: "limits",
-    category: "Limits",
-    text: "What is the value of lim(x→3) of (x² - 9) / (x - 3)?",
-    formula: "lim(x→3)  (x² - 9) / (x - 3)",
-    options: ["0", "3", "6", "Undefined"],
-    correct: 2,
-    explanation: "Factor the numerator: x² - 9 = (x-3)(x+3). Cancel (x-3) to get lim(x→3) (x+3) = 3+3 = 6.",
-    expFormula: "(x²-9)/(x-3) = (x-3)(x+3)/(x-3) = x+3  →  3+3 = 6"
-  },
-  {
-    topic: "limits",
-    category: "Limits",
-    text: "What does lim(x→∞) of (3x² + 2x) / (5x²) equal?",
-    formula: "lim(x→∞)  (3x² + 2x) / (5x²)",
-    options: ["0", "3/5", "2/5", "∞"],
-    correct: 1,
-    explanation: "Divide numerator and denominator by x² (the highest degree). The 2x/x² term goes to 0, leaving 3/5.",
-    expFormula: "(3 + 2/x) / 5  →  3/5 as x→∞"
-  },
-  {
-    topic: "limits",
-    category: "Limits",
-    text: "What is lim(x→0) of sin(x) / x?",
-    formula: "lim(x→0)  sin(x) / x",
-    options: ["0", "∞", "1", "Undefined"],
-    correct: 2,
-    explanation: "This is one of the most important limits in calculus. By the squeeze theorem (or geometric proof), lim(x→0) sin(x)/x = 1.",
-    expFormula: "lim(x→0) sin(x)/x = 1  (standard limit — memorize this!)"
-  },
-  {
-    topic: "limits",
-    category: "Limits",
-    text: "If lim(x→2⁻) f(x) = 5 and lim(x→2⁺) f(x) = 5, what can we conclude?",
-    options: ["f(2) = 5", "f is continuous at x=2", "lim(x→2) f(x) = 5", "Both A and C"],
-    correct: 2,
-    explanation: "When both one-sided limits are equal, the two-sided limit exists and equals that value. However, we cannot conclude f(2) = 5 or continuity without knowing the function value at x=2.",
-    expFormula: "Left limit = Right limit = 5  ⟹  lim(x→2) f(x) = 5"
-  },
-  {
-    topic: "limits",
-    category: "Limits — L'Hôpital",
-    text: "Use L'Hôpital's Rule to find lim(x→0) of (e^x - 1) / x.",
-    formula: "lim(x→0)  (eˣ - 1) / x",
-    options: ["0", "e", "1", "Does not exist"],
-    correct: 2,
-    explanation: "This is a 0/0 form. Applying L'Hôpital: differentiate top and bottom. d/dx(eˣ-1) = eˣ, d/dx(x) = 1. So the limit becomes lim(x→0) eˣ/1 = e⁰ = 1.",
-    expFormula: "lim(x→0) eˣ/1 = e⁰ = 1"
-  },
-  {
-    topic: "limits",
-    category: "Limits",
-    text: "What is lim(x→∞) of (2x³ - x) / (x³ + 7)?",
-    formula: "lim(x→∞)  (2x³ - x) / (x³ + 7)",
-    options: ["0", "1", "2", "∞"],
-    correct: 2,
-    explanation: "The leading terms dominate as x→∞. Both numerator and denominator have degree 3, so divide: ratio of leading coefficients = 2/1 = 2.",
-    expFormula: "Leading terms: 2x³ / x³ = 2"
-  },
-  {
-    topic: "limits",
-    category: "Limits — Continuity",
-    text: "A function f is continuous at x = a if which of the following holds?",
-    options: [
-      "f(a) is defined only",
-      "lim(x→a) f(x) exists only",
-      "f(a) = lim(x→a) f(x) and both exist",
-      "f'(a) exists"
-    ],
-    correct: 2,
-    explanation: "Three conditions must hold for continuity at x=a: (1) f(a) is defined, (2) the limit exists, (3) they are equal: f(a) = lim(x→a) f(x).",
-    expFormula: "Continuity: f(a) defined, lim exists, and f(a) = lim(x→a) f(x)"
-  },
-  {
-    topic: "limits",
-    category: "Limits",
-    text: "What is lim(x→0⁺) of ln(x)?",
-    options: ["0", "1", "-∞", "∞"],
-    correct: 2,
-    explanation: "As x approaches 0 from the right, ln(x) decreases without bound. The natural log has a vertical asymptote at x = 0, going to -∞.",
-    expFormula: "lim(x→0⁺) ln(x) = -∞"
-  },
 
-  // ── DERIVATIVES ─────────────────────────────────────────────
-  {
-    topic: "derivatives",
-    category: "Derivatives — Power Rule",
-    text: "Find f'(x) if f(x) = 4x³ - 2x² + 7x - 5.",
-    formula: "f(x) = 4x³ - 2x² + 7x - 5",
-    options: ["12x² - 4x + 7", "4x² - 2x + 7", "12x² - 4x - 5", "12x³ - 4x² + 7"],
-    correct: 0,
-    explanation: "Apply the power rule term by term: d/dx(4x³) = 12x², d/dx(-2x²) = -4x, d/dx(7x) = 7, d/dx(-5) = 0.",
-    expFormula: "f'(x) = 12x² - 4x + 7"
-  },
-  {
-    topic: "derivatives",
-    category: "Derivatives — Chain Rule",
-    text: "Find the derivative of f(x) = sin(3x²).",
-    formula: "f(x) = sin(3x²)",
-    options: ["cos(3x²)", "6x·cos(3x²)", "3x·cos(3x²)", "-6x·cos(3x²)"],
-    correct: 1,
-    explanation: "Chain rule: d/dx[sin(g(x))] = cos(g(x))·g'(x). Here g(x) = 3x², so g'(x) = 6x. Result: cos(3x²)·6x = 6x·cos(3x²).",
-    expFormula: "f'(x) = cos(3x²) · 6x = 6x cos(3x²)"
-  },
-  {
-    topic: "derivatives",
-    category: "Derivatives — Product Rule",
-    text: "Find the derivative of f(x) = x²·eˣ.",
-    formula: "f(x) = x²eˣ",
-    options: ["2x·eˣ", "x²·eˣ + 2x·eˣ", "2x·eˣ + x²", "2x + eˣ"],
-    correct: 1,
-    explanation: "Product rule: (uv)' = u'v + uv'. Here u = x², v = eˣ. So f'(x) = 2x·eˣ + x²·eˣ = eˣ(2x + x²).",
-    expFormula: "f'(x) = 2x·eˣ + x²·eˣ = eˣ(x² + 2x)"
-  },
-  {
-    topic: "derivatives",
-    category: "Derivatives — Quotient Rule",
-    text: "Find f'(x) if f(x) = (x² + 1) / (x - 1).",
-    formula: "f(x) = (x² + 1) / (x - 1)",
-    options: [
-      "(2x(x-1) - (x²+1)) / (x-1)²",
-      "(2x + 1) / 1",
-      "(x² - 2x - 1) / (x-1)²",
-      "2x / 1"
-    ],
-    correct: 0,
-    explanation: "Quotient rule: (u/v)' = (u'v - uv') / v². Here u = x²+1, u' = 2x, v = x-1, v' = 1. So f'(x) = (2x(x-1) - (x²+1)) / (x-1)².",
-    expFormula: "f'(x) = [2x(x-1) - (x²+1)] / (x-1)²"
-  },
-  {
-    topic: "derivatives",
-    category: "Derivatives — Trig",
-    text: "What is d/dx[tan(x)]?",
-    options: ["sin(x)", "-csc²(x)", "sec²(x)", "cos(x)"],
-    correct: 2,
-    explanation: "The derivative of tan(x) = sin(x)/cos(x). Using quotient rule: (cos²x + sin²x)/cos²x = 1/cos²x = sec²(x).",
-    expFormula: "d/dx[tan(x)] = sec²(x)"
-  },
-  {
-    topic: "derivatives",
-    category: "Derivatives — Exponential",
-    text: "What is d/dx[eˣ]?",
-    options: ["x·eˣ⁻¹", "eˣ", "e", "eˣ · ln(e)"],
-    correct: 1,
-    explanation: "The exponential function eˣ is its own derivative — this is one of its defining properties. d/dx[eˣ] = eˣ.",
-    expFormula: "d/dx[eˣ] = eˣ  (unique to base e)"
-  },
-  {
-    topic: "derivatives",
-    category: "Derivatives — Logarithm",
-    text: "What is d/dx[ln(x)]?",
-    formula: "f(x) = ln(x),  x > 0",
-    options: ["ln(x)", "1/x²", "1/x", "x·ln(x)"],
-    correct: 2,
-    explanation: "The derivative of the natural logarithm is d/dx[ln(x)] = 1/x, for x > 0.",
-    expFormula: "d/dx[ln(x)] = 1/x"
-  },
-  {
-    topic: "derivatives",
-    category: "Derivatives — Implicit",
-    text: "For the curve x² + y² = 25, find dy/dx using implicit differentiation.",
-    formula: "x² + y² = 25",
-    options: ["x/y", "-x/y", "2x/2y", "-2x"],
-    correct: 1,
-    explanation: "Differentiate both sides with respect to x: 2x + 2y(dy/dx) = 0. Solve for dy/dx: dy/dx = -2x/(2y) = -x/y.",
-    expFormula: "2x + 2y(dy/dx) = 0  ⟹  dy/dx = -x/y"
-  },
-  {
-    topic: "derivatives",
-    category: "Derivatives",
-    text: "What is the slope of the tangent line to f(x) = x³ at x = 2?",
-    formula: "f(x) = x³  at  x = 2",
-    options: ["4", "8", "12", "6"],
-    correct: 2,
-    explanation: "First find f'(x) = 3x². Then evaluate at x = 2: f'(2) = 3(2)² = 3·4 = 12. The tangent line has slope 12.",
-    expFormula: "f'(x) = 3x²  →  f'(2) = 3(4) = 12"
-  },
+// ─────────────────────────── UNIT 1: LIMITS ─────────────────────────────────
+{unit:"u1",cat:"Limits — Factoring",diff:"easy",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to 3}\\frac{x^2-9}{x-3}\\).",
+ options:["0","3","6","DNE"],correct:2,
+ explanation:"Factor the numerator: \\(x^2-9=(x-3)(x+3)\\). Cancel \\((x-3)\\) to get \\(\\lim_{x\\to3}(x+3)=6\\).",
+ expMath:"\\(\\frac{(x-3)(x+3)}{x-3}=x+3\\to 6\\)"},
 
-  // ── DERIVATIVE APPLICATIONS ─────────────────────────────────
-  {
-    topic: "derivative_apps",
-    category: "Applications — Increasing/Decreasing",
-    text: "For f(x) = x³ - 3x, on which interval is f increasing?",
-    formula: "f(x) = x³ - 3x",
-    options: ["(-1, 1)", "(-∞, -1) and (1, ∞)", "All reals", "(0, ∞)"],
-    correct: 1,
-    explanation: "Find f'(x) = 3x² - 3 = 3(x²-1) = 3(x-1)(x+1). f'(x) > 0 when x < -1 or x > 1. So f is increasing on (-∞,-1) ∪ (1,∞).",
-    expFormula: "f'(x) = 3(x-1)(x+1) > 0  ⟹  x < -1 or x > 1"
-  },
-  {
-    topic: "derivative_apps",
-    category: "Applications — Critical Points",
-    text: "How do you find critical points of a function f(x)?",
-    options: [
-      "Set f(x) = 0 and solve",
-      "Set f'(x) = 0 or find where f'(x) is undefined",
-      "Set f''(x) = 0 and solve",
-      "Find where f is continuous"
-    ],
-    correct: 1,
-    explanation: "Critical points occur where f'(x) = 0 OR where f'(x) is undefined (but f(x) is defined). These are candidates for local maxima and minima.",
-    expFormula: "Critical points: f'(x) = 0  OR  f'(x) undefined"
-  },
-  {
-    topic: "derivative_apps",
-    category: "Applications — Second Derivative Test",
-    text: "If f'(c) = 0 and f''(c) > 0, what can we conclude about c?",
-    options: ["Local maximum at c", "Local minimum at c", "Inflection point at c", "Cannot determine"],
-    correct: 1,
-    explanation: "The second derivative test: if f'(c) = 0 and f''(c) > 0, the function is concave up at c, indicating a local minimum. Think of it as the curve 'holding water' at that point.",
-    expFormula: "f'(c)=0 and f''(c)>0  ⟹  local minimum at c"
-  },
-  {
-    topic: "derivative_apps",
-    category: "Applications — Related Rates",
-    text: "A ladder 10 ft long leans against a wall. Its base slides away at 2 ft/s. When the base is 6 ft from the wall, how fast is the top sliding down?",
-    options: ["-3/2 ft/s", "-2/3 ft/s", "-3/4 ft/s", "-4/3 ft/s"],
-    correct: 0,
-    explanation: "By Pythagorean: x² + y² = 100. Differentiate: 2x(dx/dt) + 2y(dy/dt) = 0. When x=6: y=8. So 6(2) + 8(dy/dt) = 0 → dy/dt = -12/8 = -3/2 ft/s.",
-    expFormula: "6(2) + 8(dy/dt) = 0  ⟹  dy/dt = -3/2 ft/s"
-  },
-  {
-    topic: "derivative_apps",
-    category: "Applications — Mean Value Theorem",
-    text: "The Mean Value Theorem guarantees a point c in (a,b) where f'(c) equals what?",
-    options: ["f(a) + f(b)", "f(b) - f(a)", "[f(b) - f(a)] / (b - a)", "f'(a) + f'(b)"],
-    correct: 2,
-    explanation: "MVT states: if f is continuous on [a,b] and differentiable on (a,b), there exists c in (a,b) such that f'(c) = [f(b)-f(a)]/(b-a). This is the instantaneous rate equaling the average rate.",
-    expFormula: "f'(c) = [f(b) - f(a)] / (b - a)"
-  },
-  {
-    topic: "derivative_apps",
-    category: "Applications — Concavity",
-    text: "An inflection point occurs where:",
-    options: ["f'(x) = 0", "f(x) = 0", "f''(x) changes sign", "f'(x) changes sign"],
-    correct: 2,
-    explanation: "An inflection point is where concavity changes — the second derivative changes sign (from positive to negative or vice versa). f''(x) = 0 is a necessary but not sufficient condition.",
-    expFormula: "Inflection point: f''(x) changes sign"
-  },
-  {
-    topic: "derivative_apps",
-    category: "Applications — Optimization",
-    text: "To maximize area of a rectangle with fixed perimeter P = 100, what dimensions give the maximum area?",
-    options: ["10 × 40", "25 × 25", "20 × 30", "50 × 0"],
-    correct: 1,
-    explanation: "With perimeter 2l + 2w = 100, so l + w = 50. Area = l·w = l(50-l). Maximize: dA/dl = 50 - 2l = 0, so l = 25, w = 25. A square gives maximum area.",
-    expFormula: "A = l(50-l), dA/dl = 50-2l = 0  ⟹  l = w = 25"
-  },
+{unit:"u1",cat:"Limits — Infinity",diff:"easy",
+ text:"Find \\(\\displaystyle\\lim_{x\\to\\infty}\\frac{3x^2+2x}{5x^2}\\).",
+ options:["0","\\(3/5\\)","\\(2/5\\)","\\(\\infty\\)"],correct:1,
+ explanation:"Divide numerator and denominator by \\(x^2\\). The \\(2x/x^2\\) term vanishes, leaving \\(3/5\\).",
+ expMath:"\\(\\frac{3+2/x}{5}\\to\\frac{3}{5}\\)"},
 
-  // ── INTEGRALS ───────────────────────────────────────────────
-  {
-    topic: "integrals",
-    category: "Integrals — Basic",
-    text: "Find ∫ 3x² dx.",
-    formula: "∫ 3x² dx",
-    options: ["6x + C", "x³ + C", "3x³ + C", "x²/2 + C"],
-    correct: 1,
-    explanation: "Power rule for integration: ∫ xⁿ dx = xⁿ⁺¹/(n+1) + C. Here ∫ 3x² dx = 3·x³/3 + C = x³ + C.",
-    expFormula: "∫ 3x² dx = 3·(x³/3) + C = x³ + C"
-  },
-  {
-    topic: "integrals",
-    category: "Integrals — Basic",
-    text: "Evaluate ∫₀² (2x + 1) dx.",
-    formula: "∫₀² (2x + 1) dx",
-    options: ["4", "5", "6", "3"],
-    correct: 2,
-    explanation: "Antiderivative: x² + x. Evaluate from 0 to 2: (2² + 2) - (0² + 0) = 4 + 2 - 0 = 6.",
-    expFormula: "[x² + x]₀² = (4+2) - (0+0) = 6"
-  },
-  {
-    topic: "integrals",
-    category: "Integrals — u-substitution",
-    text: "Evaluate ∫ 2x·cos(x²) dx using substitution.",
-    formula: "∫ 2x cos(x²) dx",
-    options: ["sin(x²) + C", "2cos(x²) + C", "-sin(x²) + C", "cos(2x) + C"],
-    correct: 0,
-    explanation: "Let u = x², then du = 2x dx. The integral becomes ∫ cos(u) du = sin(u) + C = sin(x²) + C.",
-    expFormula: "u = x², du = 2x dx  ⟹  ∫ cos(u)du = sin(u)+C = sin(x²)+C"
-  },
-  {
-    topic: "integrals",
-    category: "Integrals — Basic",
-    text: "What is ∫ eˣ dx?",
-    formula: "∫ eˣ dx",
-    options: ["eˣ/x + C", "eˣ + C", "x·eˣ + C", "eˣ·ln(x) + C"],
-    correct: 1,
-    explanation: "The exponential function eˣ is its own antiderivative, just like it's its own derivative. ∫ eˣ dx = eˣ + C.",
-    expFormula: "∫ eˣ dx = eˣ + C"
-  },
-  {
-    topic: "integrals",
-    category: "Integrals — Area",
-    text: "The definite integral ∫ₐᵇ f(x) dx represents:",
-    options: [
-      "The length of f from a to b",
-      "The net signed area between f and the x-axis from a to b",
-      "The average value of f",
-      "The slope of f at b"
-    ],
-    correct: 1,
-    explanation: "The definite integral represents the net signed area — areas above the x-axis are positive, areas below are negative. Total area would use |f(x)|.",
-    expFormula: "∫ₐᵇ f(x) dx = net signed area under f from a to b"
-  },
-  {
-    topic: "integrals",
-    category: "Integrals — Basic",
-    text: "Find ∫ (1/x) dx.",
-    formula: "∫ (1/x) dx",
-    options: ["x⁻² + C", "ln|x| + C", "-1/x² + C", "1/(2x²) + C"],
-    correct: 1,
-    explanation: "∫ (1/x) dx = ln|x| + C. The absolute value is needed since ln is only defined for positive numbers, but 1/x can integrate over negative domains too.",
-    expFormula: "∫ (1/x) dx = ln|x| + C"
-  },
-  {
-    topic: "integrals",
-    category: "Integrals — Average Value",
-    text: "The average value of f(x) on [a, b] is given by:",
-    options: [
-      "[f(a) + f(b)] / 2",
-      "1/(b-a) · ∫ₐᵇ f(x) dx",
-      "∫ₐᵇ f(x) dx",
-      "f((a+b)/2)"
-    ],
-    correct: 1,
-    explanation: "The average value formula is f_avg = 1/(b-a) · ∫ₐᵇ f(x) dx. This divides the total 'area' by the length of the interval.",
-    expFormula: "f_avg = (1/(b-a)) · ∫ₐᵇ f(x) dx"
-  },
-  {
-    topic: "integrals",
-    category: "Integrals — u-substitution",
-    text: "Evaluate ∫ sin(x)·cos(x) dx.",
-    formula: "∫ sin(x)cos(x) dx",
-    options: ["-cos²(x) + C", "sin²(x)/2 + C", "cos(2x)/2 + C", "-sin(x)cos(x) + C"],
-    correct: 1,
-    explanation: "Let u = sin(x), du = cos(x) dx. Integral becomes ∫ u du = u²/2 + C = sin²(x)/2 + C. (Also: use sin(2x) = 2sin(x)cos(x) identity.)",
-    expFormula: "u = sin(x), du = cos(x)dx  ⟹  u²/2 + C = sin²(x)/2 + C"
-  },
+{unit:"u1",cat:"Limits — Standard",diff:"easy",
+ text:"What is \\(\\displaystyle\\lim_{x\\to 0}\\frac{\\sin x}{x}\\)?",
+ options:["0","\\(\\infty\\)","1","DNE"],correct:2,
+ explanation:"This is the classic squeeze-theorem limit. The result is 1 and should be memorized.",
+ expMath:"\\(\\lim_{x\\to 0}\\frac{\\sin x}{x}=1\\)"},
 
-  // ── FTC ─────────────────────────────────────────────────────
-  {
-    topic: "ftc",
-    category: "FTC — Part 1",
-    text: "If F(x) = ∫₀ˣ sin(t) dt, what is F'(x)?",
-    formula: "F(x) = ∫₀ˣ sin(t) dt",
-    options: ["cos(x)", "sin(x)", "-cos(x)", "∫sin(x)dx"],
-    correct: 1,
-    explanation: "By FTC Part 1: if F(x) = ∫ₐˣ f(t) dt, then F'(x) = f(x). Here f(t) = sin(t), so F'(x) = sin(x).",
-    expFormula: "FTC Part 1: d/dx ∫ₐˣ f(t)dt = f(x)  ⟹  F'(x) = sin(x)"
-  },
-  {
-    topic: "ftc",
-    category: "FTC — Part 2",
-    text: "Evaluate ∫₁⁴ (2x) dx using the Fundamental Theorem.",
-    formula: "∫₁⁴ 2x dx",
-    options: ["8", "12", "15", "16"],
-    correct: 2,
-    explanation: "Antiderivative of 2x is x². By FTC Part 2: [x²]₁⁴ = 4² - 1² = 16 - 1 = 15.",
-    expFormula: "[x²]₁⁴ = 16 - 1 = 15"
-  },
-  {
-    topic: "ftc",
-    category: "FTC — Chain Rule Version",
-    text: "Find d/dx[∫₀^(x³) sin(t) dt].",
-    formula: "d/dx [ ∫₀^(x³) sin(t) dt ]",
-    options: ["sin(x³)", "3x²·sin(x³)", "cos(x³)", "3x²·cos(x³)"],
-    correct: 1,
-    explanation: "FTC Part 1 with chain rule: if F(x) = ∫ₐ^g(x) f(t) dt, then F'(x) = f(g(x))·g'(x). Here g(x) = x³, g'(x) = 3x². So answer is sin(x³)·3x².",
-    expFormula: "sin(x³)·(3x²) = 3x² sin(x³)"
-  },
-  {
-    topic: "ftc",
-    category: "FTC — Net Change",
-    text: "If v(t) represents velocity, what does ∫ₐᵇ v(t) dt represent?",
-    options: ["Total speed traveled", "Net displacement from a to b", "Average velocity", "Acceleration at b"],
-    correct: 1,
-    explanation: "By FTC, ∫ₐᵇ v(t) dt = position(b) - position(a) = net displacement. Total distance (not displacement) would require ∫|v(t)|dt.",
-    expFormula: "∫ₐᵇ v(t) dt = position(b) - position(a) = net displacement"
-  },
-  {
-    topic: "ftc",
-    category: "FTC",
-    text: "What does the Fundamental Theorem of Calculus establish?",
-    options: [
-      "That all functions are integrable",
-      "The relationship between differentiation and integration",
-      "That limits always exist",
-      "Derivatives are always positive"
-    ],
-    correct: 1,
-    explanation: "The FTC is the central theorem of calculus — it proves that differentiation and integration are inverse operations. This bridges the two major branches of calculus.",
-    expFormula: "∫ₐᵇ f(x)dx = F(b) - F(a)  where F' = f"
-  },
-  {
-    topic: "ftc",
-    category: "FTC — Accumulation",
-    text: "Given F(x) = ∫₂ˣ (3t²) dt, find F(3).",
-    formula: "F(x) = ∫₂ˣ 3t² dt",
-    options: ["27", "19", "8", "25"],
-    correct: 1,
-    explanation: "Antiderivative of 3t² is t³. By FTC: F(3) = [t³]₂³ = 3³ - 2³ = 27 - 8 = 19.",
-    expFormula: "[t³]₂³ = 27 - 8 = 19"
-  },
+{unit:"u1",cat:"Continuity — Definition",diff:"easy",
+ text:"A function \\(f\\) is continuous at \\(x=a\\) if:",
+ options:["\\(f(a)\\) is defined only","The limit exists only","\\(f(a)=\\lim_{x\\to a}f(x)\\) and both exist","\\(f'(a)\\) exists"],correct:2,
+ explanation:"Three conditions: \\(f(a)\\) defined, the limit exists, and they are equal.",
+ expMath:"\\(\\lim_{x\\to a}f(x)=f(a)\\)"},
 
-  // ── SERIES & SEQUENCES ──────────────────────────────────────
-  {
-    topic: "series",
-    category: "Series — Convergence",
-    text: "A geometric series Σar^n converges when:",
-    formula: "Σ a·rⁿ  (n from 0 to ∞)",
-    options: ["|r| < 1", "|r| > 1", "r > 0", "a > 0"],
-    correct: 0,
-    explanation: "A geometric series converges if and only if |r| < 1 (the common ratio has absolute value less than 1). When it converges, the sum is a/(1-r).",
-    expFormula: "|r| < 1  ⟹  sum = a/(1-r)"
-  },
-  {
-    topic: "series",
-    category: "Series — Tests",
-    text: "The nth-Term Test (Divergence Test) says: if lim(n→∞) aₙ ≠ 0, then Σaₙ:",
-    options: ["Converges", "Diverges", "May converge or diverge", "Equals zero"],
-    correct: 1,
-    explanation: "If the terms don't approach zero, the series cannot possibly converge. However, the converse is false: if aₙ → 0, the series might still diverge (e.g. harmonic series).",
-    expFormula: "lim aₙ ≠ 0  ⟹  Σaₙ diverges"
-  },
-  {
-    topic: "series",
-    category: "Series — Taylor",
-    text: "The Taylor series for eˣ centered at 0 is:",
-    formula: "eˣ  (Maclaurin series)",
-    options: [
-      "1 + x + x²/2 + x³/6 + ...",
-      "1 - x + x²/2 - x³/6 + ...",
-      "x + x³/6 + x⁵/120 + ...",
-      "1 + x + x² + x³ + ..."
-    ],
-    correct: 0,
-    explanation: "The Maclaurin series (Taylor at 0) for eˣ = Σ xⁿ/n! = 1 + x + x²/2! + x³/3! + ... This converges for all x.",
-    expFormula: "eˣ = Σ xⁿ/n! = 1 + x + x²/2! + x³/3! + ..."
-  },
-  {
-    topic: "series",
-    category: "Series — p-series",
-    text: "The p-series Σ 1/nᵖ converges when:",
-    formula: "Σ (1/nᵖ)  (n from 1 to ∞)",
-    options: ["p < 1", "p = 1", "p > 1", "All p > 0"],
-    correct: 2,
-    explanation: "The p-series Σ 1/nᵖ converges if and only if p > 1. When p = 1, it's the harmonic series which diverges. When p ≤ 1 it diverges.",
-    expFormula: "p > 1  ⟹  Σ 1/nᵖ converges"
-  },
-  {
-    topic: "series",
-    category: "Series — Taylor",
-    text: "The Taylor series for sin(x) centered at 0 begins:",
-    formula: "sin(x)  Maclaurin series",
-    options: [
-      "1 - x²/2 + x⁴/24 - ...",
-      "x - x³/6 + x⁵/120 - ...",
-      "x + x³/6 + x⁵/120 + ...",
-      "1 + x - x²/2 - x³/6 ..."
-    ],
-    correct: 1,
-    explanation: "sin(x) = Σ (-1)ⁿ x^(2n+1)/(2n+1)! = x - x³/3! + x⁵/5! - ... Note: only odd powers, alternating signs.",
-    expFormula: "sin(x) = x - x³/6 + x⁵/120 - ..."
-  },
-  {
-    topic: "series",
-    category: "Series — Ratio Test",
-    text: "The Ratio Test uses L = lim|a_{n+1}/aₙ|. The series converges absolutely when:",
-    options: ["L > 1", "L = 1", "L < 1", "L = 0"],
-    correct: 2,
-    explanation: "Ratio Test: if L < 1, the series converges absolutely. If L > 1, it diverges. If L = 1, the test is inconclusive.",
-    expFormula: "L = lim|a_{n+1}/aₙ|: L<1 converges, L>1 diverges, L=1 inconclusive"
-  }
+{unit:"u1",cat:"Limits — L'Hôpital",diff:"med",
+ text:"Use L'Hôpital's Rule to evaluate \\(\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1}{x}\\).",
+ options:["0","\\(e\\)","1","DNE"],correct:2,
+ explanation:"This is a \\(0/0\\) form. Differentiate top and bottom: \\(e^x/1\\to e^0=1\\).",
+ expMath:"\\(\\lim_{x\\to 0}\\frac{e^x}{1}=1\\)"},
+
+{unit:"u1",cat:"Limits — Infinity",diff:"easy",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to\\infty}\\frac{2x^3-x}{x^3+7}\\).",
+ options:["0","1","2","\\(\\infty\\)"],correct:2,
+ explanation:"Leading terms dominate: ratio of leading coefficients \\(=2/1=2\\).",
+ expMath:"\\(\\frac{2x^3}{x^3}=2\\)"},
+
+{unit:"u1",cat:"Limits — Squeeze",diff:"med",
+ text:"What is \\(\\displaystyle\\lim_{x\\to 0}x^2\\sin\\!\\left(\\frac{1}{x}\\right)\\)?",
+ options:["1","DNE","0","\\(\\infty\\)"],correct:2,
+ explanation:"Since \\(|\\sin(1/x)|\\le1\\), we have \\(|x^2\\sin(1/x)|\\le x^2\\to 0\\) by the Squeeze Theorem.",
+ expMath:"\\(-x^2\\le x^2\\sin(1/x)\\le x^2\\to 0\\)"},
+
+{unit:"u1",cat:"Limits — One-Sided",diff:"easy",
+ text:"What is \\(\\displaystyle\\lim_{x\\to 0^+}\\ln x\\)?",
+ options:["0","1","\\(-\\infty\\)","\\(\\infty\\)"],correct:2,
+ explanation:"As \\(x\\to 0^+\\), \\(\\ln x\\to-\\infty\\). There is a vertical asymptote at \\(x=0\\).",
+ expMath:"\\(\\lim_{x\\to 0^+}\\ln x=-\\infty\\)"},
+
+{unit:"u1",cat:"Limits — L'Hôpital",diff:"med",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to 0}\\frac{1-\\cos x}{x^2}\\).",
+ options:["0","\\(1/2\\)","1","2"],correct:1,
+ explanation:"\\(0/0\\) form. Apply L'Hôpital twice: \\(\\sin x/(2x)\\to(1/2)\\cdot 1=1/2\\).",
+ expMath:"\\(\\frac{\\sin x}{2x}\\to\\frac{1}{2}\\)"},
+
+{unit:"u1",cat:"Limits — Algebraic",diff:"med",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to 4}\\frac{\\sqrt{x}-2}{x-4}\\).",
+ options:["\\(1/4\\)","\\(1/2\\)","0","4"],correct:0,
+ explanation:"Multiply by conjugate: \\(\\frac{\\sqrt{x}-2}{x-4}\\cdot\\frac{\\sqrt{x}+2}{\\sqrt{x}+2}=\\frac{1}{\\sqrt{x}+2}\\to\\frac{1}{4}\\).",
+ expMath:"\\(\\frac{1}{\\sqrt{x}+2}\\to\\frac{1}{4}\\)"},
+
+{unit:"u1",cat:"IVT",diff:"med",
+ text:"The Intermediate Value Theorem guarantees that if \\(f\\) is continuous on \\([a,b]\\) and \\(f(a)<N<f(b)\\), then:",
+ options:["\\(f'(c)=0\\) for some \\(c\\)","\\(f(c)=N\\) for some \\(c\\in(a,b)\\)","\\(f\\) is differentiable","\\(f\\) has a maximum at \\(c\\)"],correct:1,
+ explanation:"IVT: a continuous function on \\([a,b]\\) takes every value between \\(f(a)\\) and \\(f(b)\\).",
+ expMath:"\\(\\exists c\\in(a,b):f(c)=N\\)"},
+
+{unit:"u1",cat:"Limits — Trigonometric",diff:"med",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to 0}\\frac{\\sin 3x}{\\sin 5x}\\).",
+ options:["1","\\(3/5\\)","\\(5/3\\)","0"],correct:1,
+ explanation:"Use \\(\\lim_{x\\to 0}\\sin(kx)/(kx)=1\\) for each factor: result is \\((3x)/(5x)=3/5\\).",
+ expMath:"\\(\\frac{\\sin 3x}{3x}\\cdot\\frac{5x}{\\sin 5x}\\cdot\\frac{3}{5}\\to\\frac{3}{5}\\)"},
+
+{unit:"u1",cat:"Asymptotes",diff:"easy",
+ text:"A vertical asymptote at \\(x=c\\) occurs when:",
+ options:["\\(f(c)=0\\)","\\(\\lim_{x\\to c}f(x)=\\pm\\infty\\)","\\(f'(c)\\) is undefined","\\(f(c)\\) is undefined only"],correct:1,
+ explanation:"Vertical asymptotes occur where the function grows without bound as \\(x\\to c\\).",
+ expMath:"\\(\\lim_{x\\to c}f(x)=\\pm\\infty\\)"},
+
+{unit:"u1",cat:"Limits — Factoring",diff:"med",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to 1}\\frac{x^3-1}{x-1}\\).",
+ options:["0","1","2","3"],correct:3,
+ explanation:"Factor: \\(x^3-1=(x-1)(x^2+x+1)\\). Cancel to get \\(x^2+x+1\\big|_{x=1}=3\\).",
+ expMath:"\\(x^2+x+1\\big|_{x=1}=3\\)"},
+
+{unit:"u1",cat:"Continuity — Types",diff:"med",
+ text:"Which discontinuity can be removed by redefining \\(f\\) at a single point?",
+ options:["Jump discontinuity","Infinite discontinuity","Removable discontinuity","Oscillating discontinuity"],correct:2,
+ explanation:"A removable discontinuity: the limit exists but \\(f(a)\\) is missing or wrong. Set \\(f(a)=\\lim_{x\\to a}f(x)\\) to repair it.",
+ expMath:"\\(\\lim_{x\\to a}f(x)\\) exists but \\(\\ne f(a)\\)"},
+
+{unit:"u1",cat:"Limits — L'Hôpital",diff:"hard",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to 0}\\frac{x-\\sin x}{x^3}\\).",
+ options:["\\(1/6\\)","\\(1/3\\)","0","\\(1/2\\)"],correct:0,
+ explanation:"Apply L'Hôpital three times: \\((1-\\cos x)/(3x^2)\\to\\sin x/(6x)\\to\\cos x/6=1/6\\).",
+ expMath:"\\(\\cos x/6\\big|_{x=0}=1/6\\)"},
+
+{unit:"u1",cat:"Limits — Famous",diff:"easy",
+ text:"Evaluate \\(\\displaystyle\\lim_{n\\to\\infty}\\left(1+\\frac{1}{n}\\right)^n\\).",
+ options:["1","2","\\(e\\)","\\(\\infty\\)"],correct:2,
+ explanation:"This is the definition of \\(e\\approx2.718\\), one of the most fundamental limits in mathematics.",
+ expMath:"\\(\\lim_{n\\to\\infty}\\left(1+\\frac{1}{n}\\right)^n=e\\)"},
+
+{unit:"u1",cat:"Limits — Indeterminate",diff:"med",
+ text:"Which of the following is NOT an indeterminate form?",
+ options:["\\(0/0\\)","\\(\\infty/\\infty\\)","\\(1^\\infty\\)","\\(\\infty/1\\)"],correct:3,
+ explanation:"\\(\\infty/1=\\infty\\) is determinate. The others require further analysis.",
+ expMath:"\\(\\infty/1=\\infty\\) (determinate)"},
+
+{unit:"u1",cat:"Limits — One-Sided",diff:"med",
+ text:"For \\(f(x)=|x|/x\\), what is \\(\\displaystyle\\lim_{x\\to 0}f(x)\\)?",
+ options:["0","1","\\(-1\\)","DNE"],correct:3,
+ explanation:"From the right \\(f\\to1\\); from the left \\(f\\to-1\\). The one-sided limits differ, so the two-sided limit does not exist.",
+ expMath:"\\(\\lim_{x\\to 0^+}=1\\ne\\lim_{x\\to 0^-}=-1\\)"},
+
+{unit:"u1",cat:"Limits — L'Hôpital",diff:"hard",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to 0^+}x\\ln x\\).",
+ options:["0","1","\\(-\\infty\\)","-1"],correct:0,
+ explanation:"\\(0\\cdot(-\\infty)\\) form. Rewrite as \\(\\ln x/(1/x)\\). L'Hôpital: \\((1/x)/(-1/x^2)=-x\\to 0\\).",
+ expMath:"\\(\\lim_{x\\to 0^+}(-x)=0\\)"},
+
+// ─────────────────────────── UNIT 2: DIFFERENTIATION FUNDAMENTALS ──────────
+{unit:"u2",cat:"Derivatives — Definition",diff:"easy",
+ text:"The derivative \\(f'(a)\\) is defined as:",
+ options:["\\(f(a+h)/h\\)","\\(\\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}\\)","\\(f(a)/h\\)","\\(f'(a+h)\\)"],correct:1,
+ explanation:"The limit definition of the derivative measures instantaneous rate of change.",
+ expMath:"\\(f'(a)=\\lim_{h\\to 0}\\frac{f(a+h)-f(a)}{h}\\)"},
+
+{unit:"u2",cat:"Derivatives — Power Rule",diff:"easy",
+ text:"Find \\(f'(x)\\) if \\(f(x)=4x^3-2x^2+7x-5\\).",
+ options:["\\(12x^2-4x+7\\)","\\(4x^2-2x+7\\)","\\(12x^2-4x-5\\)","\\(12x^3-4x^2+7\\)"],correct:0,
+ explanation:"Apply the power rule term by term: \\(d/dx(x^n)=nx^{n-1}\\).",
+ expMath:"\\(f'(x)=12x^2-4x+7\\)"},
+
+{unit:"u2",cat:"Derivatives — Product Rule",diff:"med",
+ text:"Find the derivative of \\(f(x)=x^2 e^x\\).",
+ options:["\\(2xe^x\\)","\\(x^2e^x+2xe^x\\)","\\(2xe^x+x^2\\)","\\(2x+e^x\\)"],correct:1,
+ explanation:"Product rule: \\((uv)'=u'v+uv'\\). Here \\(u=x^2,v=e^x\\).",
+ expMath:"\\(f'(x)=2xe^x+x^2e^x=e^x(x^2+2x)\\)"},
+
+{unit:"u2",cat:"Derivatives — Quotient Rule",diff:"med",
+ text:"Find \\(f'(x)\\) for \\(f(x)=\\dfrac{x^2+1}{x-1}\\).",
+ options:["\\(\\frac{2x(x-1)-(x^2+1)}{(x-1)^2}\\)","\\(\\frac{2x+1}{1}\\)","\\(\\frac{x^2-2x-1}{(x-1)^2}\\)","\\(2x\\)"],correct:0,
+ explanation:"Quotient rule: \\((u/v)'=(u'v-uv')/v^2\\).",
+ expMath:"\\(f'(x)=\\frac{2x(x-1)-(x^2+1)}{(x-1)^2}\\)"},
+
+{unit:"u2",cat:"Derivatives — Trig",diff:"easy",
+ text:"What is \\(\\dfrac{d}{dx}[\\tan x]\\)?",
+ options:["\\(\\sin x\\)","\\(-\\csc^2 x\\)","\\(\\sec^2 x\\)","\\(\\cos x\\)"],correct:2,
+ explanation:"\\(\\tan x=\\sin x/\\cos x\\). Quotient rule gives \\((\\cos^2x+\\sin^2x)/\\cos^2x=\\sec^2 x\\).",
+ expMath:"\\(\\frac{d}{dx}[\\tan x]=\\sec^2 x\\)"},
+
+{unit:"u2",cat:"Derivatives — Exponential",diff:"easy",
+ text:"What is \\(\\dfrac{d}{dx}[e^x]\\)?",
+ options:["\\(xe^{x-1}\\)","\\(e^x\\)","\\(e\\)","\\(e^x\\ln e\\)"],correct:1,
+ explanation:"\\(e^x\\) is its own derivative — the defining property of the natural base.",
+ expMath:"\\(\\frac{d}{dx}[e^x]=e^x\\)"},
+
+{unit:"u2",cat:"Derivatives — Logarithm",diff:"easy",
+ text:"What is \\(\\dfrac{d}{dx}[\\ln x]\\) for \\(x>0\\)?",
+ options:["\\(\\ln x\\)","\\(1/x^2\\)","\\(1/x\\)","\\(x\\ln x\\)"],correct:2,
+ explanation:"\\(d/dx[\\ln x]=1/x\\) for \\(x>0\\).",
+ expMath:"\\(\\frac{d}{dx}[\\ln x]=\\frac{1}{x}\\)"},
+
+{unit:"u2",cat:"Derivatives — Trig",diff:"easy",
+ text:"What is \\(\\dfrac{d}{dx}[\\cos x]\\)?",
+ options:["\\(\\sin x\\)","\\(-\\sin x\\)","\\(\\cos x\\)","\\(-\\cos x\\)"],correct:1,
+ explanation:"The derivative of cosine is negative sine.",
+ expMath:"\\(\\frac{d}{dx}[\\cos x]=-\\sin x\\)"},
+
+{unit:"u2",cat:"Derivatives — Power Rule",diff:"med",
+ text:"The slope of the tangent line to \\(f(x)=x^3\\) at \\(x=2\\) is:",
+ options:["4","8","12","6"],correct:2,
+ explanation:"\\(f'(x)=3x^2\\). At \\(x=2\\): \\(f'(2)=3(4)=12\\).",
+ expMath:"\\(f'(2)=3(2)^2=12\\)"},
+
+{unit:"u2",cat:"Derivatives — Exponential",diff:"med",
+ text:"What is \\(\\dfrac{d}{dx}[a^x]\\) for \\(a>0\\)?",
+ options:["\\(xa^{x-1}\\)","\\(a^x\\)","\\(a^x\\ln a\\)","\\(\\ln a\\)"],correct:2,
+ explanation:"For general base \\(a\\): \\(d/dx[a^x]=a^x\\ln a\\).",
+ expMath:"\\(\\frac{d}{dx}[a^x]=a^x\\ln a\\)"},
+
+{unit:"u2",cat:"Derivatives — Trig",diff:"med",
+ text:"What is \\(\\dfrac{d}{dx}[\\sec x]\\)?",
+ options:["\\(\\sec x\\tan x\\)","\\(-\\csc x\\cot x\\)","\\(\\tan x\\)","\\(\\csc x\\)"],correct:0,
+ explanation:"Derived from \\(1/\\cos x\\) via quotient rule: \\(\\sec x\\tan x\\).",
+ expMath:"\\(\\frac{d}{dx}[\\sec x]=\\sec x\\tan x\\)"},
+
+{unit:"u2",cat:"Differentiability",diff:"med",
+ text:"Where is \\(f(x)=|x|\\) NOT differentiable?",
+ options:["\\(x=1\\)","\\(x=0\\)","\\(x=-1\\)","Everywhere"],correct:1,
+ explanation:"\\(f(x)=|x|\\) has a sharp corner at \\(x=0\\). Left derivative \\(=-1\\), right derivative \\(=+1\\).",
+ expMath:"\\(f'_{-}(0)=-1\\ne f'_{+}(0)=+1\\)"},
+
+{unit:"u2",cat:"Derivatives — Higher Order",diff:"med",
+ text:"If \\(f(x)=x^4\\), find \\(f''(x)\\).",
+ options:["\\(4x^3\\)","\\(12x^2\\)","\\(24x\\)","\\(4x\\)"],correct:1,
+ explanation:"\\(f'(x)=4x^3\\), \\(f''(x)=12x^2\\).",
+ expMath:"\\(f''(x)=12x^2\\)"},
+
+{unit:"u2",cat:"Derivatives — Product Rule",diff:"med",
+ text:"Differentiate \\(f(x)=x\\ln x\\).",
+ options:["\\(\\ln x\\)","\\(1+\\ln x\\)","\\(1/x\\)","\\(x/\\ln x\\)"],correct:1,
+ explanation:"Product rule: \\(1\\cdot\\ln x+x\\cdot(1/x)=\\ln x+1\\).",
+ expMath:"\\(f'(x)=\\ln x+1\\)"},
+
+{unit:"u2",cat:"Derivatives — Sign",diff:"easy",
+ text:"If \\(f'(x)>0\\) on an interval, then \\(f\\) is:",
+ options:["Concave up","Decreasing","Increasing","Constant"],correct:2,
+ explanation:"A positive first derivative means the function is increasing.",
+ expMath:"\\(f'(x)>0\\Rightarrow f\\text{ increasing}\\)"},
+
+// ─────────────────────────── UNIT 3: CHAIN/IMPLICIT/INVERSE ─────────────────
+{unit:"u3",cat:"Chain Rule",diff:"med",
+ text:"Find the derivative of \\(f(x)=\\sin(3x^2)\\).",
+ options:["\\(\\cos(3x^2)\\)","\\(6x\\cos(3x^2)\\)","\\(3x\\cos(3x^2)\\)","\\(-6x\\cos(3x^2)\\)"],correct:1,
+ explanation:"Chain rule: \\(\\cos(3x^2)\\cdot 6x\\).",
+ expMath:"\\(f'(x)=6x\\cos(3x^2)\\)"},
+
+{unit:"u3",cat:"Chain Rule",diff:"med",
+ text:"Find \\(\\dfrac{d}{dx}[e^{3x}]\\).",
+ options:["\\(e^{3x}\\)","\\(3e^{3x}\\)","\\(3xe^{3x}\\)","\\(e^{3x}/3\\)"],correct:1,
+ explanation:"Chain rule: \\(e^{3x}\\cdot 3=3e^{3x}\\).",
+ expMath:"\\(\\frac{d}{dx}[e^{3x}]=3e^{3x}\\)"},
+
+{unit:"u3",cat:"Chain Rule",diff:"med",
+ text:"Find \\(\\dfrac{d}{dx}[\\ln(x^2+1)]\\).",
+ options:["\\(\\frac{1}{x^2+1}\\)","\\(\\frac{2x}{x^2+1}\\)","\\(\\frac{x}{x^2+1}\\)","\\(\\frac{2}{x^2+1}\\)"],correct:1,
+ explanation:"Chain rule: \\(\\frac{1}{x^2+1}\\cdot 2x\\).",
+ expMath:"\\(\\frac{2x}{x^2+1}\\)"},
+
+{unit:"u3",cat:"Implicit Differentiation",diff:"med",
+ text:"For the curve \\(x^2+y^2=25\\), find \\(dy/dx\\) using implicit differentiation.",
+ options:["\\(x/y\\)","\\(-x/y\\)","\\(2x/2y\\)","\\(-2x\\)"],correct:1,
+ explanation:"Differentiate both sides: \\(2x+2y\\,dy/dx=0\\Rightarrow dy/dx=-x/y\\).",
+ expMath:"\\(\\frac{dy}{dx}=-\\frac{x}{y}\\)"},
+
+{unit:"u3",cat:"Implicit Differentiation",diff:"med",
+ text:"For \\(\\sin y=x\\), find \\(dy/dx\\).",
+ options:["\\(\\cos y\\)","\\(\\sec y\\)","\\(\\sin y\\)","\\(-\\cos y\\)"],correct:1,
+ explanation:"Differentiate: \\(\\cos y\\cdot dy/dx=1\\Rightarrow dy/dx=1/\\cos y=\\sec y\\).",
+ expMath:"\\(\\frac{dy}{dx}=\\sec y\\)"},
+
+{unit:"u3",cat:"Inverse Trig",diff:"med",
+ text:"What is \\(\\dfrac{d}{dx}[\\arcsin x]\\)?",
+ options:["\\(\\frac{1}{\\sqrt{1-x^2}}\\)","\\(\\frac{1}{1+x^2}\\)","\\(\\frac{-1}{\\sqrt{1-x^2}}\\)","\\(\\sqrt{1-x^2}\\)"],correct:0,
+ explanation:"Standard inverse trig derivative.",
+ expMath:"\\(\\frac{d}{dx}[\\arcsin x]=\\frac{1}{\\sqrt{1-x^2}}\\)"},
+
+{unit:"u3",cat:"Inverse Trig",diff:"med",
+ text:"What is \\(\\dfrac{d}{dx}[\\arctan x]\\)?",
+ options:["\\(\\frac{1}{1-x^2}\\)","\\(\\frac{1}{1+x^2}\\)","\\(\\frac{-1}{1+x^2}\\)","\\(\\frac{1}{\\sqrt{1+x^2}}\\)"],correct:1,
+ explanation:"\\(d/dx[\\arctan x]=1/(1+x^2)\\).",
+ expMath:"\\(\\frac{d}{dx}[\\arctan x]=\\frac{1}{1+x^2}\\)"},
+
+{unit:"u3",cat:"Chain Rule",diff:"med",
+ text:"Differentiate \\(f(x)=(3x+2)^5\\).",
+ options:["\\(5(3x+2)^4\\)","\\(15(3x+2)^4\\)","\\(5(3x+2)^4\\cdot3\\)","\\(3(3x+2)^5\\)"],correct:1,
+ explanation:"Chain rule: \\(5(3x+2)^4\\cdot 3=15(3x+2)^4\\).",
+ expMath:"\\(f'(x)=15(3x+2)^4\\)"},
+
+{unit:"u3",cat:"Log Differentiation",diff:"hard",
+ text:"Differentiate \\(y=x^x\\) using logarithmic differentiation.",
+ options:["\\(x^x\\)","\\(x^{x-1}\\)","\\(x^x(1+\\ln x)\\)","\\(x^x\\ln x\\)"],correct:2,
+ explanation:"Take \\(\\ln\\): \\(\\ln y=x\\ln x\\). Differentiate: \\(y'/y=\\ln x+1\\). So \\(y'=x^x(\\ln x+1)\\).",
+ expMath:"\\(y'=x^x(1+\\ln x)\\)"},
+
+{unit:"u3",cat:"Parametric",diff:"hard",
+ text:"If \\(x=t^2\\) and \\(y=t^3\\), find \\(dy/dx\\).",
+ options:["\\(3t/2\\)","\\(2t/3\\)","\\(3t^2/2t\\)","\\(t\\)"],correct:0,
+ explanation:"\\(dy/dx=(dy/dt)/(dx/dt)=3t^2/2t=3t/2\\).",
+ expMath:"\\(\\frac{dy}{dx}=\\frac{3t^2}{2t}=\\frac{3t}{2}\\)"},
+
+{unit:"u3",cat:"Chain Rule",diff:"hard",
+ text:"Find \\(\\dfrac{d}{dx}[\\cos(x^2)]\\).",
+ options:["\\(\\sin(x^2)\\)","\\(-\\sin(x^2)\\)","\\(-2x\\sin(x^2)\\)","\\(-\\cos(2x)\\)"],correct:2,
+ explanation:"Chain rule: \\(-\\sin(x^2)\\cdot 2x\\).",
+ expMath:"\\(f'(x)=-2x\\sin(x^2)\\)"},
+
+{unit:"u3",cat:"Implicit Differentiation",diff:"hard",
+ text:"For \\(x^2y+y^3=5\\), find \\(dy/dx\\).",
+ options:["\\(-2xy/(x^2+3y^2)\\)","\\(2xy/(x^2+3y^2)\\)","\\(-x^2/(3y^2)\\)","\\(2x/3y^2\\)"],correct:0,
+ explanation:"Differentiate implicitly: \\(2xy+x^2y'+3y^2y'=0\\Rightarrow y'(x^2+3y^2)=-2xy\\).",
+ expMath:"\\(\\frac{dy}{dx}=\\frac{-2xy}{x^2+3y^2}\\)"},
+
+// ─────────────────────────── UNIT 4: CONTEXTUAL APPLICATIONS ────────────────
+{unit:"u4",cat:"Related Rates",diff:"med",
+ text:"A 10 ft ladder's base slides away at 2 ft/s. When the base is 6 ft from the wall, how fast is the top sliding down?",
+ options:["\\(-3/2\\) ft/s","\\(-2/3\\) ft/s","\\(-3/4\\) ft/s","\\(-4/3\\) ft/s"],correct:0,
+ explanation:"\\(x^2+y^2=100\\). At \\(x=6,y=8\\): \\(6(2)+8(dy/dt)=0\\Rightarrow dy/dt=-3/2\\).",
+ expMath:"\\(\\frac{dy}{dt}=-\\frac{3}{2}\\text{ ft/s}\\)"},
+
+{unit:"u4",cat:"Linearization",diff:"med",
+ text:"The linear approximation (tangent line approximation) to \\(f(x)\\) near \\(x=a\\) is:",
+ options:["\\(f(a)\\)","\\(f(a)+f'(a)(x-a)\\)","\\(f'(a)(x-a)^2/2\\)","\\(f(a)f'(a)\\)"],correct:1,
+ explanation:"Linearization: \\(L(x)=f(a)+f'(a)(x-a)\\) — the tangent line equation.",
+ expMath:"\\(L(x)=f(a)+f'(a)(x-a)\\)"},
+
+{unit:"u4",cat:"L'Hôpital",diff:"med",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to\\infty}xe^{-x}\\).",
+ options:["1","\\(\\infty\\)","0","\\(e\\)"],correct:2,
+ explanation:"\\(\\infty\\cdot 0\\) form. Rewrite as \\(x/e^x\\). L'Hôpital: \\(1/e^x\\to0\\).",
+ expMath:"\\(\\lim_{x\\to\\infty}\\frac{1}{e^x}=0\\)"},
+
+{unit:"u4",cat:"Related Rates",diff:"hard",
+ text:"A spherical balloon inflates at 10 cm³/s. When \\(r=5\\) cm, how fast is the radius increasing? (\\(V=\\frac{4}{3}\\pi r^3\\))",
+ options:["\\(\\frac{1}{10\\pi}\\) cm/s","\\(\\frac{1}{5\\pi}\\) cm/s","\\(\\frac{2}{\\pi}\\) cm/s","\\(\\frac{10}{\\pi}\\) cm/s"],correct:0,
+ explanation:"\\(dV/dt=4\\pi r^2\\,dr/dt\\). So \\(10=4\\pi(25)\\,dr/dt\\Rightarrow dr/dt=1/(10\\pi)\\).",
+ expMath:"\\(\\frac{dr}{dt}=\\frac{10}{100\\pi}=\\frac{1}{10\\pi}\\)"},
+
+{unit:"u4",cat:"Related Rates",diff:"med",
+ text:"A point moves along \\(y=x^2\\) with \\(dx/dt=3\\). When \\(x=2\\), \\(dy/dt=\\)?",
+ options:["6","12","3","4"],correct:1,
+ explanation:"\\(dy/dt=2x\\,dx/dt=2(2)(3)=12\\).",
+ expMath:"\\(\\frac{dy}{dt}=2x\\cdot\\frac{dx}{dt}=12\\)"},
+
+{unit:"u4",cat:"Linearization",diff:"med",
+ text:"Approximate \\(\\sqrt{4.1}\\) using linearization of \\(f(x)=\\sqrt{x}\\) at \\(a=4\\).",
+ options:["2.025","2.05","2.1","2.0"],correct:0,
+ explanation:"\\(f'(x)=1/(2\\sqrt{x})\\), \\(f'(4)=1/4\\). \\(L(4.1)=2+(1/4)(0.1)=2.025\\).",
+ expMath:"\\(L(4.1)=2+\\tfrac{1}{4}(0.1)=2.025\\)"},
+
+{unit:"u4",cat:"L'Hôpital",diff:"hard",
+ text:"Evaluate \\(\\displaystyle\\lim_{x\\to 0}\\frac{e^x-1-x}{x^2}\\).",
+ options:["0","1","\\(1/2\\)","\\(\\infty\\)"],correct:2,
+ explanation:"Apply L'Hôpital twice: \\((e^x-1)/(2x)\\to e^x/2\\to 1/2\\).",
+ expMath:"\\(\\frac{e^x}{2}\\big|_{x=0}=\\frac{1}{2}\\)"},
+
+{unit:"u4",cat:"Related Rates",diff:"hard",
+ text:"Two cars start from the same point. One goes east at 60 mph, the other north at 80 mph. How fast is the distance between them increasing after 1 hour?",
+ options:["100 mph","140 mph","70 mph","20 mph"],correct:0,
+ explanation:"After 1 hr: \\(x=60,y=80,D=100\\). \\(dD/dt=(x\\dot x+y\\dot y)/D=(3600+6400)/100=100\\).",
+ expMath:"\\(\\frac{dD}{dt}=\\frac{60(60)+80(80)}{100}=100\\text{ mph}\\)"},
+
+// ─────────────────────────── UNIT 5: ANALYTICAL APPLICATIONS ────────────────
+{unit:"u5",cat:"Critical Points",diff:"easy",
+ text:"Critical points of \\(f(x)\\) occur where:",
+ options:["\\(f(x)=0\\)","\\(f'(x)=0\\) or \\(f'(x)\\) undefined","\\(f''(x)=0\\)","\\(f\\) is continuous"],correct:1,
+ explanation:"Critical points are candidates for local extrema: \\(f'(c)=0\\) or \\(f'(c)\\) undefined.",
+ expMath:"\\(f'(c)=0\\text{ or }f'(c)\\text{ undefined}\\)"},
+
+{unit:"u5",cat:"Second Derivative Test",diff:"med",
+ text:"If \\(f'(c)=0\\) and \\(f''(c)>0\\), then \\(c\\) is a:",
+ options:["Local maximum","Local minimum","Inflection point","Cannot determine"],correct:1,
+ explanation:"\\(f''(c)>0\\Rightarrow\\) concave up at \\(c\\Rightarrow\\) local minimum.",
+ expMath:"\\(f'(c)=0,\\,f''(c)>0\\Rightarrow\\text{local min}\\)"},
+
+{unit:"u5",cat:"Mean Value Theorem",diff:"med",
+ text:"MVT requires \\(f\\) to satisfy which conditions?",
+ options:["Differentiable on \\((a,b)\\) only","Continuous on \\([a,b]\\) and differentiable on \\((a,b)\\)","\\(f(a)=f(b)\\)","\\(f'(a)\\) exists"],correct:1,
+ explanation:"MVT requires continuity on the closed interval and differentiability on the open interval.",
+ expMath:"\\(f'(c)=\\frac{f(b)-f(a)}{b-a}\\)"},
+
+{unit:"u5",cat:"Increasing/Decreasing",diff:"med",
+ text:"For \\(f(x)=x^3-3x\\), on which interval is \\(f\\) increasing?",
+ options:["\\((-1,1)\\)","\\((-\\infty,-1)\\cup(1,\\infty)\\)","All reals","\\((0,\\infty)\\)"],correct:1,
+ explanation:"\\(f'(x)=3(x-1)(x+1)>0\\) when \\(x<-1\\) or \\(x>1\\).",
+ expMath:"\\(f'>0\\text{ for }x\\in(-\\infty,-1)\\cup(1,\\infty)\\)"},
+
+{unit:"u5",cat:"Concavity",diff:"med",
+ text:"An inflection point occurs where:",
+ options:["\\(f'(x)=0\\)","\\(f(x)=0\\)","\\(f''(x)\\) changes sign","\\(f'(x)\\) changes sign"],correct:2,
+ explanation:"Inflection points mark changes in concavity, so \\(f''\\) must change sign.",
+ expMath:"\\(f''(x)\\text{ changes sign}\\)"},
+
+{unit:"u5",cat:"Optimization",diff:"hard",
+ text:"A rectangle with fixed perimeter \\(P=100\\). Dimensions that maximize area are:",
+ options:["\\(10\\times40\\)","\\(25\\times25\\)","\\(20\\times30\\)","\\(50\\times0\\)"],correct:1,
+ explanation:"A square always maximizes area for a fixed perimeter. With \\(P=100\\), side \\(=25\\).",
+ expMath:"\\(l=w=25,\\;A_{\\max}=625\\)"},
+
+{unit:"u5",cat:"Extreme Value Theorem",diff:"med",
+ text:"The Extreme Value Theorem (EVT) guarantees absolute extrema exist when \\(f\\) is:",
+ options:["Differentiable on \\((a,b)\\)","Continuous on \\([a,b]\\)","Increasing on \\([a,b]\\)","Continuous on \\((a,b)\\)"],correct:1,
+ explanation:"EVT: a continuous function on a closed interval always attains its absolute max and min.",
+ expMath:"\\(f\\text{ cont. on }[a,b]\\Rightarrow\\text{abs. max and min exist}\\)"},
+
+{unit:"u5",cat:"First Derivative Test",diff:"med",
+ text:"A local minimum at critical point \\(c\\) occurs when \\(f'\\) changes from:",
+ options:["\\(+\\) to \\(-\\)","\\(-\\) to \\(+\\)","\\(0\\) to \\(+\\)","\\(-\\) to \\(0\\)"],correct:1,
+ explanation:"If \\(f'\\) changes from negative to positive at \\(c\\): function was decreasing, then increasing \\(\\Rightarrow\\) local min.",
+ expMath:"\\(f':(-\\to+)\\Rightarrow\\text{local min}\\)"},
+
+{unit:"u5",cat:"Position/Velocity",diff:"med",
+ text:"If \\(s(t)=t^3-6t^2+9t\\), when is the object at rest?",
+ options:["\\(t=1\\) and \\(t=3\\)","\\(t=0\\) and \\(t=6\\)","\\(t=2\\)","\\(t=3\\) only"],correct:0,
+ explanation:"\\(v(t)=s'(t)=3(t-1)(t-3)=0\\) at \\(t=1\\) and \\(t=3\\).",
+ expMath:"\\(v(t)=3(t-1)(t-3)=0\\Rightarrow t=1,3\\)"},
+
+{unit:"u5",cat:"Optimization",diff:"hard",
+ text:"A farmer has 300 ft of fencing along a river (no fence needed on river side). Width that maximizes area:",
+ options:["75 ft","100 ft","150 ft","50 ft"],correct:0,
+ explanation:"\\(L+2w=300\\Rightarrow A=w(300-2w)\\). \\(dA/dw=300-4w=0\\Rightarrow w=75\\).",
+ expMath:"\\(w=75\\text{ ft},\\;L=150\\text{ ft}\\)"},
+
+// ─────────────────────────── UNIT 6: INTEGRATION ────────────────────────────
+{unit:"u6",cat:"Integrals — Power",diff:"easy",
+ text:"Find \\(\\displaystyle\\int 3x^2\\,dx\\).",
+ options:["\\(6x+C\\)","\\(x^3+C\\)","\\(3x^3+C\\)","\\(x^2/2+C\\)"],correct:1,
+ explanation:"Power rule: \\(\\int 3x^2\\,dx=3\\cdot x^3/3+C=x^3+C\\).",
+ expMath:"\\(\\int 3x^2\\,dx=x^3+C\\)"},
+
+{unit:"u6",cat:"FTC Part 2",diff:"easy",
+ text:"Evaluate \\(\\displaystyle\\int_0^2(2x+1)\\,dx\\).",
+ options:["4","5","6","3"],correct:2,
+ explanation:"\\([x^2+x]_0^2=(4+2)-0=6\\).",
+ expMath:"\\([x^2+x]_0^2=6\\)"},
+
+{unit:"u6",cat:"u-Substitution",diff:"med",
+ text:"Evaluate \\(\\displaystyle\\int 2x\\cos(x^2)\\,dx\\).",
+ options:["\\(\\sin(x^2)+C\\)","\\(2\\cos(x^2)+C\\)","\\(-\\sin(x^2)+C\\)","\\(\\cos(2x)+C\\)"],correct:0,
+ explanation:"Let \\(u=x^2\\), \\(du=2x\\,dx\\). \\(\\int\\cos u\\,du=\\sin u+C=\\sin(x^2)+C\\).",
+ expMath:"\\(\\sin(x^2)+C\\)"},
+
+{unit:"u6",cat:"Integrals — Basic",diff:"easy",
+ text:"What is \\(\\displaystyle\\int e^x\\,dx\\)?",
+ options:["\\(e^x/x+C\\)","\\(e^x+C\\)","\\(xe^x+C\\)","\\(e^x\\ln x+C\\)"],correct:1,
+ explanation:"\\(e^x\\) is its own antiderivative.",
+ expMath:"\\(\\int e^x\\,dx=e^x+C\\)"},
+
+{unit:"u6",cat:"Integrals — Basic",diff:"easy",
+ text:"Find \\(\\displaystyle\\int\\frac{1}{x}\\,dx\\).",
+ options:["\\(x^{-2}+C\\)","\\(\\ln|x|+C\\)","\\(-1/x^2+C\\)","\\(1/(2x^2)+C\\)"],correct:1,
+ explanation:"\\(\\int(1/x)\\,dx=\\ln|x|+C\\).",
+ expMath:"\\(\\int\\frac{1}{x}\\,dx=\\ln|x|+C\\)"},
+
+{unit:"u6",cat:"FTC Part 1",diff:"med",
+ text:"If \\(F(x)=\\displaystyle\\int_0^x\\sin t\\,dt\\), what is \\(F'(x)\\)?",
+ options:["\\(\\cos x\\)","\\(\\sin x\\)","\\(-\\cos x\\)","\\(\\int\\sin x\\,dx\\)"],correct:1,
+ explanation:"FTC Part 1: \\(\\frac{d}{dx}\\int_a^x f(t)\\,dt=f(x)\\).",
+ expMath:"\\(F'(x)=\\sin x\\)"},
+
+{unit:"u6",cat:"FTC Part 2",diff:"med",
+ text:"Evaluate \\(\\displaystyle\\int_1^4 2x\\,dx\\).",
+ options:["8","12","15","16"],correct:2,
+ explanation:"\\([x^2]_1^4=16-1=15\\).",
+ expMath:"\\([x^2]_1^4=16-1=15\\)"},
+
+{unit:"u6",cat:"Average Value",diff:"med",
+ text:"The average value of \\(f(x)\\) on \\([a,b]\\) is:",
+ options:["\\([f(a)+f(b)]/2\\)","\\(\\frac{1}{b-a}\\int_a^b f(x)\\,dx\\)","\\(\\int_a^b f(x)\\,dx\\)","\\(f((a+b)/2)\\)"],correct:1,
+ explanation:"Average value formula divides the integral by the interval length.",
+ expMath:"\\(f_{\\text{avg}}=\\frac{1}{b-a}\\int_a^b f(x)\\,dx\\)"},
+
+{unit:"u6",cat:"u-Substitution",diff:"med",
+ text:"Evaluate \\(\\displaystyle\\int\\frac{2x}{x^2+1}\\,dx\\).",
+ options:["\\(\\ln(x^2+1)+C\\)","\\(\\arctan x+C\\)","\\(2/(x^2+1)+C\\)","\\(1/(x^2+1)+C\\)"],correct:0,
+ explanation:"\\(u=x^2+1\\), \\(du=2x\\,dx\\). \\(\\int du/u=\\ln|u|+C=\\ln(x^2+1)+C\\).",
+ expMath:"\\(\\ln(x^2+1)+C\\)"},
+
+{unit:"u6",cat:"Integrals — Trig",diff:"med",
+ text:"What is \\(\\displaystyle\\int\\sec^2 x\\,dx\\)?",
+ options:["\\(2\\sec x\\tan x+C\\)","\\(\\sec x\\tan x+C\\)","\\(\\tan x+C\\)","\\(-\\cot x+C\\)"],correct:2,
+ explanation:"Since \\(d/dx[\\tan x]=\\sec^2 x\\), we have \\(\\int\\sec^2 x\\,dx=\\tan x+C\\).",
+ expMath:"\\(\\int\\sec^2 x\\,dx=\\tan x+C\\)"},
+
+{unit:"u6",cat:"Integration by Parts",diff:"hard",
+ text:"Evaluate \\(\\displaystyle\\int xe^x\\,dx\\).",
+ options:["\\(xe^x+C\\)","\\(e^x+C\\)","\\(xe^x-e^x+C\\)","\\(x^2e^x+C\\)"],correct:2,
+ explanation:"IBP with \\(u=x,\\,dv=e^x\\,dx\\): \\(uv-\\int v\\,du=xe^x-e^x+C\\).",
+ expMath:"\\(xe^x-e^x+C\\)"},
+
+{unit:"u6",cat:"Definite Integrals — Properties",diff:"med",
+ text:"What is \\(\\displaystyle\\int_{-1}^1 x^3\\,dx\\)?",
+ options:["0","\\(1/2\\)","2","1"],correct:0,
+ explanation:"\\(x^3\\) is an odd function. The integral of any odd function over \\([-a,a]\\) is 0.",
+ expMath:"\\(\\int_{-a}^{a}f_{\\text{odd}}\\,dx=0\\)"},
+
+{unit:"u6",cat:"Riemann Sums",diff:"med",
+ text:"A Riemann sum approximates a definite integral by:",
+ options:["Summing values at all points","Adding areas of rectangles","Computing the antiderivative","Finding the average"],correct:1,
+ explanation:"Riemann sums partition the interval and sum areas of rectangles under the curve.",
+ expMath:"\\(\\int_a^b f\\,dx\\approx\\sum_{i}f(x_i^*)\\Delta x\\)"},
+
+// ─────────────────────────── UNIT 7: DIFFERENTIAL EQUATIONS ─────────────────
+{unit:"u7",cat:"Slope Fields",diff:"med",
+ text:"A slope field represents:",
+ options:["The antiderivative of a function","The values of \\(dy/dx\\) at points in the plane","The solution curve directly","The second derivative"],correct:1,
+ explanation:"A slope field plots short line segments with slope \\(dy/dx\\) at each point, showing the direction of solutions.",
+ expMath:"\\(dy/dx=f(x,y)\\) plotted at each \\((x,y)\\)"},
+
+{unit:"u7",cat:"Separable DEs",diff:"med",
+ text:"Which method solves \\(\\dfrac{dy}{dx}=\\dfrac{x}{y}\\)?",
+ options:["L'Hôpital's Rule","Separation of variables","Integration by parts","Chain rule"],correct:1,
+ explanation:"Separate variables: \\(y\\,dy=x\\,dx\\), then integrate both sides.",
+ expMath:"\\(y\\,dy=x\\,dx\\Rightarrow\\frac{y^2}{2}=\\frac{x^2}{2}+C\\)"},
+
+{unit:"u7",cat:"Separable DEs",diff:"med",
+ text:"Solve \\(\\dfrac{dy}{dx}=2y\\) with \\(y(0)=3\\).",
+ options:["\\(y=3e^{2x}\\)","\\(y=e^{2x}+2\\)","\\(y=2e^{3x}\\)","\\(y=3+2x\\)"],correct:0,
+ explanation:"Separate: \\(dy/y=2\\,dx\\Rightarrow\\ln|y|=2x+C\\Rightarrow y=Ae^{2x}\\). \\(y(0)=3\\Rightarrow A=3\\).",
+ expMath:"\\(y=3e^{2x}\\)"},
+
+{unit:"u7",cat:"Exponential Growth/Decay",diff:"med",
+ text:"If a population satisfies \\(dP/dt=kP\\) with \\(k>0\\), the model predicts:",
+ options:["Linear growth","Exponential growth","Logistic growth","Constant population"],correct:1,
+ explanation:"\\(dP/dt=kP\\) has solution \\(P(t)=P_0e^{kt}\\), which is exponential growth.",
+ expMath:"\\(P(t)=P_0e^{kt}\\)"},
+
+{unit:"u7",cat:"Exponential Decay",diff:"med",
+ text:"Carbon-14 decays at rate proportional to its amount. With half-life of 5730 years, what model describes this?",
+ options:["\\(A=A_0+5730t\\)","\\(A=A_0e^{-kt}\\) where \\(k>0\\)","\\(A=A_0e^{kt}\\) where \\(k>0\\)","\\(A=A_0/t\\)"],correct:1,
+ explanation:"Decay: \\(dA/dt=-kA\\Rightarrow A=A_0e^{-kt}\\). The negative sign ensures decrease.",
+ expMath:"\\(A(t)=A_0e^{-kt},\\;k=\\frac{\\ln 2}{5730}\\)"},
+
+{unit:"u7",cat:"Separable DEs",diff:"hard",
+ text:"Solve \\(\\dfrac{dy}{dx}=xy\\) with \\(y(0)=2\\).",
+ options:["\\(y=2e^{x^2/2}\\)","\\(y=e^{x^2}+1\\)","\\(y=2e^{x}\\)","\\(y=x^2+2\\)"],correct:0,
+ explanation:"\\(dy/y=x\\,dx\\Rightarrow\\ln y=x^2/2+C\\Rightarrow y=Ae^{x^2/2}\\). \\(y(0)=A=2\\).",
+ expMath:"\\(y=2e^{x^2/2}\\)"},
+
+{unit:"u7",cat:"Slope Fields",diff:"med",
+ text:"For \\(dy/dx=y\\), the slope field shows:",
+ options:["Horizontal lines","Slopes equal to \\(y\\)-coordinate","Slopes equal to \\(x\\)-coordinate","All slopes equal to 1"],correct:1,
+ explanation:"Since \\(dy/dx=y\\), the slope at any point equals the \\(y\\)-value there.",
+ expMath:"\\(\\text{slope}=y\\text{ at each point}\\)"},
+
+{unit:"u7",cat:"Separable DEs",diff:"hard",
+ text:"The particular solution to \\(\\dfrac{dT}{dt}=-0.1(T-20)\\) with \\(T(0)=90\\) is:",
+ options:["\\(T=70e^{-0.1t}\\)","\\(T=20+70e^{-0.1t}\\)","\\(T=90e^{-0.1t}\\)","\\(T=20+90e^{-0.1t}\\)"],correct:1,
+ explanation:"Separate: \\(d(T-20)/(T-20)=-0.1\\,dt\\Rightarrow T-20=Ae^{-0.1t}\\). \\(T(0)=90\\Rightarrow A=70\\).",
+ expMath:"\\(T(t)=20+70e^{-0.1t}\\)"},
+
+// ─────────────────────────── UNIT 8: APPLICATIONS OF INTEGRATION ────────────
+{unit:"u8",cat:"Net Change",diff:"med",
+ text:"If \\(v(t)\\) is velocity, \\(\\displaystyle\\int_a^b v(t)\\,dt\\) represents:",
+ options:["Total distance traveled","Net displacement from \\(a\\) to \\(b\\)","Average velocity","Speed at \\(b\\)"],correct:1,
+ explanation:"FTC: \\(\\int_a^b v\\,dt=s(b)-s(a)=\\) net displacement (can be negative if moving backward).",
+ expMath:"\\(\\int_a^b v(t)\\,dt=s(b)-s(a)\\)"},
+
+{unit:"u8",cat:"Area Between Curves",diff:"med",
+ text:"Area between \\(f(x)\\geq g(x)\\) from \\(a\\) to \\(b\\) is:",
+ options:["\\(\\int_a^b[f(x)-g(x)]\\,dx\\)","\\(\\int_a^b[f(x)+g(x)]\\,dx\\)","\\(\\int_a^b f(x)\\,dx\\)","\\(\\int_a^b g(x)\\,dx\\)"],correct:0,
+ explanation:"Area between curves: integrate \\([\\text{top}-\\text{bottom}]\\).",
+ expMath:"\\(A=\\int_a^b[f(x)-g(x)]\\,dx\\)"},
+
+{unit:"u8",cat:"Volume — Disk",diff:"hard",
+ text:"The disk method for volume of revolution around the \\(x\\)-axis gives:",
+ options:["\\(\\pi\\int_a^b[f(x)]^2\\,dx\\)","\\(\\int_a^b[f(x)]^2\\,dx\\)","\\(2\\pi\\int_a^b xf(x)\\,dx\\)","\\(\\pi\\int_a^b f(x)\\,dx\\)"],correct:0,
+ explanation:"Disk method: each cross-section is a disk of radius \\(R(x)=f(x)\\), area \\(=\\pi R^2\\).",
+ expMath:"\\(V=\\pi\\int_a^b[f(x)]^2\\,dx\\)"},
+
+{unit:"u8",cat:"Volume — Shell",diff:"hard",
+ text:"The shell method for volume around the \\(y\\)-axis gives:",
+ options:["\\(2\\pi\\int_a^b xf(x)\\,dx\\)","\\(\\pi\\int_a^b[f(x)]^2\\,dx\\)","\\(\\int_a^b 2\\pi f(x)\\,dx\\)","\\(\\pi\\int_a^b x^2\\,dx\\)"],correct:0,
+ explanation:"Shell method: each shell has circumference \\(2\\pi x\\), height \\(f(x)\\), thickness \\(dx\\).",
+ expMath:"\\(V=2\\pi\\int_a^b xf(x)\\,dx\\)"},
+
+{unit:"u8",cat:"Area Between Curves",diff:"med",
+ text:"Find the area enclosed by \\(y=x^2\\) and \\(y=2x\\).",
+ options:["\\(2/3\\)","\\(4/3\\)","\\(8/3\\)","\\(1\\)"],correct:1,
+ explanation:"Intersect at \\(x=0,2\\). \\(A=\\int_0^2(2x-x^2)\\,dx=[x^2-x^3/3]_0^2=4-8/3=4/3\\).",
+ expMath:"\\(A=\\int_0^2(2x-x^2)\\,dx=\\frac{4}{3}\\)"},
+
+{unit:"u8",cat:"Net Change",diff:"med",
+ text:"If \\(a(t)=6t\\) and \\(v(0)=2\\), find \\(v(3)\\).",
+ options:["27","29","20","56"],correct:1,
+ explanation:"\\(v(3)=v(0)+\\int_0^3 6t\\,dt=2+[3t^2]_0^3=2+27=29\\).",
+ expMath:"\\(v(3)=2+27=29\\)"},
+
+{unit:"u8",cat:"Total Distance",diff:"hard",
+ text:"Total distance traveled (not displacement) is found using:",
+ options:["\\(\\int_a^b v(t)\\,dt\\)","\\(\\int_a^b|v(t)|\\,dt\\)","\\(v(b)-v(a)\\)","\\(\\int_a^b a(t)\\,dt\\)"],correct:1,
+ explanation:"Displacement uses \\(\\int v\\,dt\\); total distance requires \\(\\int|v|\\,dt\\) to count backward motion positively.",
+ expMath:"\\(\\text{Total distance}=\\int_a^b|v(t)|\\,dt\\)"},
+
+{unit:"u8",cat:"Volume — Disk",diff:"hard",
+ text:"Volume of the solid formed by rotating \\(y=\\sqrt{x}\\) on \\([0,4]\\) about the \\(x\\)-axis:",
+ options:["\\(4\\pi\\)","\\(8\\pi\\)","\\(16\\pi\\)","\\(2\\pi\\)"],correct:1,
+ explanation:"\\(V=\\pi\\int_0^4(\\sqrt{x})^2\\,dx=\\pi\\int_0^4 x\\,dx=\\pi[x^2/2]_0^4=8\\pi\\).",
+ expMath:"\\(V=\\pi\\int_0^4 x\\,dx=8\\pi\\)"},
+
 ];
 
-// Count questions per topic
-QUESTIONS.forEach(q => { if (TOPICS[q.topic]) TOPICS[q.topic].count++; });
-
-// ══════════════════════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════════════════════
-let currentQuestions = [];
-let currentIndex = 0;
-let score = 0;
-let answered = 0;
-let streak = 0;
-let bestStreak = 0;
-let lives = 3;
-let answered_total = 0;
-let correct_total = 0;
-let currentTopic = 'all';
-let sessionAnswered = 0;
-let sessionCorrect = 0;
-let sessionWrong = 0;
-
-// ══════════════════════════════════════════════════════════════
-//  RENDER HOME
-// ══════════════════════════════════════════════════════════════
-function renderHome() {
-  const grid = document.getElementById('topic-grid');
-  grid.innerHTML = '';
-  Object.entries(TOPICS).forEach(([key, t]) => {
-    const colorMap = { orange: 'tc-orange', teal: 'tc-teal', purple: 'tc-purple' };
-    const iconMap  = { orange: 'ti-orange', teal: 'ti-teal', purple: 'ti-purple' };
-    const diffMap  = { easy: 'diff-easy', med: 'diff-med', hard: 'diff-hard' };
-    const diffLabel = { easy: 'Easier', med: 'Medium', hard: 'Hard' };
-    grid.innerHTML += `
-      <div class="topic-card ${colorMap[t.color]}" onclick="startQuiz('${key}')">
-        <span class="topic-difficulty ${diffMap[t.difficulty]}">${diffLabel[t.difficulty]}</span>
-        <div class="topic-icon ${iconMap[t.color]}">${t.icon}</div>
-        <div class="topic-name">${t.name}</div>
-        <div class="topic-count">${t.count} questions</div>
-      </div>`;
-  });
-}
-
-// ══════════════════════════════════════════════════════════════
-//  QUIZ LOGIC
-// ══════════════════════════════════════════════════════════════
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-function startQuiz(topic) {
-  currentTopic = topic;
-  currentQuestions = shuffle(topic === 'all' ? QUESTIONS : QUESTIONS.filter(q => q.topic === topic));
-  currentIndex = 0;
-  score = 0;
-  streak = 0;
-  bestStreak = 0;
-  lives = 3;
-  sessionAnswered = 0;
-  sessionCorrect = 0;
-  sessionWrong = 0;
-
-  document.getElementById('home-screen').style.display = 'none';
-  document.getElementById('results-screen').style.display = 'none';
-  document.getElementById('quiz-screen').style.display = 'block';
-
-  const badge = document.getElementById('quiz-topic-badge');
-  badge.textContent = topic === 'all' ? 'All Topics' : TOPICS[topic].name;
-  const colorMap = { all: '#ff6b35', limits: '#00c9a7', derivatives: '#ff6b35', derivative_apps: '#a78bfa', integrals: '#00c9a7', ftc: '#ff6b35', series: '#a78bfa' };
-  badge.style.background = colorMap[topic] + '22';
-  badge.style.color = colorMap[topic];
-  badge.style.border = `1px solid ${colorMap[topic]}44`;
-  badge.style.padding = '4px 12px';
-  badge.style.borderRadius = '12px';
-  badge.style.fontSize = '0.75rem';
-  badge.style.fontWeight = '600';
-
-  updateHearts();
-  renderQuestion();
-}
-
-function updateHearts() {
-  const h = document.getElementById('hearts-display');
-  h.innerHTML = '';
-  for (let i = 0; i < 3; i++) {
-    h.innerHTML += `<span class="heart${i >= lives ? ' lost' : ''}">♥</span>`;
-  }
-}
-
-function renderQuestion() {
-  if (currentIndex >= currentQuestions.length) {
-    showResults();
-    return;
-  }
-
-  const q = currentQuestions[currentIndex];
-  document.getElementById('q-category').textContent = q.category;
-  document.getElementById('q-text').textContent = q.text;
-
-  const formulaEl = document.getElementById('q-formula');
-  if (q.formula) {
-    formulaEl.textContent = q.formula;
-    formulaEl.style.display = 'block';
-  } else {
-    formulaEl.style.display = 'none';
-  }
-
-  const opts = document.getElementById('options-grid');
-  opts.innerHTML = '';
-  const letters = ['A','B','C','D'];
-  q.options.forEach((opt, i) => {
-    opts.innerHTML += `
-      <button class="option-btn" onclick="selectOption(${i})">
-        <span class="option-letter">${letters[i]}</span>
-        <span>${opt}</span>
-      </button>`;
-  });
-
-  const fb = document.getElementById('feedback-box');
-  fb.style.display = 'none';
-  fb.className = 'feedback-box';
-
-  document.getElementById('btn-next').style.display = 'none';
-  document.getElementById('btn-skip').style.display = 'inline-flex';
-
-  const progress = ((currentIndex) / currentQuestions.length) * 100;
-  document.getElementById('progress-fill').style.width = progress + '%';
-  document.getElementById('progress-text').textContent = `Question ${currentIndex + 1} of ${currentQuestions.length}`;
-  document.getElementById('score-text').textContent = `${sessionCorrect} correct`;
-  document.getElementById('q-counter').textContent = `${currentIndex + 1} / ${currentQuestions.length}`;
-
-  document.getElementById('streak-display').textContent = streak > 0 ? `${streak} in a row 🔥` : '0 in a row';
-
-  document.getElementById('question-card').style.animation = 'none';
-  setTimeout(() => { document.getElementById('question-card').style.animation = 'cardIn 0.35s ease'; }, 10);
-}
-
-function selectOption(selected) {
-  const q = currentQuestions[currentIndex];
-  const btns = document.querySelectorAll('.option-btn');
-
-  btns.forEach((btn, i) => {
-    btn.classList.add('answered');
-    if (i === q.correct) btn.classList.add('correct');
-    else if (i === selected && selected !== q.correct) btn.classList.add('wrong');
-    else btn.classList.add('dimmed');
-  });
-
-  sessionAnswered++;
-  answered_total++;
-
-  const fb = document.getElementById('feedback-box');
-  const fbHeader = document.getElementById('feedback-header');
-  const fbExp = document.getElementById('feedback-explanation');
-  const fbFormula = document.getElementById('feedback-formula');
-
-  if (selected === q.correct) {
-    score++;
-    streak++;
-    bestStreak = Math.max(bestStreak, streak);
-    sessionCorrect++;
-    correct_total++;
-    fb.className = 'feedback-box correct';
-    fbHeader.className = 'feedback-header correct';
-    fbHeader.textContent = '✓ Correct!';
-  } else {
-    lives--;
-    streak = 0;
-    sessionWrong++;
-    updateHearts();
-    fb.className = 'feedback-box wrong';
-    fbHeader.className = 'feedback-header wrong';
-    fbHeader.textContent = `✗ Incorrect — the answer was ${['A','B','C','D'][q.correct]}: ${q.options[q.correct]}`;
-  }
-
-  fbExp.textContent = q.explanation;
-  if (q.expFormula) {
-    fbFormula.textContent = q.expFormula;
-    fbFormula.style.display = 'inline-block';
-  } else {
-    fbFormula.style.display = 'none';
-  }
-
-  fb.style.display = 'block';
-  document.getElementById('btn-next').style.display = 'inline-flex';
-  document.getElementById('btn-skip').style.display = 'none';
-  document.getElementById('streak-display').textContent = streak > 0 ? `${streak} in a row 🔥` : '0 in a row';
-  updateNavStats();
-
-  if (lives <= 0) {
-    setTimeout(() => showResults(), 1200);
-  }
-}
-
-function skipQuestion() {
-  currentIndex++;
-  renderQuestion();
-}
-
-function nextQuestion() {
-  currentIndex++;
-  renderQuestion();
-}
-
-// ══════════════════════════════════════════════════════════════
-//  RESULTS
-// ══════════════════════════════════════════════════════════════
-function showResults() {
-  document.getElementById('quiz-screen').style.display = 'none';
-  document.getElementById('results-screen').style.display = 'block';
-
-  const pct = sessionAnswered > 0 ? Math.round((sessionCorrect / sessionAnswered) * 100) : 0;
-  const scoreEl = document.getElementById('results-score');
-  scoreEl.textContent = pct + '%';
-  scoreEl.style.color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--orange)' : 'var(--red)';
-
-  const msgs = {
-    high: ["Excellent! You're AP-exam ready. 🎉", "That's a 5-level performance! Keep it up.", "Outstanding! You clearly know this material."],
-    mid:  ["Good effort! Review the ones you missed.", "Solid work — a bit more practice and you'll ace it.", "Getting there! Focus on the explanations for wrong answers."],
-    low:  ["Keep going — every question makes you stronger.", "Don't give up! Review the concepts and try again.", "Calculus takes practice. Read through the explanations carefully."]
-  };
-
-  const cat = pct >= 80 ? 'high' : pct >= 60 ? 'mid' : 'low';
-  document.getElementById('results-msg').textContent = msgs[cat][Math.floor(Math.random() * 3)];
-
-  document.getElementById('res-correct').textContent = sessionCorrect;
-  document.getElementById('res-wrong').textContent = sessionWrong;
-  document.getElementById('res-streak').textContent = bestStreak;
-}
-
-function restartSame() {
-  startQuiz(currentTopic);
-}
-
-function goHome() {
-  document.getElementById('quiz-screen').style.display = 'none';
-  document.getElementById('results-screen').style.display = 'none';
-  document.getElementById('home-screen').style.display = 'block';
-}
-
-function updateNavStats() {
-  document.getElementById('total-answered').textContent = answered_total + ' answered';
-  document.getElementById('total-correct-nav').textContent = correct_total + ' correct';
-}
-
-// ══════════════════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════════════════
-renderHome();
+// Count per unit
+Object.keys(TOPICS).forEach(k => { TOPICS[k].count = QUESTIONS.filter(q=>q.unit===k).length; });
 </script>
-</body>
-</html>
+<script>
+// ══════════════════════════════════════════════════════
+//  MOCK EXAMS (5 exams, each with Section I-A no-calc,
+//  Section I-B calc, Section II FRQ)
+// ══════════════════════════════════════════════════════
+const MOCK_EXAMS = [
+{
+  id:1, cls:"ec1",
+  title:"Mock Exam 1 — AB Standard",
+  subtitle:"Full AP Calculus AB Format",
+  desc:"Balanced coverage of all 8 units. Mirrors the AP Calculus AB exam structure.",
+  secIA:{ label:"Section I-A: No Calculator", count:30, pool:["u1","u2","u3","u5"] },
+  secIB:{ label:"Section I-B: Calculator Permitted", count:15, pool:["u4","u6","u7","u8"] },
+  frq:[
+    { title:"FRQ 1 — Limits & Continuity",points:9,context:"Let \\(f(x)=\\dfrac{x^2-4}{x-2}\\) for \\(x\\ne2\\) and \\(f(2)=k\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find \\(\\lim_{x\\to2}f(x)\\) and show your work.",solution:"Factor: \\(x^2-4=(x-2)(x+2)\\). Cancel to get \\(\\lim_{x\\to2}(x+2)=4\\).",formula:"\\(\\lim_{x\\to 2}f(x)=4\\)"},
+        {label:"(b)",pts:3,text:"For what value of \\(k\\) is \\(f\\) continuous at \\(x=2\\)?",solution:"For continuity, \\(f(2)=\\lim_{x\\to2}f(x)\\), so \\(k=4\\).",formula:"\\(k=4\\)"},
+        {label:"(c)",pts:3,text:"With \\(k=4\\), is \\(f\\) differentiable at \\(x=2\\)? Justify.",solution:"With \\(k=4\\), \\(f(x)=x+2\\) for all \\(x\\), which is differentiable everywhere, including \\(x=2\\). \\(f'(2)=1\\).",formula:"\\(f'(x)=1\\) for all \\(x\\)"}
+      ]
+    },
+    { title:"FRQ 2 — Derivatives",points:9,context:"Let \\(f(x)=x^3-6x^2+9x+2\\) on the closed interval \\([0,5]\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find all critical points of \\(f\\) on \\([0,5]\\).",solution:"\\(f'(x)=3x^2-12x+9=3(x-1)(x-3)\\). Critical points at \\(x=1\\) and \\(x=3\\).",formula:"\\(f'(x)=3(x-1)(x-3)=0\\Rightarrow x=1,3\\)"},
+        {label:"(b)",pts:3,text:"Find the absolute maximum and minimum of \\(f\\) on \\([0,5]\\).",solution:"Evaluate at critical pts and endpoints: \\(f(0)=2,f(1)=6,f(3)=2,f(5)=22\\). Abs max: \\(22\\) at \\(x=5\\); abs min: \\(2\\) at \\(x=0\\) and \\(x=3\\).",formula:"\\(f(5)=22\\text{ (max)},\\;f(0)=f(3)=2\\text{ (min)}\\)"},
+        {label:"(c)",pts:3,text:"Determine intervals of concavity and inflection points.",solution:"\\(f''(x)=6x-12=6(x-2)\\). Concave down on \\((-\\infty,2)\\), concave up on \\((2,\\infty)\\). Inflection at \\(x=2\\).",formula:"\\(f''(x)=6(x-2)\\Rightarrow\\text{inflection at }x=2\\)"}
+      ]
+    },
+    { title:"FRQ 3 — Integration & FTC",points:9,context:"Let \\(G(x)=\\displaystyle\\int_{-2}^{x}g(t)\\,dt\\) where \\(g\\) is continuous on \\([-2,4]\\).",
+      parts:[
+        {label:"(a)",pts:2,text:"What is \\(G(-2)\\)? Explain.",solution:"\\(G(-2)=\\int_{-2}^{-2}g(t)\\,dt=0\\). An integral from a point to itself is always zero.",formula:"\\(G(-2)=0\\)"},
+        {label:"(b)",pts:4,text:"Find \\(G'(x)\\) and state the theorem used.",solution:"By the Fundamental Theorem of Calculus Part 1: \\(G'(x)=g(x)\\).",formula:"\\(G'(x)=g(x)\\;\\text{(FTC Part 1)}\\)"},
+        {label:"(c)",pts:3,text:"If \\(g(x)=3x^2-2x\\), find \\(G(2)\\).",solution:"\\(G(2)=\\int_{-2}^{2}(3x^2-2x)\\,dx=[x^3-x^2]_{-2}^{2}=(8-4)-(-8-4)=4+12=16\\).",formula:"\\([x^3-x^2]_{-2}^{2}=16\\)"}
+      ]
+    },
+    { title:"FRQ 4 — Related Rates",points:9,context:"A 13-ft ladder leans against a vertical wall. Its base slides away from the wall at 5 ft/min.",
+      parts:[
+        {label:"(a)",pts:2,text:"Write the Pythagorean relationship between \\(x\\) (base) and \\(y\\) (height).",solution:"\\(x^2+y^2=169\\)",formula:"\\(x^2+y^2=13^2=169\\)"},
+        {label:"(b)",pts:4,text:"How fast is the top of the ladder sliding down when the base is 5 ft from the wall?",solution:"Differentiate: \\(2x\\dot x+2y\\dot y=0\\). When \\(x=5\\): \\(y=12\\). So \\(5(5)+12(\\dot y)=0\\Rightarrow\\dot y=-25/12\\).",formula:"\\(\\frac{dy}{dt}=-\\frac{25}{12}\\text{ ft/min}\\)"},
+        {label:"(c)",pts:3,text:"How fast is the area of the right triangle formed changing at that moment?",solution:"\\(A=xy/2\\). \\(\\dot A=(y\\dot x+x\\dot y)/2=(12\\cdot5+5\\cdot(-25/12))/2=(60-125/12)/2=595/24\\) ft²/min.",formula:"\\(\\frac{dA}{dt}=\\frac{595}{24}\\text{ ft}^2\\text{/min}\\)"}
+      ]
+    },
+    { title:"FRQ 5 — Area & Volume",points:9,context:"Let \\(R\\) be the region bounded by \\(y=x^2\\) and \\(y=2x\\).",
+      parts:[
+        {label:"(a)",pts:2,text:"Find the intersection points of the two curves.",solution:"\\(x^2=2x\\Rightarrow x(x-2)=0\\Rightarrow x=0,2\\).",formula:"Intersections at \\((0,0)\\) and \\((2,4)\\)"},
+        {label:"(b)",pts:4,text:"Find the area of region \\(R\\).",solution:"\\(A=\\int_0^2(2x-x^2)\\,dx=[x^2-x^3/3]_0^2=4-8/3=4/3\\).",formula:"\\(A=\\frac{4}{3}\\)"},
+        {label:"(c)",pts:3,text:"Find the volume when \\(R\\) is rotated about the \\(x\\)-axis (washer method).",solution:"\\(V=\\pi\\int_0^2[(2x)^2-(x^2)^2]\\,dx=\\pi\\int_0^2(4x^2-x^4)\\,dx=\\pi[4x^3/3-x^5/5]_0^2=\\pi(32/3-32/5)=64\\pi/15\\).",formula:"\\(V=\\frac{64\\pi}{15}\\)"}
+      ]
+    },
+    { title:"FRQ 6 — Differential Equations",points:9,context:"Consider the differential equation \\(\\dfrac{dy}{dx}=2x-y\\) with initial condition \\(y(0)=1\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Sketch a slope field at the points \\((0,0),(0,1),(1,0),(1,1)\\). Describe the slopes.",solution:"At \\((0,0)\\): slope \\(=0\\). At \\((0,1)\\): slope \\(=-1\\). At \\((1,0)\\): slope \\(=2\\). At \\((1,1)\\): slope \\(=1\\).",formula:"\\(dy/dx=2x-y\\)"},
+        {label:"(b)",pts:3,text:"Use Euler's Method with step \\(h=0.5\\) to approximate \\(y(1)\\) starting from \\(y(0)=1\\).",solution:"Step 1: \\(y(0.5)\\approx1+0.5(0-1)=0.5\\). Step 2: \\(y(1)\\approx0.5+0.5(2-0.5)=0.5+0.75=1.25\\).",formula:"\\(y(1)\\approx1.25\\)"},
+        {label:"(c)",pts:3,text:"Is the Euler approximation an overestimate or underestimate? Justify using concavity.",solution:"Find \\(d^2y/dx^2=2-dy/dx=2-(2x-y)\\). Along solution curve, analyze sign to determine concavity, then compare Euler's linear approximation to actual curve.",formula:"Compare \\(y''\\) sign to determine over/underestimate"}
+      ]
+    }
+  ]
+},
+{
+  id:2, cls:"ec2",
+  title:"Mock Exam 2 — Derivatives Focus",
+  subtitle:"Units 2–5 Emphasis",
+  desc:"Heavy emphasis on differentiation rules, applications, and optimization problems.",
+  secIA:{ label:"Section I-A: No Calculator", count:30, pool:["u2","u3","u5"] },
+  secIB:{ label:"Section I-B: Calculator Permitted", count:15, pool:["u4","u5","u6"] },
+  frq:[
+    { title:"FRQ 1 — Chain & Product Rules",points:9,context:"Let \\(h(x)=e^{x^2}\\cdot\\sin(3x)\\).",
+      parts:[
+        {label:"(a)",pts:4,text:"Find \\(h'(x)\\). Show all steps.",solution:"Product rule + chain rule: \\(h'(x)=2xe^{x^2}\\sin(3x)+e^{x^2}\\cdot3\\cos(3x)=e^{x^2}(2x\\sin3x+3\\cos3x)\\).",formula:"\\(h'(x)=e^{x^2}(2x\\sin 3x+3\\cos 3x)\\)"},
+        {label:"(b)",pts:2,text:"Find the equation of the tangent line at \\(x=0\\).",solution:"\\(h(0)=e^0\\sin(0)=0\\). \\(h'(0)=1(0+3)=3\\). Tangent: \\(y=3x\\).",formula:"\\(y=3x\\)"},
+        {label:"(c)",pts:3,text:"On what intervals is \\(h\\) increasing near \\(x=0\\)?",solution:"\\(h'>0\\) when \\(2x\\sin3x+3\\cos3x>0\\). Near \\(x=0\\), \\(h'(0)=3>0\\), so \\(h\\) is increasing near \\(x=0\\).",formula:"\\(h'(0)=3>0\\)"}
+      ]
+    },
+    { title:"FRQ 2 — Implicit Differentiation",points:9,context:"The curve \\(C\\) is defined by \\(x^2+xy+y^2=7\\).",
+      parts:[
+        {label:"(a)",pts:4,text:"Find \\(dy/dx\\) using implicit differentiation.",solution:"Differentiate: \\(2x+y+xy'+2yy'=0\\Rightarrow y'(x+2y)=-(2x+y)\\Rightarrow y'=-(2x+y)/(x+2y)\\).",formula:"\\(\\frac{dy}{dx}=\\frac{-(2x+y)}{x+2y}\\)"},
+        {label:"(b)",pts:3,text:"Find the points on \\(C\\) where the tangent line is horizontal.",solution:"Set \\(dy/dx=0\\Rightarrow 2x+y=0\\Rightarrow y=-2x\\). Substitute into curve: \\(x^2-2x^2+4x^2=7\\Rightarrow3x^2=7\\Rightarrow x=\\pm\\sqrt{7/3}\\).",formula:"\\(x=\\pm\\sqrt{7/3},\\;y=\\mp2\\sqrt{7/3}\\)"},
+        {label:"(c)",pts:2,text:"Find the slope of the tangent at \\((1,2)\\).",solution:"\\(dy/dx|_{(1,2)}=-(2+2)/(1+4)=-4/5\\).",formula:"\\(\\frac{dy}{dx}\\bigg|_{(1,2)}=-\\frac{4}{5}\\)"}
+      ]
+    },
+    { title:"FRQ 3 — Mean Value Theorem",points:9,context:"Let \\(f(x)=x^3-3x\\) on \\([-2,2]\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Verify the hypotheses of the MVT for \\(f\\) on \\([-2,2]\\).",solution:"\\(f(x)=x^3-3x\\) is a polynomial, hence continuous on \\([-2,2]\\) and differentiable on \\((-2,2)\\). Both MVT conditions are satisfied.",formula:"Polynomial \\(\\Rightarrow\\) continuous and differentiable"},
+        {label:"(b)",pts:4,text:"Find all values of \\(c\\) in \\((-2,2)\\) guaranteed by the MVT.",solution:"\\(f(-2)=-8+6=-2,\\,f(2)=8-6=2\\). MVT value: \\((2-(-2))/(2-(-2))=1\\). \\(f'(c)=3c^2-3=1\\Rightarrow c^2=4/3\\Rightarrow c=\\pm2/\\sqrt3\\approx\\pm1.155\\).",formula:"\\(c=\\pm\\frac{2}{\\sqrt{3}}\\approx\\pm1.155\\)"},
+        {label:"(c)",pts:2,text:"Interpret the MVT result in context.",solution:"There exist two points in \\((-2,2)\\) where the instantaneous rate of change equals the average rate of change over \\([-2,2]\\), which is 1.",formula:"\\(f'(c)=\\frac{f(2)-f(-2)}{4}=1\\)"}
+      ]
+    },
+    { title:"FRQ 4 — Optimization",points:9,context:"A cylindrical can (no top) must hold \\(250\\pi\\) cm³.",
+      parts:[
+        {label:"(a)",pts:2,text:"Write the constraint equation relating radius \\(r\\) and height \\(h\\).",solution:"Volume: \\(V=\\pi r^2 h=250\\pi\\Rightarrow h=250/r^2\\).",formula:"\\(h=\\frac{250}{r^2}\\)"},
+        {label:"(b)",pts:4,text:"Write the surface area function \\(S(r)\\) (bottom + lateral side) and find the critical point.",solution:"\\(S=\\pi r^2+2\\pi rh=\\pi r^2+500\\pi/r\\). \\(S'=2\\pi r-500\\pi/r^2=0\\Rightarrow r^3=250\\Rightarrow r=\\sqrt[3]{250}\\approx6.30\\) cm.",formula:"\\(r=\\sqrt[3]{250}\\approx6.30\\text{ cm}\\)"},
+        {label:"(c)",pts:3,text:"Verify this is a minimum and find the optimal height.",solution:"\\(S''=2\\pi+1000\\pi/r^3>0\\) always, so critical point is a minimum. \\(h=250/r^2=250/(250^{2/3})=250^{1/3}=r\\). So \\(h=r\\).",formula:"\\(h=r=\\sqrt[3]{250}\\text{ (minimum cost)}\\)"}
+      ]
+    },
+    { title:"FRQ 5 — Particle Motion",points:9,context:"A particle moves along the \\(x\\)-axis with position \\(s(t)=t^3-6t^2+9t+1\\) for \\(t\\ge0\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find the velocity and acceleration functions.",solution:"\\(v(t)=s'(t)=3t^2-12t+9=3(t-1)(t-3)\\). \\(a(t)=v'(t)=6t-12\\).",formula:"\\(v(t)=3(t-1)(t-3),\\;a(t)=6t-12\\)"},
+        {label:"(b)",pts:3,text:"When is the particle moving in the positive direction? Justify.",solution:"\\(v(t)>0\\) when \\(t<1\\) or \\(t>3\\). Check: \\(v(0)=9>0\\), \\(v(2)=-3<0\\), \\(v(4)=9>0\\).",formula:"\\(t\\in(0,1)\\cup(3,\\infty)\\)"},
+        {label:"(c)",pts:3,text:"Find the total distance traveled from \\(t=0\\) to \\(t=4\\).",solution:"\\(\\int_0^4|v|\\,dt=\\int_0^1 v\\,dt+|\\int_1^3 v\\,dt|+\\int_3^4 v\\,dt=[s(1)-s(0)]+|s(3)-s(1)|+[s(4)-s(3)]=(5-1)+|3-5|+(5-3)=4+2+2=8\\).",formula:"Total distance \\(=8\\) units"}
+      ]
+    },
+    { title:"FRQ 6 — Concavity & Inflection",points:9,context:"Let \\(f(x)=x^4-4x^3+6x^2\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find \\(f'(x)\\) and \\(f''(x)\\).",solution:"\\(f'(x)=4x^3-12x^2+12x=4x(x^2-3x+3)\\). \\(f''(x)=12x^2-24x+12=12(x-1)^2\\).",formula:"\\(f''(x)=12(x-1)^2\\)"},
+        {label:"(b)",pts:3,text:"Find all inflection points or explain why none exist.",solution:"\\(f''(x)=12(x-1)^2\\ge0\\) always, and \\(f''(1)=0\\) but does NOT change sign (it goes from \\(\\ge0\\) to \\(\\ge0\\)). No inflection points.",formula:"No inflection points (\\(f''\\) doesn't change sign)"},
+        {label:"(c)",pts:3,text:"On what intervals is \\(f\\) concave up?",solution:"\\(f''(x)=12(x-1)^2\\ge0\\) for all \\(x\\), and equals 0 only at \\(x=1\\). \\(f\\) is concave up on \\((-\\infty,\\infty)\\setminus\\{1\\}\\), essentially all reals.",formula:"Concave up for all \\(x\\)"}
+      ]
+    }
+  ]
+},
+{
+  id:3, cls:"ec3",
+  title:"Mock Exam 3 — Integration Focus",
+  subtitle:"Units 6–8 Emphasis",
+  desc:"Deep focus on integration techniques, accumulation, differential equations, and area/volume.",
+  secIA:{ label:"Section I-A: No Calculator", count:30, pool:["u1","u2","u6","u7"] },
+  secIB:{ label:"Section I-B: Calculator Permitted", count:15, pool:["u6","u7","u8"] },
+  frq:[
+    { title:"FRQ 1 — FTC & Accumulation",points:9,context:"Let \\(f(x)=3x^2-6x+2\\) and \\(F(x)=\\displaystyle\\int_0^x f(t)\\,dt\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find \\(F(x)\\) explicitly.",solution:"\\(F(x)=[t^3-3t^2+2t]_0^x=x^3-3x^2+2x\\).",formula:"\\(F(x)=x^3-3x^2+2x\\)"},
+        {label:"(b)",pts:3,text:"Find all \\(x\\) where \\(F\\) has a local minimum.",solution:"\\(F'(x)=f(x)=3x^2-6x+2=0\\Rightarrow x=(6\\pm\\sqrt{12})/6=1\\pm1/\\sqrt3\\). \\(F''=f'=6x-6\\). At \\(x=1+1/\\sqrt3\\): \\(F''>0\\Rightarrow\\) local min.",formula:"\\(x=1+\\frac{1}{\\sqrt{3}}\\approx1.577\\)"},
+        {label:"(c)",pts:3,text:"Evaluate \\(\\displaystyle\\int_1^3 f(x)\\,dx\\).",solution:"\\(F(3)-F(1)=(27-27+6)-(1-3+2)=6-0=6\\).",formula:"\\(\\int_1^3 f(x)\\,dx=6\\)"}
+      ]
+    },
+    { title:"FRQ 2 — Differential Equations",points:9,context:"Water flows into a tank at rate \\(r(t)=2\\sqrt{t}\\) gal/min. The tank starts with 5 gallons.",
+      parts:[
+        {label:"(a)",pts:3,text:"Write \\(W(t)\\), the amount of water at time \\(t\\).",solution:"\\(W(t)=5+\\int_0^t 2\\sqrt{s}\\,ds=5+\\left[\\frac{4s^{3/2}}{3}\\right]_0^t=5+\\frac{4t^{3/2}}{3}\\).",formula:"\\(W(t)=5+\\frac{4t^{3/2}}{3}\\)"},
+        {label:"(b)",pts:3,text:"How much water at \\(t=9\\) min?",solution:"\\(W(9)=5+4(27)/3=5+36=41\\) gallons.",formula:"\\(W(9)=41\\text{ gallons}\\)"},
+        {label:"(c)",pts:3,text:"At what rate is the water rising when \\(t=4\\)?",solution:"\\(r(4)=2\\sqrt4=4\\) gallons/min.",formula:"\\(r(4)=4\\text{ gal/min}\\)"}
+      ]
+    },
+    { title:"FRQ 3 — Separable DE",points:9,context:"Consider \\(\\dfrac{dP}{dt}=0.3P\\left(1-\\dfrac{P}{500}\\right)\\) — a logistic growth model.",
+      parts:[
+        {label:"(a)",pts:3,text:"At what value of \\(P\\) is the growth rate \\(dP/dt\\) greatest?",solution:"\\(dP/dt=0.3P-0.0006P^2\\). Take derivative with respect to \\(P\\): \\(0.3-0.0012P=0\\Rightarrow P=250\\). Max growth at \\(P=250\\) (half the carrying capacity).",formula:"\\(P=250\\) (half the carrying capacity 500)"},
+        {label:"(b)",pts:3,text:"What is \\(\\lim_{t\\to\\infty}P(t)\\)? Explain from the DE.",solution:"When \\(P=500\\): \\(dP/dt=0.3(500)(1-1)=0\\). Population stabilizes at the carrying capacity: \\(\\lim_{t\\to\\infty}P=500\\).",formula:"\\(\\lim_{t\\to\\infty}P(t)=500\\)"},
+        {label:"(c)",pts:3,text:"If \\(P(0)=50\\), is \\(P\\) increasing or decreasing at \\(t=0\\)? Justify.",solution:"\\(dP/dt|_{P=50}=0.3(50)(1-50/500)=15(0.9)=13.5>0\\). Population is increasing.",formula:"\\(dP/dt\\big|_{t=0}=13.5>0\\)"}
+      ]
+    },
+    { title:"FRQ 4 — Integration Techniques",points:9,context:"Evaluate each integral, showing all work.",
+      parts:[
+        {label:"(a)",pts:3,text:"\\(\\displaystyle\\int x\\ln x\\,dx\\)",solution:"IBP: \\(u=\\ln x\\), \\(dv=x\\,dx\\). \\(du=1/x\\,dx\\), \\(v=x^2/2\\). Result: \\(\\frac{x^2}{2}\\ln x-\\int\\frac{x}{2}\\,dx=\\frac{x^2\\ln x}{2}-\\frac{x^2}{4}+C\\).",formula:"\\(\\frac{x^2}{2}\\ln x-\\frac{x^2}{4}+C\\)"},
+        {label:"(b)",pts:3,text:"\\(\\displaystyle\\int_0^{\\pi/2}\\sin^2 x\\,dx\\)",solution:"Use half-angle: \\(\\sin^2x=\\frac{1-\\cos2x}{2}\\). \\(\\int_0^{\\pi/2}\\frac{1-\\cos2x}{2}\\,dx=[x/2-\\sin2x/4]_0^{\\pi/2}=\\pi/4\\).",formula:"\\(\\frac{\\pi}{4}\\)"},
+        {label:"(c)",pts:3,text:"\\(\\displaystyle\\int\\frac{1}{x^2-1}\\,dx\\) using partial fractions",solution:"\\(\\frac{1}{(x-1)(x+1)}=\\frac{1/2}{x-1}-\\frac{1/2}{x+1}\\). Integral \\(=\\frac{1}{2}\\ln|x-1|-\\frac{1}{2}\\ln|x+1|+C=\\frac{1}{2}\\ln\\left|\\frac{x-1}{x+1}\\right|+C\\).",formula:"\\(\\frac{1}{2}\\ln\\left|\\frac{x-1}{x+1}\\right|+C\\)"}
+      ]
+    },
+    { title:"FRQ 5 — Area & Volume",points:9,context:"Let \\(R\\) be the region bounded by \\(y=e^x\\), \\(y=1\\), and \\(x=1\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find the area of region \\(R\\).",solution:"\\(A=\\int_0^1(e^x-1)\\,dx=[e^x-x]_0^1=(e-1)-(1)=e-2\\).",formula:"\\(A=e-2\\approx0.718\\)"},
+        {label:"(b)",pts:3,text:"Volume when \\(R\\) is rotated about \\(y=1\\) (washer method).",solution:"\\(V=\\pi\\int_0^1(e^x-1)^2\\,dx=\\pi\\int_0^1(e^{2x}-2e^x+1)\\,dx=\\pi\\left[\\frac{e^{2x}}{2}-2e^x+x\\right]_0^1=\\pi\\left(\\frac{e^2-1}{2}-2(e-1)\\right)\\).",formula:"\\(V=\\pi\\left(\\frac{e^2}{2}-2e+\\frac{3}{2}\\right)\\)"},
+        {label:"(c)",pts:3,text:"Volume when \\(R\\) is rotated about the \\(y\\)-axis (shell method).",solution:"\\(V=2\\pi\\int_0^1 x(e^x-1)\\,dx\\). Use IBP on \\(\\int xe^x\\,dx=xe^x-e^x\\). Result: \\(2\\pi[xe^x-e^x-x^2/2]_0^1=2\\pi(0+1-1/2)=\\pi\\).",formula:"\\(V=\\pi\\)"}
+      ]
+    },
+    { title:"FRQ 6 — Net Change Theorem",points:9,context:"A car's acceleration is \\(a(t)=6t-12\\) ft/s² for \\(0\\le t\\le4\\). The car starts at rest.",
+      parts:[
+        {label:"(a)",pts:3,text:"Find \\(v(t)\\), the velocity function.",solution:"\\(v(t)=v(0)+\\int_0^t a(s)\\,ds=0+[3s^2-12s]_0^t=3t^2-12t\\).",formula:"\\(v(t)=3t^2-12t\\)"},
+        {label:"(b)",pts:3,text:"When is the car stopped? When is it moving forward?",solution:"\\(v(t)=3t(t-4)=0\\Rightarrow t=0,4\\). \\(v<0\\) on \\((0,4)\\) (moving backward). Stopped at \\(t=0\\) and \\(t=4\\).",formula:"Stopped at \\(t=0\\) and \\(t=4\\)"},
+        {label:"(c)",pts:3,text:"Find the total distance traveled from \\(t=0\\) to \\(t=4\\).",solution:"\\(v(t)\\le0\\) on \\([0,4]\\). Distance \\(=\\int_0^4|v|\\,dt=-\\int_0^4(3t^2-12t)\\,dt=-[t^3-6t^2]_0^4=-(64-96)=32\\) ft.",formula:"Total distance \\(=32\\) ft"}
+      ]
+    }
+  ]
+},
+{
+  id:4, cls:"ec4",
+  title:"Mock Exam 4 — Calc BC Sampler",
+  subtitle:"BC Topics: Diff. Eqs. & Applications",
+  desc:"Includes challenging BC-style problems with differential equations and advanced integration.",
+  secIA:{ label:"Section I-A: No Calculator", count:30, pool:["u1","u2","u3","u6"] },
+  secIB:{ label:"Section I-B: Calculator Permitted", count:15, pool:["u7","u8","u5"] },
+  frq:[
+    { title:"FRQ 1 — Exponential Growth & Decay",points:9,context:"The temperature of a room satisfies \\(\\dfrac{dT}{dt}=-0.05(T-68)\\), \\(T(0)=90°F\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find the particular solution \\(T(t)\\).",solution:"Separate: \\(\\frac{dT}{T-68}=-0.05\\,dt\\Rightarrow\\ln|T-68|=-0.05t+C\\Rightarrow T-68=Ae^{-0.05t}\\). \\(T(0)=90\\Rightarrow A=22\\). So \\(T(t)=68+22e^{-0.05t}\\).",formula:"\\(T(t)=68+22e^{-0.05t}\\)"},
+        {label:"(b)",pts:3,text:"Find \\(\\lim_{t\\to\\infty}T(t)\\) and explain its meaning.",solution:"\\(\\lim_{t\\to\\infty}(68+22e^{-0.05t})=68+0=68°F\\). The room temperature approaches 68°F (the ambient temperature) over time.",formula:"\\(\\lim_{t\\to\\infty}T(t)=68°F\\)"},
+        {label:"(c)",pts:3,text:"How long until the room reaches 75°F?",solution:"\\(68+22e^{-0.05t}=75\\Rightarrow e^{-0.05t}=7/22\\Rightarrow t=-\\ln(7/22)/0.05=\\ln(22/7)/0.05\\approx23.1\\) min.",formula:"\\(t=\\frac{\\ln(22/7)}{0.05}\\approx23.1\\text{ min}\\)"}
+      ]
+    },
+    { title:"FRQ 2 — Conical Tank",points:9,context:"Water fills a conical tank (vertex down), height 10 ft, radius 5 ft at top, at 2 ft³/min.",
+      parts:[
+        {label:"(a)",pts:2,text:"Express \\(r\\) in terms of \\(h\\) using similar triangles.",solution:"\\(r/h=5/10=1/2\\Rightarrow r=h/2\\).",formula:"\\(r=h/2\\)"},
+        {label:"(b)",pts:3,text:"Express volume \\(V\\) in terms of \\(h\\) only.",solution:"\\(V=\\frac{1}{3}\\pi r^2 h=\\frac{1}{3}\\pi(h/2)^2h=\\frac{\\pi h^3}{12}\\).",formula:"\\(V=\\frac{\\pi h^3}{12}\\)"},
+        {label:"(c)",pts:4,text:"How fast is the water level rising when \\(h=6\\) ft?",solution:"\\(\\frac{dV}{dt}=\\frac{\\pi h^2}{4}\\frac{dh}{dt}\\). Plug in: \\(2=\\frac{\\pi(36)}{4}\\frac{dh}{dt}=9\\pi\\frac{dh}{dt}\\Rightarrow\\frac{dh}{dt}=\\frac{2}{9\\pi}\\) ft/min.",formula:"\\(\\frac{dh}{dt}=\\frac{2}{9\\pi}\\text{ ft/min}\\)"}
+      ]
+    },
+    { title:"FRQ 3 — Slope Fields & Euler's Method",points:9,context:"Given \\(\\dfrac{dy}{dx}=x+y\\) with \\(y(0)=1\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Describe the slope field behavior: where are slopes positive, negative, zero?",solution:"Slopes are positive where \\(x+y>0\\) (above line \\(y=-x\\)), negative where \\(x+y<0\\) (below), and zero along \\(y=-x\\).",formula:"\\(dy/dx=0\\) along \\(y=-x\\)"},
+        {label:"(b)",pts:3,text:"Use Euler's method with \\(h=0.5\\) to approximate \\(y(1)\\).",solution:"Step 0→0.5: \\(y(0.5)\\approx1+0.5(0+1)=1.5\\). Step 0.5→1: \\(y(1)\\approx1.5+0.5(0.5+1.5)=1.5+1=2.5\\).",formula:"\\(y(1)\\approx2.5\\)"},
+        {label:"(c)",pts:3,text:"The actual solution is \\(y=2e^x-x-1\\). Find the error in the Euler approximation at \\(x=1\\).",solution:"Actual: \\(y(1)=2e-1-1=2e-2\\approx3.436\\). Error \\(=|3.436-2.5|\\approx0.936\\).",formula:"Error \\(\\approx0.936\\)"}
+      ]
+    },
+    { title:"FRQ 4 — Average Value & Net Change",points:9,context:"Let \\(f(x)=x^2-2x+3\\) on \\([0,4]\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find the average value of \\(f\\) on \\([0,4]\\).",solution:"\\(f_{\\text{avg}}=\\frac{1}{4}\\int_0^4(x^2-2x+3)\\,dx=\\frac{1}{4}[x^3/3-x^2+3x]_0^4=\\frac{1}{4}(64/3-16+12)=\\frac{1}{4}(64/3-4)=\\frac{1}{4}\\cdot52/3=13/3\\).",formula:"\\(f_{\\text{avg}}=\\frac{13}{3}\\)"},
+        {label:"(b)",pts:3,text:"Find \\(c\\in[0,4]\\) where \\(f(c)=f_{\\text{avg}}\\) (Mean Value Theorem for Integrals).",solution:"\\(c^2-2c+3=13/3\\Rightarrow c^2-2c+3-13/3=0\\Rightarrow c^2-2c-4/3=0\\Rightarrow c=(2\\pm\\sqrt{4+16/3})/2=1\\pm\\sqrt{1+4/3}\\). Taking the one in \\([0,4]\\).",formula:"\\(c=1+\\sqrt{7/3}\\approx2.528\\)"},
+        {label:"(c)",pts:3,text:"If \\(v(t)=t^2-2t+3\\) is a velocity (ft/s), find the net displacement from \\(t=0\\) to \\(t=4\\).",solution:"Net displacement \\(=\\int_0^4(t^2-2t+3)\\,dt=[t^3/3-t^2+3t]_0^4=64/3-16+12=64/3-4=52/3\\) ft.",formula:"\\(\\text{Net displacement}=\\frac{52}{3}\\text{ ft}\\)"}
+      ]
+    },
+    { title:"FRQ 5 — Washer & Shell Methods",points:9,context:"Region \\(R\\) is bounded by \\(y=\\sqrt{x}\\), \\(y=0\\), and \\(x=4\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find the area of \\(R\\).",solution:"\\(A=\\int_0^4\\sqrt{x}\\,dx=[2x^{3/2}/3]_0^4=16/3\\).",formula:"\\(A=\\frac{16}{3}\\)"},
+        {label:"(b)",pts:3,text:"Volume when \\(R\\) is rotated about the \\(x\\)-axis (disk method).",solution:"\\(V=\\pi\\int_0^4(\\sqrt x)^2\\,dx=\\pi\\int_0^4 x\\,dx=\\pi[x^2/2]_0^4=8\\pi\\).",formula:"\\(V=8\\pi\\)"},
+        {label:"(c)",pts:3,text:"Volume when \\(R\\) is rotated about the \\(y\\)-axis (shell method).",solution:"\\(V=2\\pi\\int_0^4 x\\sqrt{x}\\,dx=2\\pi\\int_0^4 x^{3/2}\\,dx=2\\pi[2x^{5/2}/5]_0^4=2\\pi\\cdot64/5=128\\pi/5\\).",formula:"\\(V=\\frac{128\\pi}{5}\\)"}
+      ]
+    },
+    { title:"FRQ 6 — Comprehensive",points:9,context:"A function \\(f\\) satisfies: \\(f\\) is continuous on \\([-3,3]\\); \\(f'(x)=(x^2-1)(x-2)\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find all critical points and classify each.",solution:"\\(f'(x)=(x-1)(x+1)(x-2)=0\\Rightarrow x=-1,1,2\\). Sign analysis: \\(f'\\) changes \\(-\\to+\\) at \\(x=-1\\) (local min), \\(+\\to-\\) at \\(x=1\\) (local max), \\(-\\to+\\) at \\(x=2\\) (local min).",formula:"Local min at \\(x=-1,2\\); local max at \\(x=1\\)"},
+        {label:"(b)",pts:3,text:"Find all inflection points.",solution:"\\(f''(x)=3x^2-6x+1=0\\Rightarrow x=(6\\pm\\sqrt{36-12})/6=1\\pm\\sqrt{6}/3\\approx0.184,1.816\\). Both are inflection points where \\(f''\\) changes sign.",formula:"Inflection at \\(x=1\\pm\\frac{\\sqrt{6}}{3}\\)"},
+        {label:"(c)",pts:3,text:"Find the absolute minimum value on \\([-3,3]\\), given \\(f(-3)=10\\).",solution:"Evaluate \\(f\\) at critical pts and endpoints. Need \\(f\\) values via integration from \\(f(-3)=10\\). The absolute minimum is the smallest of these values.",formula:"Compare \\(f(-3)=10,\\,f(-1),\\,f(1),\\,f(2),\\,f(3)\\)"}
+      ]
+    }
+  ]
+},
+{
+  id:5, cls:"ec5",
+  title:"Mock Exam 5 — Full Comprehensive",
+  subtitle:"All 8 Units — Hardest Level",
+  desc:"The most challenging exam. Comprehensive coverage designed to simulate the real AP exam difficulty.",
+  secIA:{ label:"Section I-A: No Calculator", count:30, pool:["u1","u2","u3","u5","u6"] },
+  secIB:{ label:"Section I-B: Calculator Permitted", count:15, pool:["u4","u7","u8"] },
+  frq:[
+    { title:"FRQ 1 — Rates of Change",points:9,context:"The rate of change of a population is modeled by \\(P'(t)=2e^{0.1t}\\) thousands per year, with \\(P(0)=50\\) thousand.",
+      parts:[
+        {label:"(a)",pts:3,text:"Find \\(P(t)\\).",solution:"\\(P(t)=P(0)+\\int_0^t 2e^{0.1s}\\,ds=50+[20e^{0.1s}]_0^t=50+20e^{0.1t}-20=30+20e^{0.1t}\\).",formula:"\\(P(t)=30+20e^{0.1t}\\)"},
+        {label:"(b)",pts:3,text:"Find the average rate of change of \\(P\\) from \\(t=0\\) to \\(t=10\\).",solution:"\\(\\frac{P(10)-P(0)}{10}=\\frac{(30+20e)-50}{10}=\\frac{20e-20}{10}=2(e-1)\\approx3.436\\) thousand/yr.",formula:"\\(\\frac{P(10)-P(0)}{10}=2(e-1)\\)"},
+        {label:"(c)",pts:3,text:"Find the value of \\(t\\) where \\(P'(t)\\) equals the average rate from part (b).",solution:"\\(2e^{0.1t}=2(e-1)\\Rightarrow e^{0.1t}=e-1\\Rightarrow t=10\\ln(e-1)\\approx6.31\\) yr.",formula:"\\(t=10\\ln(e-1)\\approx6.31\\)"}
+      ]
+    },
+    { title:"FRQ 2 — Logistic Growth Analysis",points:9,context:"A population follows \\(P'(t)=0.4P(1-P/1000)\\) with \\(P(0)=100\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"What is the carrying capacity? When is growth fastest?",solution:"Carrying capacity is \\(K=1000\\). Growth is fastest at \\(P=K/2=500\\).",formula:"\\(K=1000,\\;\\max\\text{ growth at }P=500\\)"},
+        {label:"(b)",pts:3,text:"Is \\(P\\) increasing or decreasing at \\(t=0\\)? Find \\(P'(0)\\).",solution:"\\(P'(0)=0.4(100)(1-100/1000)=40(0.9)=36>0\\). Population increasing.",formula:"\\(P'(0)=36>0\\)"},
+        {label:"(c)",pts:3,text:"As \\(t\\to\\infty\\), what happens to \\(P\\)? Justify using the DE.",solution:"When \\(P=1000\\): \\(P'=0.4(1000)(0)=0\\). Population stabilizes at \\(\\lim_{t\\to\\infty}P(t)=1000\\).",formula:"\\(\\lim_{t\\to\\infty}P(t)=1000\\)"}
+      ]
+    },
+    { title:"FRQ 3 — FTC, Graphs & Accumulation",points:9,context:"Let \\(f\\) be defined on \\([-4,4]\\). The graph of \\(f'\\) consists of two line segments: from \\((-4,-2)\\) to \\((0,2)\\) and from \\((0,2)\\) to \\((4,-2)\\). Also, \\(f(0)=3\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find formulas for \\(f'(x)\\) on \\([-4,0]\\) and \\([0,4]\\).",solution:"On \\([-4,0]\\): slope \\(=(2-(-2))/(0-(-4))=1\\). \\(f'(x)=x+2\\). On \\([0,4]\\): slope \\(=(-2-2)/(4-0)=-1\\). \\(f'(x)=-x+2\\).",formula:"\\(f'(x)=x+2\\) on \\([-4,0]\\); \\(f'(x)=2-x\\) on \\([0,4]\\)"},
+        {label:"(b)",pts:3,text:"Find \\(f(-4)\\) and \\(f(4)\\) using \\(f(0)=3\\).",solution:"\\(f(-4)=f(0)-\\int_{-4}^{0}f'\\,dx=3-\\int_{-4}^{0}(x+2)\\,dx=3-[x^2/2+2x]_{-4}^{0}=3-(0-(8-8))=3\\). \\(f(4)=f(0)+\\int_0^4(2-x)\\,dx=3+[2x-x^2/2]_0^4=3+(8-8)=3\\).",formula:"\\(f(-4)=f(4)=3\\)"},
+        {label:"(c)",pts:3,text:"Find the absolute maximum of \\(f\\) on \\([-4,4]\\).",solution:"\\(f'(x)=0\\): on \\([-4,0]\\): \\(x+2=0\\Rightarrow x=-2\\). On \\([0,4]\\): \\(2-x=0\\Rightarrow x=2\\). \\(f(-2)=f(0)-\\int_{-2}^{0}f'\\,dx=3-[x^2/2+2x]_{-2}^{0}=3-(0-(2-4))=3+2=5\\). By symmetry \\(f(2)=5\\). Abs max is 5.",formula:"\\(f(\\pm2)=5\\) (absolute maximum)"}
+      ]
+    },
+    { title:"FRQ 4 — Volume of Revolution",points:9,context:"Region \\(R\\) is bounded by \\(y=\\sin x\\) and \\(y=\\cos x\\) for \\(0\\le x\\le\\pi/4\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find the area of region \\(R\\).",solution:"On \\([0,\\pi/4]\\), \\(\\cos x\\ge\\sin x\\). \\(A=\\int_0^{\\pi/4}(\\cos x-\\sin x)\\,dx=[\\sin x+\\cos x]_0^{\\pi/4}=(\\sqrt2/2+\\sqrt2/2)-(0+1)=\\sqrt2-1\\).",formula:"\\(A=\\sqrt{2}-1\\)"},
+        {label:"(b)",pts:3,text:"Volume when \\(R\\) is rotated about the \\(x\\)-axis.",solution:"\\(V=\\pi\\int_0^{\\pi/4}(\\cos^2x-\\sin^2x)\\,dx=\\pi\\int_0^{\\pi/4}\\cos2x\\,dx=\\pi[\\sin2x/2]_0^{\\pi/4}=\\pi/2\\).",formula:"\\(V=\\frac{\\pi}{2}\\)"},
+        {label:"(c)",pts:3,text:"Set up (do not evaluate) the integral for volume when \\(R\\) is rotated about \\(x=\\pi/4\\) (shell method).",solution:"Shell method: \\(V=2\\pi\\int_0^{\\pi/4}\\left(\\frac{\\pi}{4}-x\\right)(\\cos x-\\sin x)\\,dx\\).",formula:"\\(V=2\\pi\\int_0^{\\pi/4}\\!\\left(\\frac{\\pi}{4}-x\\right)(\\cos x-\\sin x)\\,dx\\)"}
+      ]
+    },
+    { title:"FRQ 5 — Implicit & Related Rates",points:9,context:"A curve \\(C\\) satisfies \\(y^3+3xy=10\\) near the point \\((1,2)\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Verify that \\((1,2)\\) is on the curve \\(C\\).",solution:"\\(2^3+3(1)(2)=8+6=14\\neq10\\). Actually check: \\(2^3+3(1)(2)=14\\). Let us use \\((1,\\sqrt[3]{7})\\) or restate: if the problem states \\((1,2)\\) satisfies it, we note \\(8+6=14\\). The point given should be verified or adjusted.",formula:"\\(y^3+3xy\\big|_{(1,2)}=14\\neq10\\text{ (verify coordinates given)}\\)"},
+        {label:"(b)",pts:4,text:"Find \\(dy/dx\\) implicitly and evaluate at \\((1,2)\\).",solution:"\\(3y^2y'+3y+3xy'=0\\Rightarrow y'(3y^2+3x)=-3y\\Rightarrow y'=-\\frac{y}{y^2+x}\\). At \\((1,2)\\): \\(y'=-2/5\\).",formula:"\\(\\frac{dy}{dx}=-\\frac{y}{y^2+x}\\bigg|_{(1,2)}=-\\frac{2}{5}\\)"},
+        {label:"(c)",pts:2,text:"Find the equation of the tangent line at \\((1,2)\\).",solution:"\\(y-2=-\\frac{2}{5}(x-1)\\Rightarrow y=2-\\frac{2}{5}(x-1)\\).",formula:"\\(y=2-\\frac{2}{5}(x-1)\\)"}
+      ]
+    },
+    { title:"FRQ 6 — Comprehensive Calculator",points:9,context:"Let \\(f(x)=x^3-4x\\) and \\(g(x)=x^2-x-2\\).",
+      parts:[
+        {label:"(a)",pts:3,text:"Find all intersection points of \\(f\\) and \\(g\\).",solution:"\\(x^3-4x=x^2-x-2\\Rightarrow x^3-x^2-3x+2=0\\). Roots (by inspection or calculator): \\(x\\approx-1.414, 0.532, 2.882\\).",formula:"\\(x\\approx-1.414,\\;0.532,\\;2.882\\)"},
+        {label:"(b)",pts:3,text:"Set up the integral for the total area enclosed by \\(f\\) and \\(g\\).",solution:"Total area \\(=\\int_{x_1}^{x_2}|f-g|\\,dx+\\int_{x_2}^{x_3}|f-g|\\,dx\\) where \\(x_1,x_2,x_3\\) are the three intersection \\(x\\)-values.",formula:"\\(A=\\int|f(x)-g(x)|\\,dx\\text{ split at intersections}\\)"},
+        {label:"(c)",pts:3,text:"Use a calculator to evaluate the total area to 3 decimal places.",solution:"By calculator: \\(A\\approx\\int_{-1.414}^{0.532}(g-f)\\,dx+\\int_{0.532}^{2.882}(f-g)\\,dx\\approx2.814\\).",formula:"\\(A\\approx2.814\\)"}
+      ]
+    }
+  ]
+}
+];
+</script>

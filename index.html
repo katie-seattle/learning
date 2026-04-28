@@ -1,16 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PRBZM6F4QL"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-PRBZM6F4QL');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CalcIQ — Free AP Calculus Practice</title>
@@ -32,8 +22,6 @@
     --red-dim: rgba(255,79,79,0.12);
     --green: #22c55e;
     --green-dim: rgba(34,197,94,0.12);
-    --blue: #60a5fa;
-    --blue-dim: rgba(96,165,250,0.12);
     --text: #f0f0f0;
     --muted: #6b7280;
     --muted2: #9ca3af;
@@ -49,6 +37,7 @@
     overflow-x: hidden;
   }
 
+  /* ── NOISE OVERLAY ── */
   body::before {
     content: '';
     position: fixed;
@@ -58,6 +47,7 @@
     z-index: 0;
   }
 
+  /* ── NAV ── */
   nav {
     position: sticky; top: 0; z-index: 100;
     backdrop-filter: blur(16px);
@@ -79,7 +69,7 @@
   .logo span { color: var(--orange); }
 
   .nav-stats {
-    display: flex; gap: 1rem; align-items: center;
+    display: flex; gap: 1.5rem; align-items: center;
     font-size: 0.8rem; color: var(--muted2);
   }
 
@@ -92,10 +82,10 @@
     font-weight: 500;
   }
 
-  /* HOME */
+  /* ── HERO ── */
   #home-screen {
     position: relative; z-index: 1;
-    max-width: 960px; margin: 0 auto;
+    max-width: 900px; margin: 0 auto;
     padding: 5rem 2rem 3rem;
   }
 
@@ -125,16 +115,12 @@
   .hero-sub {
     font-size: 1.05rem;
     color: var(--muted2);
-    max-width: 560px;
+    max-width: 540px;
     line-height: 1.7;
     margin-bottom: 2.5rem;
   }
 
-  .hero-btns {
-    display: flex; gap: 12px; flex-wrap: wrap;
-    margin-bottom: 3rem;
-  }
-
+  /* ── TOPIC GRID ── */
   .section-label {
     font-family: 'Syne', sans-serif;
     font-size: 0.7rem;
@@ -147,9 +133,9 @@
 
   .topic-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 14px;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
   }
 
   .topic-card {
@@ -177,26 +163,22 @@
   .tc-orange::before { background: var(--orange); }
   .tc-teal::before   { background: var(--teal); }
   .tc-purple::before { background: var(--purple); }
-  .tc-blue::before   { background: var(--blue); }
 
   .topic-card:hover.tc-orange { box-shadow: 0 8px 32px rgba(255,107,53,0.1); }
   .topic-card:hover.tc-teal   { box-shadow: 0 8px 32px rgba(0,201,167,0.1); }
   .topic-card:hover.tc-purple { box-shadow: 0 8px 32px rgba(167,139,250,0.1); }
-  .topic-card:hover.tc-blue   { box-shadow: 0 8px 32px rgba(96,165,250,0.1); }
 
   .topic-icon {
     width: 38px; height: 38px;
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1rem; font-weight: 700;
-    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
     margin-bottom: 1rem;
   }
 
   .ti-orange { background: var(--orange-dim); color: var(--orange); }
   .ti-teal   { background: var(--teal-dim);   color: var(--teal); }
   .ti-purple { background: var(--purple-dim); color: var(--purple); }
-  .ti-blue   { background: var(--blue-dim);   color: var(--blue); }
 
   .topic-name {
     font-family: 'Syne', sans-serif;
@@ -204,7 +186,9 @@
     margin-bottom: 0.3rem;
   }
 
-  .topic-count { font-size: 0.78rem; color: var(--muted2); }
+  .topic-count {
+    font-size: 0.78rem; color: var(--muted2);
+  }
 
   .topic-difficulty {
     position: absolute; top: 1rem; right: 1rem;
@@ -216,71 +200,6 @@
   .diff-easy   { background: rgba(34,197,94,0.12);  color: #22c55e; }
   .diff-med    { background: rgba(251,191,36,0.12); color: #fbbf24; }
   .diff-hard   { background: rgba(255,79,79,0.12);  color: var(--red); }
-
-  /* Mock exam cards */
-  .exam-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 14px;
-    margin-bottom: 3rem;
-  }
-
-  .exam-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.6rem;
-    cursor: pointer;
-    transition: all 0.22s ease;
-    position: relative; overflow: hidden;
-  }
-
-  .exam-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    border-radius: 16px 16px 0 0;
-    opacity: 0; transition: opacity 0.22s;
-  }
-
-  .exam-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-  .exam-card:hover::before { opacity: 1; }
-
-  .exam-card.ec-1::before { background: linear-gradient(90deg, var(--orange), var(--teal)); }
-  .exam-card.ec-2::before { background: linear-gradient(90deg, var(--purple), var(--orange)); }
-  .exam-card.ec-3::before { background: linear-gradient(90deg, var(--teal), var(--purple)); }
-
-  .exam-card:hover.ec-1 { box-shadow: 0 8px 32px rgba(255,107,53,0.12); }
-  .exam-card:hover.ec-2 { box-shadow: 0 8px 32px rgba(167,139,250,0.12); }
-  .exam-card:hover.ec-3 { box-shadow: 0 8px 32px rgba(0,201,167,0.12); }
-
-  .exam-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 2.5rem; font-weight: 800;
-    line-height: 1;
-    margin-bottom: 0.5rem;
-    opacity: 0.15;
-  }
-
-  .exam-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.05rem; font-weight: 700;
-    margin-bottom: 0.4rem;
-  }
-
-  .exam-meta { font-size: 0.8rem; color: var(--muted2); line-height: 1.6; }
-
-  .exam-chips {
-    display: flex; gap: 6px; flex-wrap: wrap;
-    margin-top: 1rem;
-  }
-
-  .exam-chip {
-    font-size: 0.7rem; font-weight: 600;
-    padding: 3px 10px; border-radius: 10px;
-  }
-
-  .chip-mcq { background: var(--orange-dim); color: var(--orange); }
-  .chip-frq { background: var(--teal-dim); color: var(--teal); }
 
   .play-all-btn {
     display: inline-flex; align-items: center; gap: 10px;
@@ -297,22 +216,7 @@
 
   .play-all-btn:hover { background: #ff8558; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,107,53,0.3); }
 
-  .btn-outline {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: transparent;
-    border: 1.5px solid var(--border2);
-    color: var(--muted2);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.9rem; font-weight: 600;
-    padding: 13px 24px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-outline:hover { border-color: var(--muted); color: var(--text); }
-
-  /* QUIZ SCREEN */
+  /* ── QUIZ SCREEN ── */
   #quiz-screen {
     display: none;
     position: relative; z-index: 1;
@@ -348,7 +252,10 @@
     padding: 4px 12px; border-radius: 12px;
   }
 
-  .progress-wrap { margin-bottom: 2rem; }
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 2rem;
+  }
 
   .progress-info {
     display: flex; justify-content: space-between;
@@ -367,6 +274,7 @@
     transition: width 0.4s ease;
   }
 
+  /* Question card */
   .question-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -389,24 +297,25 @@
 
   .q-text {
     font-family: 'Syne', sans-serif;
-    font-size: 1.15rem; font-weight: 600;
-    line-height: 1.55;
+    font-size: 1.2rem; font-weight: 600;
+    line-height: 1.5;
     margin-bottom: 0.6rem;
   }
 
   .q-formula {
-    font-family: 'Courier New', monospace;
+    font-family: 'DM Mono', 'Courier New', monospace;
     background: var(--surface2);
     border: 1px solid var(--border);
     border-left: 3px solid var(--orange);
     border-radius: 8px;
     padding: 12px 16px;
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--teal);
     margin: 1rem 0;
     letter-spacing: 0.5px;
   }
 
+  /* Options */
   .options-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -445,17 +354,45 @@
     margin-top: 1px;
   }
 
-  .option-btn:hover:not(.answered) { border-color: var(--border2); background: rgba(255,255,255,0.04); }
-  .option-btn:hover:not(.answered) .option-letter { background: var(--orange-dim); border-color: var(--orange); color: var(--orange); }
+  .option-btn:hover:not(.answered) {
+    border-color: var(--border2);
+    background: rgba(255,255,255,0.04);
+  }
 
-  .option-btn.correct { border-color: var(--green); background: var(--green-dim); }
-  .option-btn.correct .option-letter { background: var(--green); border-color: var(--green); color: #fff; }
+  .option-btn:hover:not(.answered) .option-letter {
+    background: var(--orange-dim);
+    border-color: var(--orange);
+    color: var(--orange);
+  }
 
-  .option-btn.wrong { border-color: var(--red); background: var(--red-dim); }
-  .option-btn.wrong .option-letter { background: var(--red); border-color: var(--red); color: #fff; }
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-dim);
+  }
 
-  .option-btn.dimmed { opacity: 0.4; cursor: default; }
+  .option-btn.correct .option-letter {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
 
+  .option-btn.wrong {
+    border-color: var(--red);
+    background: var(--red-dim);
+  }
+
+  .option-btn.wrong .option-letter {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff;
+  }
+
+  .option-btn.dimmed {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  /* Feedback */
   .feedback-box {
     border-radius: 14px;
     padding: 1.3rem 1.5rem;
@@ -469,8 +406,15 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .feedback-box.correct { background: var(--green-dim); border: 1px solid rgba(34,197,94,0.25); }
-  .feedback-box.wrong   { background: var(--red-dim);   border: 1px solid rgba(255,79,79,0.25); }
+  .feedback-box.correct {
+    background: var(--green-dim);
+    border: 1px solid rgba(34,197,94,0.25);
+  }
+
+  .feedback-box.wrong {
+    background: var(--red-dim);
+    border: 1px solid rgba(255,79,79,0.25);
+  }
 
   .feedback-header {
     font-family: 'Syne', sans-serif;
@@ -482,7 +426,11 @@
   .feedback-header.correct { color: var(--green); }
   .feedback-header.wrong   { color: var(--red); }
 
-  .feedback-explanation { font-size: 0.88rem; color: var(--muted2); line-height: 1.6; }
+  .feedback-explanation {
+    font-size: 0.88rem;
+    color: var(--muted2);
+    line-height: 1.6;
+  }
 
   .feedback-formula {
     font-family: 'Courier New', monospace;
@@ -494,6 +442,7 @@
     display: inline-block;
   }
 
+  /* Next / actions */
   .quiz-actions {
     display: flex; justify-content: flex-end; gap: 12px;
     margin-top: 1.5rem;
@@ -524,138 +473,7 @@
 
   .btn-skip:hover { border-color: var(--border2); color: var(--text); }
 
-  /* FRQ SCREEN */
-  #frq-screen {
-    display: none;
-    position: relative; z-index: 1;
-    max-width: 860px; margin: 0 auto;
-    padding: 2.5rem 2rem;
-  }
-
-  .frq-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 2rem;
-  }
-
-  .frq-section-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.8rem; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 0.5rem;
-  }
-
-  .frq-question-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 2rem 2.4rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .frq-q-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.8rem;
-  }
-
-  .frq-q-text {
-    font-size: 1rem; line-height: 1.7;
-    margin-bottom: 1.2rem;
-    color: var(--text);
-  }
-
-  .frq-part {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.2rem 1.4rem;
-    margin-bottom: 10px;
-  }
-
-  .frq-part-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.78rem; font-weight: 700;
-    color: var(--teal);
-    margin-bottom: 0.5rem;
-  }
-
-  .frq-part-text { font-size: 0.93rem; line-height: 1.6; color: var(--muted2); }
-
-  .frq-workspace {
-    background: var(--surface2);
-    border: 1.5px solid var(--border2);
-    border-radius: 10px;
-    padding: 1rem;
-    margin-top: 10px;
-    min-height: 80px;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    color: var(--text);
-    width: 100%;
-    resize: vertical;
-    outline: none;
-    transition: border-color 0.18s;
-  }
-
-  .frq-workspace:focus { border-color: var(--teal); }
-
-  .frq-show-sol-btn {
-    background: var(--teal-dim);
-    border: 1px solid rgba(0,201,167,0.3);
-    color: var(--teal);
-    font-family: 'Syne', sans-serif;
-    font-size: 0.82rem; font-weight: 700;
-    padding: 8px 18px; border-radius: 8px;
-    cursor: pointer; transition: all 0.18s;
-    margin-top: 10px;
-  }
-
-  .frq-show-sol-btn:hover { background: rgba(0,201,167,0.2); }
-
-  .frq-solution {
-    background: rgba(0,201,167,0.06);
-    border: 1px solid rgba(0,201,167,0.2);
-    border-radius: 12px;
-    padding: 1.2rem 1.4rem;
-    margin-top: 12px;
-    display: none;
-  }
-
-  .frq-solution-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem; font-weight: 700;
-    letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 0.7rem;
-  }
-
-  .frq-solution-text { font-size: 0.9rem; line-height: 1.7; color: var(--muted2); }
-
-  .frq-formula {
-    font-family: 'Courier New', monospace;
-    background: rgba(0,0,0,0.3);
-    padding: 8px 14px; border-radius: 6px;
-    font-size: 0.85rem;
-    color: var(--teal);
-    margin: 8px 0;
-    display: block;
-  }
-
-  .frq-points-badge {
-    display: inline-block;
-    background: rgba(251,191,36,0.12);
-    color: #fbbf24;
-    font-size: 0.7rem; font-weight: 700;
-    letter-spacing: 1px;
-    padding: 3px 10px; border-radius: 10px;
-    margin-left: 8px;
-    vertical-align: middle;
-  }
-
-  /* RESULTS */
+  /* ── RESULTS SCREEN ── */
   #results-screen {
     display: none;
     position: relative; z-index: 1;
@@ -671,8 +489,14 @@
     margin: 1rem 0;
   }
 
-  .results-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem; }
-  .results-msg { font-size: 1rem; color: var(--muted2); margin-bottom: 2.5rem; line-height: 1.6; }
+  .results-label {
+    font-size: 0.8rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .results-msg {
+    font-size: 1rem; color: var(--muted2); margin-bottom: 2.5rem; line-height: 1.6;
+  }
 
   .results-grid {
     display: grid; grid-template-columns: repeat(3, 1fr);
@@ -685,10 +509,16 @@
     border-radius: 14px; padding: 1.2rem;
   }
 
-  .result-stat-val { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; }
+  .result-stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem; font-weight: 800;
+  }
+
   .result-stat-label { font-size: 0.75rem; color: var(--muted2); margin-top: 4px; }
 
-  .results-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .results-btns {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
 
   .btn-primary {
     background: var(--orange); color: #fff;
@@ -709,7 +539,7 @@
 
   .btn-secondary:hover { border-color: var(--muted); }
 
-  /* STREAK / HEARTS */
+  /* ── STREAK ── */
   .streak-bar {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -719,78 +549,22 @@
   }
 
   .streak-label { font-size: 0.8rem; color: var(--muted2); }
-  .streak-val { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--orange); }
 
-  .hearts { display: flex; gap: 5px; }
-  .heart { font-size: 1rem; transition: all 0.2s; }
+  .streak-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700; color: var(--orange);
+  }
+
+  .hearts {
+    display: flex; gap: 5px;
+  }
+
+  .heart {
+    font-size: 1rem;
+    transition: all 0.2s;
+  }
+
   .heart.lost { filter: grayscale(1); opacity: 0.3; }
-
-  /* AP EXAM INTRO */
-  #exam-intro-screen {
-    display: none;
-    position: relative; z-index: 1;
-    max-width: 700px; margin: 0 auto;
-    padding: 4rem 2rem;
-    text-align: center;
-  }
-
-  .exam-intro-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem; font-weight: 800;
-    margin-bottom: 1rem;
-  }
-
-  .exam-intro-meta {
-    font-size: 0.95rem; color: var(--muted2); line-height: 1.8;
-    margin-bottom: 2rem;
-  }
-
-  .exam-info-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 12px; margin-bottom: 2.5rem;
-  }
-
-  .exam-info-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px; padding: 1.4rem;
-    text-align: left;
-  }
-
-  .exam-info-box-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 0.75rem; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 0.5rem;
-  }
-
-  .exam-info-box-val {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.5rem; font-weight: 800;
-  }
-
-  .exam-info-box-sub { font-size: 0.78rem; color: var(--muted2); margin-top: 2px; }
-
-  /* MCQ exam mode badge */
-  .mode-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--surface2); border: 1px solid var(--border2);
-    border-radius: 20px; padding: 5px 14px;
-    font-size: 0.75rem; font-weight: 600;
-    color: var(--muted2); margin-bottom: 1.5rem;
-  }
-
-  .mode-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--orange);
-  }
-
-  @media (max-width: 600px) {
-    .exam-info-grid { grid-template-columns: 1fr; }
-    .results-grid { grid-template-columns: 1fr 1fr; }
-  }
 </style>
 </head>
 <body>
@@ -811,34 +585,20 @@
     one question <span class="accent-t">at a time.</span>
   </h1>
   <p class="hero-sub">
-    180+ practice questions across every AP Calculus AB/BC topic, plus 3 full-length AP-format mock exams with MCQ and FRQ. Instant feedback, full explanations. Free, no account needed.
+    100+ practice questions across every AP Calculus topic. Instant feedback, full explanations, totally free. No account needed.
   </p>
 
-  <div class="hero-btns">
-    <button class="play-all-btn" onclick="startQuiz('all')">&#9654; Practice All Topics</button>
-    <button class="btn-outline" onclick="scrollToExams()">&#128196; Mock Exams</button>
+  <div style="margin-bottom: 2.5rem;">
+    <button class="play-all-btn" onclick="startQuiz('all')">
+      <span>&#9654;</span> Practice All Topics
+    </button>
   </div>
 
-  <div class="section-label">Practice by Topic</div>
+  <div class="section-label">Choose a Topic</div>
   <div class="topic-grid" id="topic-grid"></div>
-
-  <div class="section-label" id="exams-anchor" style="margin-top:1rem;">AP Mock Exams</div>
-  <div class="exam-grid" id="exam-grid"></div>
 </div>
 
-<!-- EXAM INTRO SCREEN -->
-<div id="exam-intro-screen">
-  <div class="mode-badge"><span class="mode-dot"></span> AP Format Exam</div>
-  <div class="exam-intro-title" id="exam-intro-title"></div>
-  <div class="exam-intro-meta" id="exam-intro-meta"></div>
-  <div class="exam-info-grid" id="exam-info-grid"></div>
-  <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-    <button class="btn-primary" id="exam-start-mcq-btn">Start Section I — MCQ</button>
-    <button class="btn-secondary" onclick="goHome()">&#8592; Back</button>
-  </div>
-</div>
-
-<!-- QUIZ SCREEN (MCQ) -->
+<!-- QUIZ SCREEN -->
 <div id="quiz-screen">
   <div class="quiz-header">
     <button class="back-btn" onclick="goHome()">&#8592; Back</button>
@@ -859,7 +619,7 @@
   <div class="progress-wrap">
     <div class="progress-info">
       <span id="progress-text">Question 1</span>
-      <span id="score-text">0 correct</span>
+      <span id="score-text">0 / 0</span>
     </div>
     <div class="progress-bar-bg">
       <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
@@ -881,21 +641,7 @@
 
   <div class="quiz-actions">
     <button class="btn-skip" id="btn-skip" onclick="skipQuestion()">Skip</button>
-    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next &#8594;</button>
-  </div>
-</div>
-
-<!-- FRQ SCREEN -->
-<div id="frq-screen">
-  <div class="frq-header">
-    <button class="back-btn" onclick="goHome()">&#8592; Back to Home</button>
-    <div class="quiz-meta">
-      <span class="topic-badge" id="frq-topic-badge" style="background:rgba(0,201,167,0.12);color:var(--teal);border:1px solid rgba(0,201,167,0.3);padding:4px 12px;border-radius:12px;font-size:0.75rem;font-weight:600;"></span>
-    </div>
-  </div>
-  <div id="frq-content"></div>
-  <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:2rem;">
-    <button class="btn-primary" onclick="goHome()">Finish Exam</button>
+    <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next Question &#8594;</button>
   </div>
 </div>
 
@@ -923,487 +669,567 @@
 
   <div class="results-btns">
     <button class="btn-primary" onclick="restartSame()">Try Again</button>
-    <button class="btn-secondary" id="frq-continue-btn" style="display:none;" onclick="startFRQ()">Continue to FRQ &#8594;</button>
     <button class="btn-secondary" onclick="goHome()">Back to Topics</button>
   </div>
 </div>
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  TOPICS
+//  QUESTION BANK
 // ══════════════════════════════════════════════════════════════
 const TOPICS = {
-  limits:          { name: "Limits & Continuity",       icon: "lim",  color: "teal",   difficulty: "easy" },
-  derivatives:     { name: "Derivatives",               icon: "f'",   color: "orange", difficulty: "med"  },
-  derivative_apps: { name: "Derivative Applications",   icon: "opt",  color: "purple", difficulty: "med"  },
-  integrals:       { name: "Integrals",                 icon: "∫",    color: "teal",   difficulty: "med"  },
-  ftc:             { name: "Fundamental Theorem",       icon: "FTC",  color: "orange", difficulty: "hard" },
-  series:          { name: "Series & Sequences",        icon: "Σ",    color: "purple", difficulty: "hard" },
+  limits: {
+    name: "Limits",
+    icon: "lim",
+    color: "teal",
+    difficulty: "easy",
+    count: 0
+  },
+  derivatives: {
+    name: "Derivatives",
+    icon: "f'",
+    color: "orange",
+    difficulty: "med",
+    count: 0
+  },
+  derivative_apps: {
+    name: "Derivative Applications",
+    icon: "opt",
+    color: "purple",
+    difficulty: "med",
+    count: 0
+  },
+  integrals: {
+    name: "Integrals",
+    icon: "∫",
+    color: "teal",
+    difficulty: "med",
+    count: 0
+  },
+  ftc: {
+    name: "Fundamental Theorem",
+    icon: "FTC",
+    color: "orange",
+    difficulty: "hard",
+    count: 0
+  },
+  series: {
+    name: "Series & Sequences",
+    icon: "Σ",
+    color: "purple",
+    difficulty: "hard",
+    count: 0
+  }
 };
 
-// ══════════════════════════════════════════════════════════════
-//  QUESTION BANK  (30+ per topic)
-// ══════════════════════════════════════════════════════════════
 const QUESTIONS = [
-
-// ─────────────────────────────────────────────────────────────
-// LIMITS (30 questions)
-// ─────────────────────────────────────────────────────────────
-{ topic:"limits", category:"Limits", text:"What is lim(x→3) of (x² - 9)/(x - 3)?", formula:"lim(x→3)  (x² - 9)/(x - 3)", options:["0","3","6","Undefined"], correct:2, explanation:"Factor: x²-9=(x-3)(x+3). Cancel (x-3) to get lim(x→3)(x+3)=6.", expFormula:"(x-3)(x+3)/(x-3) = x+3 → 3+3 = 6" },
-{ topic:"limits", category:"Limits", text:"What does lim(x→∞) of (3x²+2x)/(5x²) equal?", formula:"lim(x→∞)  (3x²+2x)/(5x²)", options:["0","3/5","2/5","∞"], correct:1, explanation:"Divide by x². The 2x/x² term → 0, leaving 3/5.", expFormula:"(3+2/x)/5 → 3/5 as x→∞" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→0) of sin(x)/x?", formula:"lim(x→0)  sin(x)/x", options:["0","∞","1","Undefined"], correct:2, explanation:"Classic squeeze-theorem limit. lim sin(x)/x = 1 as x→0.", expFormula:"lim(x→0) sin(x)/x = 1" },
-{ topic:"limits", category:"Limits", text:"If lim(x→2⁻)f(x)=5 and lim(x→2⁺)f(x)=5, we can conclude:", options:["f(2)=5","f is continuous at x=2","lim(x→2)f(x)=5","Both A and C"], correct:2, explanation:"Equal one-sided limits ⟹ the two-sided limit exists and equals 5. We cannot conclude f(2)=5 without more info.", expFormula:"Left=Right=5 ⟹ lim(x→2)f(x)=5" },
-{ topic:"limits", category:"Limits — L'Hôpital", text:"Use L'Hôpital's Rule: lim(x→0) of (eˣ-1)/x.", formula:"lim(x→0)  (eˣ-1)/x", options:["0","e","1","DNE"], correct:2, explanation:"0/0 form. Differentiate top and bottom: eˣ/1 → e⁰=1.", expFormula:"lim eˣ/1 = e⁰ = 1" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→∞) of (2x³-x)/(x³+7)?", formula:"lim(x→∞)  (2x³-x)/(x³+7)", options:["0","1","2","∞"], correct:2, explanation:"Dominant terms: 2x³/x³=2.", expFormula:"Leading coefficient ratio: 2/1 = 2" },
-{ topic:"limits", category:"Limits — Continuity", text:"A function f is continuous at x=a if:", options:["f(a) is defined only","lim(x→a)f(x) exists only","f(a)=lim(x→a)f(x) and both exist","f'(a) exists"], correct:2, explanation:"All three must hold: f(a) defined, limit exists, and they are equal.", expFormula:"f(a) = lim(x→a)f(x), both defined" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→0⁺) of ln(x)?", options:["0","1","-∞","∞"], correct:2, explanation:"As x→0⁺, ln(x) decreases without bound to -∞.", expFormula:"lim(x→0⁺) ln(x) = -∞" },
-{ topic:"limits", category:"Limits — L'Hôpital", text:"Evaluate lim(x→0) of (1-cos x)/x².", formula:"lim(x→0)  (1-cosx)/x²", options:["0","1/2","1","2"], correct:1, explanation:"0/0 form. Differentiate twice: sin(x)/(2x) → (1/2)(sin x/x) → 1/2.", expFormula:"lim sinx/(2x) = (1/2)·1 = 1/2" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→∞) of x·sin(1/x)?", formula:"lim(x→∞)  x·sin(1/x)", options:["0","∞","1","Does not exist"], correct:2, explanation:"Let u=1/x, so as x→∞, u→0. x·sin(1/x)=sin(u)/u → 1.", expFormula:"sin(u)/u → 1 as u→0" },
-{ topic:"limits", category:"Limits", text:"Which expression gives an indeterminate form 0/0?", options:["lim(x→1)(x-1)/(x²-1)","lim(x→2) 5","lim(x→0) x²","lim(x→∞) 1/x"], correct:0, explanation:"At x=1, numerator and denominator both equal 0, creating the 0/0 form.", expFormula:"(1-1)/((1)²-1) = 0/0" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→0) of (sin 3x)/(sin 5x)?", formula:"lim(x→0)  sin(3x)/sin(5x)", options:["1","3/5","5/3","0"], correct:1, explanation:"Use lim(x→0)sin(kx)/(kx)=1 for each. Result is (3x)/(5x)=3/5.", expFormula:"sin(3x)/3x · 5x/sin(5x) · (3/5) → 3/5" },
-{ topic:"limits", category:"Limits — Squeeze Theorem", text:"The Squeeze Theorem says if g(x)≤f(x)≤h(x) near a and lim g=lim h=L, then:", options:["f(a)=L","lim f(x)=L","f'(a)=L","f is continuous"], correct:1, explanation:"The squeeze theorem concludes the limit of f equals L, but says nothing about f(a) or continuity.", expFormula:"g(x)≤f(x)≤h(x) and lim g=lim h=L ⟹ lim f=L" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→2) of (x²-4)/(x²-3x+2)?", formula:"lim(x→2)  (x²-4)/(x²-3x+2)", options:["4","2","Undefined","0"], correct:0, explanation:"Factor: (x-2)(x+2)/((x-2)(x-1)). Cancel: (x+2)/(x-1)→4/1=4.", expFormula:"(x+2)/(x-1) at x=2: 4/1 = 4" },
-{ topic:"limits", category:"Limits — Asymptotes", text:"A vertical asymptote at x=c occurs when:", options:["f(c)=0","lim f(x)=±∞ as x→c","f'(c) is undefined","lim f(x)=0 as x→c"], correct:1, explanation:"Vertical asymptotes occur where the function's limit approaches ±∞.", expFormula:"lim(x→c) f(x) = ±∞" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→∞) of e^(-x)?", options:["1","0","∞","-1"], correct:1, explanation:"As x→∞, -x→-∞, so e^(-x)→0.", expFormula:"lim(x→∞) e^(-x) = 0" },
-{ topic:"limits", category:"Limits", text:"Evaluate lim(x→4) of (√x - 2)/(x - 4).", formula:"lim(x→4)  (√x - 2)/(x - 4)", options:["1/4","1/2","0","4"], correct:0, explanation:"Multiply numerator and denominator by (√x+2). Get 1/(√x+2) → 1/(2+2) = 1/4.", expFormula:"1/(√x+2) → 1/(4) = 1/4" },
-{ topic:"limits", category:"Limits — IVT", text:"The Intermediate Value Theorem guarantees that if f is continuous on [a,b] and f(a)<N<f(b), then:", options:["f'(c)=0 for some c","f(c)=N for some c∈(a,b)","f is differentiable at c","f has a maximum at c"], correct:1, explanation:"IVT: a continuous function on [a,b] takes all values between f(a) and f(b).", expFormula:"∃c∈(a,b) such that f(c)=N" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→0) of x²·sin(1/x)?", formula:"lim(x→0)  x²·sin(1/x)", options:["1","Does not exist","0","∞"], correct:2, explanation:"Since |sin(1/x)|≤1, we have |x²·sin(1/x)|≤x²→0. By squeeze theorem, limit=0.", expFormula:"-x² ≤ x²sin(1/x) ≤ x² → 0" },
-{ topic:"limits", category:"Limits", text:"Which of the following is NOT an indeterminate form?", options:["0/0","∞/∞","1^∞","∞/1"], correct:3, explanation:"∞/1 is simply ∞, which is determinate. The others (0/0, ∞/∞, 1^∞) are classic indeterminate forms.", expFormula:"∞/1 = ∞ (determinate)" },
-{ topic:"limits", category:"Limits — L'Hôpital", text:"Evaluate lim(x→∞) of x·e^(-x).", formula:"lim(x→∞)  x·e^(-x)", options:["1","∞","0","e"], correct:2, explanation:"∞·0 form. Rewrite as x/eˣ (∞/∞). L'Hôpital: 1/eˣ → 0.", expFormula:"lim(x→∞) 1/eˣ = 0" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→π) of sin(x)/(x - π)?", formula:"lim(x→π)  sin(x)/(x-π)", options:["0","1","-1","π"], correct:2, explanation:"Let u=x-π. Then sin(x)=sin(u+π)=-sin(u). So limit = -sin(u)/u → -1.", expFormula:"-sin(u)/u → -1 as u→0" },
-{ topic:"limits", category:"Limits", text:"For f(x)=|x|/x, what is lim(x→0) f(x)?", options:["0","1","-1","Does not exist"], correct:3, explanation:"From the right, f(x)→1. From the left, f(x)→-1. One-sided limits differ, so the two-sided limit DNE.", expFormula:"lim(x→0⁺)=1 ≠ lim(x→0⁻)=-1" },
-{ topic:"limits", category:"Limits — Continuity", text:"Which type of discontinuity can be 'removed' by redefining f at a point?", options:["Jump discontinuity","Infinite discontinuity","Removable discontinuity","Oscillating discontinuity"], correct:2, explanation:"A removable discontinuity exists when the limit exists but f(a) is missing or wrong. Redefine f(a)=limit value to fix it.", expFormula:"lim(x→a)f(x) exists but ≠ f(a)" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→0⁺) of x·ln(x)?", formula:"lim(x→0⁺)  x·ln(x)", options:["0","1","-∞","-1"], correct:0, explanation:"0·(-∞) form. Rewrite as ln(x)/(1/x). L'Hôpital: (1/x)/(-1/x²)=-x→0.", expFormula:"lim(x→0⁺) -x = 0" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→1) of (x³-1)/(x-1)?", formula:"lim(x→1)  (x³-1)/(x-1)", options:["0","1","2","3"], correct:3, explanation:"Factor: x³-1=(x-1)(x²+x+1). Cancel: x²+x+1 at x=1 = 1+1+1=3.", expFormula:"x²+x+1 at x=1: 1+1+1 = 3" },
-{ topic:"limits", category:"Limits", text:"Evaluate lim(x→0) of (tan x)/x.", formula:"lim(x→0)  tan(x)/x", options:["0","1","∞","π"], correct:1, explanation:"tan(x)=sin(x)/cos(x). Limit = (sin x/x)·(1/cos x) = 1·1 = 1.", expFormula:"(sinx/x)·(1/cosx) → 1·1 = 1" },
-{ topic:"limits", category:"Limits", text:"What is lim(x→∞) of (5x⁴-3x²+1)/(2x⁴+x³)?", formula:"lim(x→∞)  (5x⁴-3x²+1)/(2x⁴+x³)", options:["0","5/2","5","∞"], correct:1, explanation:"Leading terms dominate: 5x⁴/2x⁴=5/2.", expFormula:"5x⁴/2x⁴ = 5/2" },
-{ topic:"limits", category:"Limits", text:"If f is differentiable at x=a, then f must be:", options:["Increasing at a","Equal to 0 at a","Continuous at a","Unbounded near a"], correct:2, explanation:"Differentiability implies continuity. If f'(a) exists, then f is continuous at a.", expFormula:"Differentiable ⟹ Continuous" },
-{ topic:"limits", category:"Limits — L'Hôpital", text:"Apply L'Hôpital's Rule to lim(x→0) of (x-sin x)/x³.", formula:"lim(x→0)  (x-sinx)/x³", options:["1/6","1/3","0","1/2"], correct:0, explanation:"Apply L'Hôpital three times: (1-cosx)/(3x²) → sinx/(6x) → cosx/6 = 1/6.", expFormula:"cosx/6 at x=0 = 1/6" },
-{ topic:"limits", category:"Limits", text:"What is lim(n→∞) of (1 + 1/n)ⁿ?", formula:"lim(n→∞)  (1+1/n)ⁿ", options:["1","2","e","∞"], correct:2, explanation:"This is the definition of e, one of the most fundamental limits in mathematics.", expFormula:"lim(n→∞)(1+1/n)ⁿ = e ≈ 2.718..." },
-
-// ─────────────────────────────────────────────────────────────
-// DERIVATIVES (30 questions)
-// ─────────────────────────────────────────────────────────────
-{ topic:"derivatives", category:"Derivatives — Power Rule", text:"Find f'(x) if f(x) = 4x³ - 2x² + 7x - 5.", formula:"f(x) = 4x³ - 2x² + 7x - 5", options:["12x²-4x+7","4x²-2x+7","12x²-4x-5","12x³-4x²+7"], correct:0, explanation:"Power rule term-by-term: 12x²-4x+7.", expFormula:"f'(x) = 12x² - 4x + 7" },
-{ topic:"derivatives", category:"Derivatives — Chain Rule", text:"Find the derivative of f(x) = sin(3x²).", formula:"f(x) = sin(3x²)", options:["cos(3x²)","6x·cos(3x²)","3x·cos(3x²)","-6x·cos(3x²)"], correct:1, explanation:"Chain rule: cos(3x²)·6x.", expFormula:"f'(x) = 6x cos(3x²)" },
-{ topic:"derivatives", category:"Derivatives — Product Rule", text:"Find the derivative of f(x) = x²·eˣ.", formula:"f(x) = x²eˣ", options:["2x·eˣ","x²eˣ+2xeˣ","2xeˣ+x²","2x+eˣ"], correct:1, explanation:"Product rule: 2x·eˣ + x²·eˣ.", expFormula:"f'(x) = eˣ(x²+2x)" },
-{ topic:"derivatives", category:"Derivatives — Quotient Rule", text:"Find f'(x) if f(x) = (x²+1)/(x-1).", formula:"f(x) = (x²+1)/(x-1)", options:["(2x(x-1)-(x²+1))/(x-1)²","(2x+1)/1","(x²-2x-1)/(x-1)²","2x/1"], correct:0, explanation:"Quotient rule: (u'v-uv')/v²=(2x(x-1)-(x²+1))/(x-1)².", expFormula:"f'(x) = [2x(x-1)-(x²+1)]/(x-1)²" },
-{ topic:"derivatives", category:"Derivatives — Trig", text:"What is d/dx[tan(x)]?", options:["sin(x)","-csc²(x)","sec²(x)","cos(x)"], correct:2, explanation:"tan=sin/cos. Quotient rule gives 1/cos²x=sec²x.", expFormula:"d/dx[tan(x)] = sec²(x)" },
-{ topic:"derivatives", category:"Derivatives — Exponential", text:"What is d/dx[eˣ]?", options:["x·eˣ⁻¹","eˣ","e","eˣ·ln(e)"], correct:1, explanation:"eˣ is its own derivative.", expFormula:"d/dx[eˣ] = eˣ" },
-{ topic:"derivatives", category:"Derivatives — Logarithm", text:"What is d/dx[ln(x)]?", formula:"f(x)=ln(x), x>0", options:["ln(x)","1/x²","1/x","x·ln(x)"], correct:2, explanation:"d/dx[ln(x)]=1/x.", expFormula:"d/dx[ln(x)] = 1/x" },
-{ topic:"derivatives", category:"Derivatives — Implicit", text:"For x²+y²=25, find dy/dx using implicit differentiation.", formula:"x²+y²=25", options:["x/y","-x/y","2x/2y","-2x"], correct:1, explanation:"2x+2y(dy/dx)=0 ⟹ dy/dx=-x/y.", expFormula:"dy/dx = -x/y" },
-{ topic:"derivatives", category:"Derivatives", text:"What is the slope of the tangent line to f(x)=x³ at x=2?", formula:"f(x)=x³ at x=2", options:["4","8","12","6"], correct:2, explanation:"f'(x)=3x². f'(2)=3·4=12.", expFormula:"f'(2) = 3(4) = 12" },
-{ topic:"derivatives", category:"Derivatives — Trig", text:"What is d/dx[cos(x)]?", options:["sin(x)","-sin(x)","cos(x)","-cos(x)"], correct:1, explanation:"The derivative of cos(x) is -sin(x).", expFormula:"d/dx[cos(x)] = -sin(x)" },
-{ topic:"derivatives", category:"Derivatives — Chain Rule", text:"Find d/dx[e^(3x)].", formula:"f(x) = e^(3x)", options:["e^(3x)","3e^(3x)","3xe^(3x)","e^(3x)/3"], correct:1, explanation:"Chain rule: e^(3x)·3=3e^(3x).", expFormula:"d/dx[e^(3x)] = 3e^(3x)" },
-{ topic:"derivatives", category:"Derivatives — Chain Rule", text:"Find d/dx[ln(x²+1)].", formula:"f(x) = ln(x²+1)", options:["1/(x²+1)","2x/(x²+1)","x/(x²+1)","2/(x²+1)"], correct:1, explanation:"Chain rule: (1/(x²+1))·2x = 2x/(x²+1).", expFormula:"f'(x) = 2x/(x²+1)" },
-{ topic:"derivatives", category:"Derivatives — Trig", text:"What is d/dx[sec(x)]?", options:["sec(x)tan(x)","-csc(x)cot(x)","tan(x)","csc(x)"], correct:0, explanation:"d/dx[sec(x)]=sec(x)tan(x). Derive from 1/cos(x) using quotient rule.", expFormula:"d/dx[sec(x)] = sec(x)tan(x)" },
-{ topic:"derivatives", category:"Derivatives — Inverse Trig", text:"What is d/dx[arcsin(x)]?", formula:"f(x) = arcsin(x)", options:["1/√(1-x²)","1/(1+x²)","-1/√(1-x²)","√(1-x²)"], correct:0, explanation:"Standard inverse trig derivative: d/dx[arcsin(x)]=1/√(1-x²).", expFormula:"d/dx[arcsin(x)] = 1/√(1-x²)" },
-{ topic:"derivatives", category:"Derivatives — Inverse Trig", text:"What is d/dx[arctan(x)]?", formula:"f(x) = arctan(x)", options:["1/(1-x²)","1/(1+x²)","-1/(1+x²)","1/√(1+x²)"], correct:1, explanation:"d/dx[arctan(x)]=1/(1+x²).", expFormula:"d/dx[arctan(x)] = 1/(1+x²)" },
-{ topic:"derivatives", category:"Derivatives — Exponential", text:"What is d/dx[aˣ] for a>0?", formula:"f(x) = aˣ", options:["x·aˣ⁻¹","aˣ","aˣ·ln(a)","ln(a)"], correct:2, explanation:"For exponential with base a: d/dx[aˣ]=aˣ·ln(a).", expFormula:"d/dx[aˣ] = aˣ·ln(a)" },
-{ topic:"derivatives", category:"Derivatives — Higher Order", text:"If f(x)=x⁴, what is f''(x)?", formula:"f(x) = x⁴", options:["4x³","12x²","24x","4x"], correct:1, explanation:"f'(x)=4x³, f''(x)=12x².", expFormula:"f''(x) = 12x²" },
-{ topic:"derivatives", category:"Derivatives — Product Rule", text:"Differentiate f(x) = x·ln(x).", formula:"f(x) = x·ln(x)", options:["ln(x)","1+ln(x)","1/x","x/ln(x)"], correct:1, explanation:"Product rule: 1·ln(x)+x·(1/x)=ln(x)+1.", expFormula:"f'(x) = ln(x) + 1" },
-{ topic:"derivatives", category:"Derivatives — Implicit", text:"Find dy/dx for sin(y)=x.", formula:"sin(y) = x", options:["cos(y)","1/cos(y)","sin(y)","-cos(y)"], correct:1, explanation:"Differentiate: cos(y)·dy/dx=1. So dy/dx=1/cos(y)=sec(y).", expFormula:"dy/dx = 1/cos(y) = sec(y)" },
-{ topic:"derivatives", category:"Derivatives — Chain Rule", text:"Differentiate f(x) = (3x+2)⁵.", formula:"f(x) = (3x+2)⁵", options:["5(3x+2)⁴","15(3x+2)⁴","5(3x+2)⁴·3","3(3x+2)⁵"], correct:1, explanation:"Chain rule: 5(3x+2)⁴·3=15(3x+2)⁴.", expFormula:"f'(x) = 15(3x+2)⁴" },
-{ topic:"derivatives", category:"Derivatives — Trig", text:"What is d/dx[sin(x)] at x=π/2?", formula:"d/dx[sin(x)] at x=π/2", options:["1","-1","0","π/2"], correct:2, explanation:"d/dx[sin(x)]=cos(x). cos(π/2)=0.", expFormula:"cos(π/2) = 0" },
-{ topic:"derivatives", category:"Derivatives — Quotient Rule", text:"Find d/dx[sin(x)/x].", formula:"d/dx[sin(x)/x]", options:["cos(x)/x","(x·cos(x)-sin(x))/x²","cos(x)/x-sin(x)/x²","sin(x)/x²"], correct:1, explanation:"Quotient rule: (cos(x)·x-sin(x)·1)/x²=(x cos x-sin x)/x².", expFormula:"(x cosx - sinx)/x²" },
-{ topic:"derivatives", category:"Derivatives — Parametric", text:"If x=t² and y=t³, find dy/dx.", formula:"x=t², y=t³", options:["3t/2","2t/3","3t²/2t","t"], correct:0, explanation:"dy/dx = (dy/dt)/(dx/dt) = 3t²/(2t) = 3t/2.", expFormula:"dy/dx = 3t²/2t = 3t/2" },
-{ topic:"derivatives", category:"Derivatives", text:"The definition of the derivative f'(a) is:", options:["f(a+h)/h","lim(h→0)[f(a+h)-f(a)]/h","lim(h→0)[f(a+h)+f(a)]/h","f(a)/h"], correct:1, explanation:"The limit definition of the derivative is lim(h→0)[f(a+h)-f(a)]/h.", expFormula:"f'(a) = lim(h→0) [f(a+h)-f(a)]/h" },
-{ topic:"derivatives", category:"Derivatives — Product Rule", text:"Differentiate f(x) = (x²+1)(x³-3).", formula:"f(x)=(x²+1)(x³-3)", options:["5x⁴-3","2x·(x³-3)+(x²+1)·3x²","5x⁴-x²-3","2x(3x²)"], correct:1, explanation:"Product rule: (2x)(x³-3)+(x²+1)(3x²).", expFormula:"f'(x) = 2x(x³-3)+(x²+1)(3x²)" },
-{ topic:"derivatives", category:"Derivatives — Trig", text:"What is d/dx[csc(x)]?", options:["csc(x)cot(x)","-csc(x)cot(x)","csc²(x)","sec(x)tan(x)"], correct:1, explanation:"d/dx[csc(x)] = -csc(x)cot(x).", expFormula:"d/dx[csc(x)] = -csc(x)cot(x)" },
-{ topic:"derivatives", category:"Derivatives — Chain Rule", text:"Find d/dx[cos(x²)].", formula:"f(x)=cos(x²)", options:["sin(x²)","-sin(x²)","2x·(-sin(x²))","-cos(2x)"], correct:2, explanation:"Chain rule: -sin(x²)·2x.", expFormula:"f'(x) = -2x sin(x²)" },
-{ topic:"derivatives", category:"Derivatives", text:"Where is f(x)=|x| NOT differentiable?", options:["x=1","x=0","x=-1","All reals"], correct:1, explanation:"f(x)=|x| has a corner at x=0 where the left and right derivatives disagree (-1 vs +1).", expFormula:"Left deriv at 0: -1 ≠ Right deriv at 0: +1" },
-{ topic:"derivatives", category:"Derivatives — Log Differentiation", text:"Differentiate y=x^x using logarithmic differentiation.", formula:"y = x^x", options:["x^x","x^(x-1)","x^x(1+ln x)","x^x·ln x"], correct:2, explanation:"Take ln: ln y=x·ln x. Differentiate: y'/y=ln x+1. So y'=x^x(ln x+1).", expFormula:"y' = x^x(1+ln x)" },
-{ topic:"derivatives", category:"Derivatives — Exponential", text:"Find d/dx[e^(sin x)].", formula:"f(x)=e^(sinx)", options:["e^(sinx)","cos(x)·e^(sinx)","sin(x)·e^(cosx)","-sin(x)·e^(sinx)"], correct:1, explanation:"Chain rule: e^(sin x)·cos(x).", expFormula:"f'(x) = cos(x)·e^(sinx)" },
-{ topic:"derivatives", category:"Derivatives", text:"If f'(x)>0 on an interval, then f is:", options:["Concave up","Decreasing","Increasing","Constant"], correct:2, explanation:"A positive first derivative means the function is increasing on that interval.", expFormula:"f'(x)>0 ⟹ f is increasing" },
-
-// ─────────────────────────────────────────────────────────────
-// DERIVATIVE APPLICATIONS (30 questions)
-// ─────────────────────────────────────────────────────────────
-{ topic:"derivative_apps", category:"Applications — Increasing/Decreasing", text:"For f(x)=x³-3x, on which interval is f increasing?", formula:"f(x)=x³-3x", options:["(-1,1)","(-∞,-1) and (1,∞)","All reals","(0,∞)"], correct:1, explanation:"f'(x)=3(x-1)(x+1)>0 when x<-1 or x>1.", expFormula:"f'(x)=3(x-1)(x+1)>0 for x<-1 or x>1" },
-{ topic:"derivative_apps", category:"Applications — Critical Points", text:"How do you find critical points of f(x)?", options:["Set f(x)=0","Set f'(x)=0 or f'(x) undefined","Set f''(x)=0","Find where f is continuous"], correct:1, explanation:"Critical points: f'(x)=0 or f'(x) undefined.", expFormula:"f'(x)=0 OR f'(x) undefined" },
-{ topic:"derivative_apps", category:"Applications — Second Derivative Test", text:"If f'(c)=0 and f''(c)>0, then at c we have:", options:["Local maximum","Local minimum","Inflection point","Cannot determine"], correct:1, explanation:"f''(c)>0 ⟹ concave up ⟹ local minimum.", expFormula:"f'(c)=0, f''(c)>0 ⟹ local min" },
-{ topic:"derivative_apps", category:"Applications — Related Rates", text:"A 10 ft ladder base slides away at 2 ft/s. When base is 6 ft from wall, how fast is top sliding down?", options:["-3/2 ft/s","-2/3 ft/s","-3/4 ft/s","-4/3 ft/s"], correct:0, explanation:"x²+y²=100. At x=6, y=8. 6(2)+8(dy/dt)=0 ⟹ dy/dt=-3/2.", expFormula:"6(2)+8(dy/dt)=0 ⟹ dy/dt = -3/2" },
-{ topic:"derivative_apps", category:"Applications — Mean Value Theorem", text:"MVT guarantees f'(c)=[f(b)-f(a)]/(b-a) for some c. What must f satisfy?", options:["Differentiable on (a,b) only","Continuous on [a,b] and differentiable on (a,b)","f(a)=f(b)","f'(a) exists"], correct:1, explanation:"MVT requires continuity on [a,b] and differentiability on the open interval (a,b).", expFormula:"f continuous on [a,b], differentiable on (a,b)" },
-{ topic:"derivative_apps", category:"Applications — Concavity", text:"An inflection point occurs where:", options:["f'(x)=0","f(x)=0","f''(x) changes sign","f'(x) changes sign"], correct:2, explanation:"Inflection points: concavity changes, so f'' changes sign.", expFormula:"Inflection: f''(x) changes sign" },
-{ topic:"derivative_apps", category:"Applications — Optimization", text:"Rectangle with fixed perimeter P=100 — max area dimensions are:", options:["10×40","25×25","20×30","50×0"], correct:1, explanation:"A square maximizes area. With P=100, each side=25.", expFormula:"l=w=25; A=625 sq units" },
-{ topic:"derivative_apps", category:"Applications — Rolle's Theorem", text:"Rolle's Theorem guarantees f'(c)=0 for some c in (a,b) if f is continuous on [a,b], differentiable on (a,b), and:", options:["f(a)=0","f'(a)=0","f(a)=f(b)","f''(a)=0"], correct:2, explanation:"Rolle's requires f(a)=f(b) in addition to continuity and differentiability.", expFormula:"f(a)=f(b) ⟹ ∃c: f'(c)=0" },
-{ topic:"derivative_apps", category:"Applications — Second Derivative Test", text:"If f'(c)=0 and f''(c)<0, then at c:", options:["Local minimum","Local maximum","Inflection point","Cannot determine"], correct:1, explanation:"f''(c)<0 ⟹ concave down ⟹ local maximum.", expFormula:"f'(c)=0, f''(c)<0 ⟹ local max" },
-{ topic:"derivative_apps", category:"Applications — Related Rates", text:"A spherical balloon is inflating at 10 cm³/s. When radius is 5 cm, how fast is radius increasing? (V=(4/3)πr³)", formula:"V = (4/3)πr³,  dV/dt = 10", options:["1/(10π)","10/(4π·25)","1/(2π)","2/(5π)"], correct:1, explanation:"dV/dt=4πr²·dr/dt. So 10=4π(25)dr/dt ⟹ dr/dt=10/(100π)=1/(10π).", expFormula:"dr/dt = 10/(4π·25) = 1/(10π)" },
-{ topic:"derivative_apps", category:"Applications — L'Hôpital", text:"lim(x→0) of sin(x)/x can be evaluated with which rule?", options:["Power rule","Chain rule","L'Hôpital's Rule","Product rule"], correct:2, explanation:"sin(x)/x → 0/0 form, so L'Hôpital applies: cos(x)/1=1.", expFormula:"d(sinx)/d(x) = cosx, so limit = cos(0)/1 = 1" },
-{ topic:"derivative_apps", category:"Applications — Linearization", text:"The linear approximation to f(x) near x=a is:", options:["f(a)","f(a)+f'(a)(x-a)","f'(a)(x-a)²/2","f(a)·f'(a)"], correct:1, explanation:"Linearization L(x)=f(a)+f'(a)(x-a) uses the tangent line at x=a.", expFormula:"L(x) = f(a) + f'(a)(x-a)" },
-{ topic:"derivative_apps", category:"Applications — Concavity", text:"Where is f(x)=x⁴-4x³ concave up?", formula:"f(x)=x⁴-4x³", options:["x<0 and x>3","x>2","0<x<3","x<2"], correct:0, explanation:"f''(x)=12x²-24x=12x(x-2). f''>0 when x<0 or x>2.", expFormula:"f''=12x(x-2)>0 for x<0 or x>2" },
-{ topic:"derivative_apps", category:"Applications — Optimization", text:"A farmer has 300 ft of fencing to enclose a rectangular field along a river (no fence on river side). What width maximizes area?", options:["75 ft","100 ft","150 ft","50 ft"], correct:0, explanation:"With L+2w=300 and A=Lw=w(300-2w). dA/dw=300-4w=0 ⟹ w=75.", expFormula:"w=75 ft, L=150 ft, A=11250 sq ft" },
-{ topic:"derivative_apps", category:"Applications — Newton's Method", text:"Newton's Method approximates roots using:", options:["xₙ₊₁=xₙ-f(xₙ)/f'(xₙ)","xₙ₊₁=xₙ+f'(xₙ)","xₙ₊₁=f(xₙ)","xₙ₊₁=xₙ/f'(xₙ)"], correct:0, explanation:"Newton's Method: each iteration xₙ₊₁=xₙ-f(xₙ)/f'(xₙ), using the tangent line.", expFormula:"xₙ₊₁ = xₙ - f(xₙ)/f'(xₙ)" },
-{ topic:"derivative_apps", category:"Applications — Increasing/Decreasing", text:"For g(x)=xe^(-x), on what interval is g increasing?", formula:"g(x)=xe^(-x)", options:["(1,∞)","(-∞,1)","All reals","(0,∞)"], correct:1, explanation:"g'(x)=e^(-x)-xe^(-x)=e^(-x)(1-x). g'>0 when x<1.", expFormula:"g'=e^(-x)(1-x)>0 for x<1" },
-{ topic:"derivative_apps", category:"Applications — Related Rates", text:"A point moves along y=x² with dx/dt=3. When x=2, dy/dt=?", formula:"y=x², dx/dt=3, at x=2", options:["6","12","3","4"], correct:1, explanation:"dy/dt=2x·(dx/dt)=2(2)(3)=12.", expFormula:"dy/dt = 2x·dx/dt = 2(2)(3) = 12" },
-{ topic:"derivative_apps", category:"Applications — Mean Value Theorem", text:"For f(x)=x² on [1,3], the MVT value c satisfies f'(c)=?", formula:"f(x)=x² on [1,3]", options:["2","4","3","6"], correct:1, explanation:"MVT: f'(c)=[f(3)-f(1)]/(3-1)=(9-1)/2=4. f'(c)=2c=4 ⟹ c=2.", expFormula:"[9-1]/(3-1) = 4" },
-{ topic:"derivative_apps", category:"Applications — First Derivative Test", text:"The First Derivative Test says a local min occurs at critical point c if f' changes from:", options:["Positive to negative","Negative to positive","Zero to positive","Negative to zero"], correct:1, explanation:"If f' changes from negative to positive at c, f was decreasing then increasing ⟹ local minimum.", expFormula:"f' changes – to + ⟹ local min" },
-{ topic:"derivative_apps", category:"Applications — Optimization", text:"What is the minimum value of f(x)=x + 4/x for x>0?", formula:"f(x) = x + 4/x, x>0", options:["2","4","8","1"], correct:1, explanation:"f'(x)=1-4/x²=0 ⟹ x²=4 ⟹ x=2. f(2)=2+2=4. f''=8/x³>0 ⟹ min.", expFormula:"f(2) = 2 + 4/2 = 4" },
-{ topic:"derivative_apps", category:"Applications — Absolute Extrema", text:"To find the absolute max/min of a continuous f on [a,b], evaluate f at:", options:["Only endpoints","Only critical points","Critical points AND endpoints","Only where f'=0"], correct:2, explanation:"The Extreme Value Theorem guarantees abs extrema exist on [a,b]. Check all critical points and endpoints.", expFormula:"Compare f at critical points + endpoints" },
-{ topic:"derivative_apps", category:"Applications — Position/Velocity", text:"If position is s(t)=t³-6t²+9t, when is the object at rest?", formula:"s(t)=t³-6t²+9t", options:["t=1 and t=3","t=0 and t=6","t=2","t=3 only"], correct:0, explanation:"v(t)=s'(t)=3t²-12t+9=3(t-1)(t-3)=0 at t=1 and t=3.", expFormula:"v(t)=3(t-1)(t-3)=0 ⟹ t=1,3" },
-{ topic:"derivative_apps", category:"Applications — Position/Velocity", text:"If v(t)=2t-4 (velocity), when is the object moving in the positive direction?", formula:"v(t)=2t-4", options:["t<2","t>2","t=2","Always"], correct:1, explanation:"Object moves positively when v(t)>0: 2t-4>0 ⟹ t>2.", expFormula:"v(t)>0 ⟹ 2t-4>0 ⟹ t>2" },
-{ topic:"derivative_apps", category:"Applications — Concavity", text:"If f''(x)>0 on an interval, the curve is:", options:["Decreasing","Concave down","Concave up","Linear"], correct:2, explanation:"Positive second derivative ⟹ concave up (opens like a cup).", expFormula:"f''(x)>0 ⟹ concave up" },
-{ topic:"derivative_apps", category:"Applications — Optimization", text:"A box with square base and no top has volume 32 cm³. Find base side x that minimizes surface area.", formula:"V=x²h=32, SA=x²+4xh", options:["x=2","x=4","x=8","x=3"], correct:1, explanation:"h=32/x². SA=x²+4x(32/x²)=x²+128/x. SA'=2x-128/x²=0 ⟹ x³=64 ⟹ x=4.", expFormula:"x³=64 ⟹ x=4 cm" },
-{ topic:"derivative_apps", category:"Applications — Related Rates", text:"Two cars start from the same point. One goes east at 60 mph, other goes north at 80 mph. How fast is distance increasing after 1 hour?", formula:"x=60t, y=80t, D=√(x²+y²)", options:["100 mph","140 mph","70 mph","10000 mph"], correct:0, explanation:"After 1hr: x=60, y=80, D=100. dD/dt=(x·dx/dt+y·dy/dt)/D=(60·60+80·80)/100=10000/100=100.", expFormula:"dD/dt = (3600+6400)/100 = 100 mph" },
-{ topic:"derivative_apps", category:"Applications — Extreme Value Theorem", text:"The Extreme Value Theorem guarantees absolute max/min exist when f is:", options:["Differentiable on (a,b)","Continuous on [a,b]","Increasing on [a,b]","Continuous on (a,b)"], correct:1, explanation:"EVT: A continuous function on a closed interval [a,b] always attains its absolute max and min.", expFormula:"f continuous on [a,b] ⟹ abs max & min exist" },
-{ topic:"derivative_apps", category:"Applications — Linearization", text:"Approximate √(4.1) using linearization of f(x)=√x at a=4.", formula:"f(x)=√x, a=4", options:["2.025","2.05","2.1","2.025"], correct:0, explanation:"f(4)=2, f'(x)=1/(2√x), f'(4)=1/4. L(4.1)=2+(1/4)(0.1)=2.025.", expFormula:"L(4.1)=2+0.25·0.1=2.025" },
-{ topic:"derivative_apps", category:"Applications — L'Hôpital", text:"Evaluate lim(x→0) of (eˣ-1-x)/x².", formula:"lim(x→0) (eˣ-1-x)/x²", options:["0","1","1/2","∞"], correct:2, explanation:"0/0 form. Apply L'Hôpital twice: (eˣ-1)/(2x) → eˣ/2 → 1/2.", expFormula:"eˣ/2 at x=0 = 1/2" },
-{ topic:"derivative_apps", category:"Applications — Position/Velocity", text:"Acceleration a(t) is defined as:", options:["ds/dt","d²s/dt²","∫v(t)dt","s(t)/t"], correct:1, explanation:"Acceleration is the second derivative of position (or first derivative of velocity).", expFormula:"a(t) = v'(t) = s''(t)" },
-
-// ─────────────────────────────────────────────────────────────
-// INTEGRALS (30 questions)
-// ─────────────────────────────────────────────────────────────
-{ topic:"integrals", category:"Integrals — Basic", text:"Find ∫ 3x² dx.", formula:"∫ 3x² dx", options:["6x+C","x³+C","3x³+C","x²/2+C"], correct:1, explanation:"Power rule: 3·x³/3=x³+C.", expFormula:"∫3x² dx = x³+C" },
-{ topic:"integrals", category:"Integrals — Definite", text:"Evaluate ∫₀² (2x+1) dx.", formula:"∫₀² (2x+1) dx", options:["4","5","6","3"], correct:2, explanation:"[x²+x]₀²=(4+2)-0=6.", expFormula:"[x²+x]₀² = 6-0 = 6" },
-{ topic:"integrals", category:"Integrals — u-Substitution", text:"Evaluate ∫ 2x·cos(x²) dx.", formula:"∫ 2x cos(x²) dx", options:["sin(x²)+C","2cos(x²)+C","-sin(x²)+C","cos(2x)+C"], correct:0, explanation:"u=x², du=2x dx. ∫cos(u)du=sin(u)+C=sin(x²)+C.", expFormula:"sin(x²)+C" },
-{ topic:"integrals", category:"Integrals — Basic", text:"What is ∫ eˣ dx?", formula:"∫ eˣ dx", options:["eˣ/x+C","eˣ+C","x·eˣ+C","eˣ·ln(x)+C"], correct:1, explanation:"eˣ is its own antiderivative.", expFormula:"∫eˣ dx = eˣ+C" },
-{ topic:"integrals", category:"Integrals — Area", text:"The definite integral ∫ₐᵇ f(x) dx represents:", options:["Length of f","Net signed area under f from a to b","Average value","Slope at b"], correct:1, explanation:"Net signed area: above x-axis positive, below negative.", expFormula:"∫ₐᵇ f(x)dx = net signed area" },
-{ topic:"integrals", category:"Integrals — Basic", text:"Find ∫ (1/x) dx.", formula:"∫ (1/x) dx", options:["x⁻²+C","ln|x|+C","-1/x²+C","1/(2x²)+C"], correct:1, explanation:"∫(1/x)dx=ln|x|+C.", expFormula:"∫(1/x)dx = ln|x|+C" },
-{ topic:"integrals", category:"Integrals — Average Value", text:"The average value of f(x) on [a,b] is:", options:["[f(a)+f(b)]/2","1/(b-a)·∫ₐᵇ f(x)dx","∫ₐᵇ f(x)dx","f((a+b)/2)"], correct:1, explanation:"f_avg=1/(b-a)·∫ₐᵇ f(x)dx.", expFormula:"f_avg = (1/(b-a))∫ₐᵇ f(x)dx" },
-{ topic:"integrals", category:"Integrals — u-Substitution", text:"Evaluate ∫ sin(x)·cos(x) dx.", formula:"∫ sin(x)cos(x) dx", options:["-cos²(x)+C","sin²(x)/2+C","cos(2x)/2+C","-sin(x)cos(x)+C"], correct:1, explanation:"u=sin(x), du=cos(x)dx. ∫u du=u²/2+C=sin²(x)/2+C.", expFormula:"sin²(x)/2+C" },
-{ topic:"integrals", category:"Integrals — Power Rule", text:"Find ∫ x⁵ dx.", formula:"∫ x⁵ dx", options:["5x⁴+C","x⁶+C","x⁶/6+C","6x⁵+C"], correct:2, explanation:"Power rule: x^(5+1)/(5+1)=x⁶/6+C.", expFormula:"∫x⁵dx = x⁶/6+C" },
-{ topic:"integrals", category:"Integrals — Trig", text:"What is ∫ cos(x) dx?", formula:"∫ cos(x) dx", options:["sin(x)+C","-sin(x)+C","cos(x)+C","-cos(x)+C"], correct:0, explanation:"∫cos(x)dx=sin(x)+C.", expFormula:"∫cos(x)dx = sin(x)+C" },
-{ topic:"integrals", category:"Integrals — Trig", text:"What is ∫ sin(x) dx?", formula:"∫ sin(x) dx", options:["cos(x)+C","-cos(x)+C","sin(x)+C","-sin(x)+C"], correct:1, explanation:"∫sin(x)dx=-cos(x)+C.", expFormula:"∫sin(x)dx = -cos(x)+C" },
-{ topic:"integrals", category:"Integrals — u-Substitution", text:"Evaluate ∫ (2x)/(x²+1) dx.", formula:"∫ 2x/(x²+1) dx", options:["ln(x²+1)+C","arctan(x)+C","2/(x²+1)+C","1/(x²+1)+C"], correct:0, explanation:"u=x²+1, du=2x dx. ∫du/u=ln|u|+C=ln(x²+1)+C.", expFormula:"ln(x²+1)+C" },
-{ topic:"integrals", category:"Integrals — Definite", text:"Evaluate ∫₀^π sin(x) dx.", formula:"∫₀^π sin(x)dx", options:["0","1","2","π"], correct:2, explanation:"[-cos(x)]₀^π=-cos(π)-(-cos(0))=1+1=2.", expFormula:"[-cosx]₀^π = 1+1 = 2" },
-{ topic:"integrals", category:"Integrals — Definite", text:"What is ∫₋₁¹ x³ dx?", formula:"∫₋₁¹ x³ dx", options:["0","1/2","2","1"], correct:0, explanation:"x³ is an odd function. The integral of an odd function over [-a,a]=0.", expFormula:"Odd function on symmetric interval: 0" },
-{ topic:"integrals", category:"Integrals — Improper", text:"Evaluate ∫₁^∞ (1/x²) dx.", formula:"∫₁^∞ x^(-2) dx", options:["∞","2","1","1/2"], correct:2, explanation:"[-1/x]₁^∞=(0)-(-1)=1.", expFormula:"[-1/x]₁^∞ = 0-(-1) = 1" },
-{ topic:"integrals", category:"Integrals — u-Substitution", text:"Evaluate ∫ e^(3x) dx.", formula:"∫ e^(3x) dx", options:["e^(3x)+C","3e^(3x)+C","e^(3x)/3+C","e^(x)/3+C"], correct:2, explanation:"u=3x, du=3dx. (1/3)∫eᵘdu=e^(3x)/3+C.", expFormula:"e^(3x)/3+C" },
-{ topic:"integrals", category:"Integrals — Area Between Curves", text:"Area between f(x) and g(x) from a to b where f≥g is:", options:["∫ₐᵇ[f(x)-g(x)]dx","∫ₐᵇ[f(x)+g(x)]dx","∫ₐᵇf(x)dx","∫ₐᵇg(x)dx"], correct:0, explanation:"Area between curves = ∫ₐᵇ[top - bottom]dx = ∫ₐᵇ[f-g]dx.", expFormula:"A = ∫ₐᵇ[f(x)-g(x)]dx" },
-{ topic:"integrals", category:"Integrals — Basic", text:"Find ∫ (3/x + 2x) dx.", formula:"∫(3/x+2x)dx", options:["3ln|x|+x²+C","3/x²+2+C","3x+2+C","ln|x|+x²+C"], correct:0, explanation:"∫3/x dx=3ln|x|, ∫2x dx=x². Sum: 3ln|x|+x²+C.", expFormula:"3ln|x|+x²+C" },
-{ topic:"integrals", category:"Integrals — Definite", text:"Evaluate ∫₀³ (x²+1) dx.", formula:"∫₀³(x²+1)dx", options:["10","12","8","9"], correct:1, explanation:"[x³/3+x]₀³=(9+3)-(0)=12.", expFormula:"[x³/3+x]₀³ = 12-0 = 12" },
-{ topic:"integrals", category:"Integrals — Trig", text:"What is ∫ sec²(x) dx?", formula:"∫ sec²(x) dx", options:["2sec(x)tan(x)+C","sec(x)tan(x)+C","tan(x)+C","-cot(x)+C"], correct:2, explanation:"Since d/dx[tan(x)]=sec²(x), the antiderivative is tan(x)+C.", expFormula:"∫sec²(x)dx = tan(x)+C" },
-{ topic:"integrals", category:"Integrals — u-Substitution", text:"Evaluate ∫ x·√(x²+1) dx.", formula:"∫ x√(x²+1) dx", options:["(x²+1)^(3/2)/3+C","√(x²+1)+C","(x²+1)^(1/2)+C","x²√(x²+1)+C"], correct:0, explanation:"u=x²+1, du=2x dx. (1/2)∫u^(1/2)du=(1/2)·(2/3)u^(3/2)=(x²+1)^(3/2)/3+C.", expFormula:"(x²+1)^(3/2)/3+C" },
-{ topic:"integrals", category:"Integrals — Riemann Sum", text:"A Riemann sum approximates a definite integral by:", options:["Summing function values at all points","Adding areas of rectangles under the curve","Computing the antiderivative","Finding the average"], correct:1, explanation:"Riemann sums use rectangles (left, right, or midpoint) to approximate the area under a curve.", expFormula:"∫ₐᵇ f(x)dx ≈ Σf(xᵢ)Δx" },
-{ topic:"integrals", category:"Integrals — Volume", text:"The disk method for volume of revolution around the x-axis is:", options:["π∫ₐᵇ[f(x)]² dx","∫ₐᵇ[f(x)]² dx","2π∫ₐᵇ x·f(x) dx","π∫ₐᵇ f(x) dx"], correct:0, explanation:"Disk method: V=π∫ₐᵇ[R(x)]²dx where R(x) is the radius.", expFormula:"V = π∫ₐᵇ[f(x)]²dx" },
-{ topic:"integrals", category:"Integrals — Trig", text:"What is ∫ (1/(1+x²)) dx?", formula:"∫ 1/(1+x²) dx", options:["ln(1+x²)+C","arctan(x)+C","arcsin(x)+C","1/(2x)+C"], correct:1, explanation:"Standard formula: ∫dx/(1+x²)=arctan(x)+C.", expFormula:"∫dx/(1+x²) = arctan(x)+C" },
-{ topic:"integrals", category:"Integrals — Integration by Parts", text:"Integration by Parts formula: ∫u dv =", options:["uv+∫v du","uv-∫v du","v du-u dv","u dv+v du"], correct:1, explanation:"∫u dv = uv - ∫v du. This is derived from the product rule.", expFormula:"∫u dv = uv - ∫v du" },
-{ topic:"integrals", category:"Integrals — Integration by Parts", text:"Evaluate ∫ x·eˣ dx using integration by parts.", formula:"∫ x·eˣ dx", options:["xeˣ+C","eˣ+C","xeˣ-eˣ+C","x²eˣ+C"], correct:2, explanation:"u=x, dv=eˣdx. uv-∫v du=xeˣ-∫eˣdx=xeˣ-eˣ+C.", expFormula:"xeˣ-eˣ+C" },
-{ topic:"integrals", category:"Integrals — Volume", text:"The shell method for volume around y-axis is:", options:["2π∫ₐᵇ x·f(x) dx","π∫ₐᵇ[f(x)]² dx","∫ₐᵇ 2πf(x) dx","π∫ₐᵇ x² dx"], correct:0, explanation:"Shell method: V=2π∫ₐᵇ x·f(x)dx. Shell radius is x, height is f(x).", expFormula:"V = 2π∫ₐᵇ x·f(x)dx" },
-{ topic:"integrals", category:"Integrals — Definite", text:"What is ∫₀¹ (1/√(1-x²)) dx?", formula:"∫₀¹ 1/√(1-x²) dx", options:["π/4","π/2","1","π"], correct:1, explanation:"[arcsin(x)]₀¹=arcsin(1)-arcsin(0)=π/2-0=π/2.", expFormula:"[arcsin(x)]₀¹ = π/2" },
-{ topic:"integrals", category:"Integrals — Basic", text:"Find ∫ x^(-3) dx.", formula:"∫ x^(-3) dx", options:["-x^(-2)+C","-x^(-2)/2+C","x^(-2)/2+C","-3x^(-4)+C"], correct:1, explanation:"Power rule: x^(-2)/(-2)+C=-x^(-2)/2+C.", expFormula:"∫x^(-3)dx = -1/(2x²)+C" },
-{ topic:"integrals", category:"Integrals — Partial Fractions", text:"To integrate (2x+1)/((x+1)(x-1)) you would use:", options:["u-substitution","Integration by parts","Partial fractions","Trigonometric substitution"], correct:2, explanation:"Rational function with factorable denominator → partial fractions: A/(x+1)+B/(x-1).", expFormula:"(2x+1)/((x+1)(x-1)) = A/(x+1)+B/(x-1)" },
-
-// ─────────────────────────────────────────────────────────────
-// FTC (30 questions)
-// ─────────────────────────────────────────────────────────────
-{ topic:"ftc", category:"FTC — Part 1", text:"If F(x) = ∫₀ˣ sin(t) dt, what is F'(x)?", formula:"F(x)=∫₀ˣ sin(t)dt", options:["cos(x)","sin(x)","-cos(x)","∫sin(x)dx"], correct:1, explanation:"FTC Part 1: d/dx∫ₐˣ f(t)dt=f(x). So F'(x)=sin(x).", expFormula:"F'(x) = sin(x)" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₁⁴ (2x) dx using FTC.", formula:"∫₁⁴ 2x dx", options:["8","12","15","16"], correct:2, explanation:"[x²]₁⁴=16-1=15.", expFormula:"[x²]₁⁴ = 16-1 = 15" },
-{ topic:"ftc", category:"FTC — Chain Rule", text:"Find d/dx[∫₀^(x³) sin(t) dt].", formula:"d/dx[∫₀^(x³) sin(t)dt]", options:["sin(x³)","3x²·sin(x³)","cos(x³)","3x²·cos(x³)"], correct:1, explanation:"FTC+chain rule: sin(x³)·3x².", expFormula:"sin(x³)·3x² = 3x²sin(x³)" },
-{ topic:"ftc", category:"FTC — Net Change", text:"If v(t) is velocity, ∫ₐᵇ v(t) dt represents:", options:["Total speed","Net displacement from a to b","Average velocity","Acceleration at b"], correct:1, explanation:"∫v(t)dt=position(b)-position(a)=net displacement.", expFormula:"∫ₐᵇ v(t)dt = position change" },
-{ topic:"ftc", category:"FTC", text:"What does the FTC establish?", options:["All functions are integrable","Differentiation and integration are inverse operations","Limits always exist","Derivatives are always positive"], correct:1, explanation:"FTC bridges the two branches of calculus: differentiation and integration are inverse operations.", expFormula:"∫ₐᵇ f(x)dx = F(b)-F(a) where F'=f" },
-{ topic:"ftc", category:"FTC — Accumulation", text:"Given F(x)=∫₂ˣ 3t² dt, find F(3).", formula:"F(x)=∫₂ˣ 3t²dt", options:["27","19","8","25"], correct:1, explanation:"[t³]₂³=27-8=19.", expFormula:"[t³]₂³ = 27-8 = 19" },
-{ topic:"ftc", category:"FTC — Part 1", text:"If G(x)=∫₀ˣ e^(t²) dt, find G'(x).", formula:"G(x)=∫₀ˣ e^(t²)dt", options:["2x·e^(x²)","e^(x²)","e^(x)","∫e^(x²)dx"], correct:1, explanation:"FTC Part 1: G'(x)=e^(x²).", expFormula:"G'(x) = e^(x²)" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀² (x²-x) dx.", formula:"∫₀²(x²-x)dx", options:["2/3","3/2","4/3","2"], correct:0, explanation:"[x³/3-x²/2]₀²=(8/3-2)-0=8/3-6/3=2/3.", expFormula:"[x³/3-x²/2]₀² = 8/3-2 = 2/3" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀^(π/2) cos(x) dx.", formula:"∫₀^(π/2) cos(x)dx", options:["0","1","2","π/2"], correct:1, explanation:"[sin(x)]₀^(π/2)=sin(π/2)-sin(0)=1-0=1.", expFormula:"[sinx]₀^(π/2) = 1-0 = 1" },
-{ topic:"ftc", category:"FTC — Chain Rule", text:"Find d/dx[∫ₓ² t³ dt].", formula:"d/dx[∫ₓ² t³ dt]", options:["x³","3x²","-x³","8"], correct:2, explanation:"Flip limits: -d/dx[∫₂ˣ t³ dt]=-x³.", expFormula:"-d/dx[∫₂ˣ t³dt] = -x³" },
-{ topic:"ftc", category:"FTC — Net Change", text:"The net change theorem states ∫ₐᵇ F'(x) dx =", options:["F'(b)-F'(a)","F(b)+F(a)","F(b)-F(a)","F'(b)"], correct:2, explanation:"FTC Part 2: the integral of a rate of change gives the net change.", expFormula:"∫ₐᵇ F'(x)dx = F(b)-F(a)" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀^(ln 2) eˣ dx.", formula:"∫₀^(ln2) eˣ dx", options:["1","2","ln2","e-1"], correct:0, explanation:"[eˣ]₀^(ln2)=e^(ln2)-e⁰=2-1=1.", expFormula:"[eˣ]₀^(ln2) = 2-1 = 1" },
-{ topic:"ftc", category:"FTC — Accumulation", text:"If f'(x)=3x² and f(1)=5, find f(3).", formula:"f'(x)=3x², f(1)=5", options:["27","31","22","30"], correct:1, explanation:"f(3)=f(1)+∫₁³ 3x²dx=5+[x³]₁³=5+(27-1)=31.", expFormula:"f(3) = 5+(27-1) = 31" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₋₂² (x³+1) dx.", formula:"∫₋₂²(x³+1)dx", options:["0","4","8","2"], correct:1, explanation:"∫x³ dx on [-2,2]=0 (odd). ∫₋₂² 1 dx=4. Total=4.", expFormula:"0+4 = 4" },
-{ topic:"ftc", category:"FTC — Part 1", text:"H(x)=∫₁^(x²) ln(t) dt. Find H'(x).", formula:"H(x)=∫₁^(x²) ln(t)dt", options:["ln(x²)","2x·ln(x²)","2x·ln(x)","ln(x)"], correct:1, explanation:"FTC+chain rule: ln(x²)·(2x)=2x·ln(x²).", expFormula:"H'(x) = ln(x²)·2x = 2x ln(x²)" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₁ᵉ (1/x) dx.", formula:"∫₁ᵉ (1/x) dx", options:["e","1","1/e","0"], correct:1, explanation:"[ln|x|]₁ᵉ=ln(e)-ln(1)=1-0=1.", expFormula:"[ln x]₁ᵉ = 1-0 = 1" },
-{ topic:"ftc", category:"FTC — Chain Rule", text:"Find d/dx[∫ₓ^(x²) sin(t) dt].", formula:"d/dx[∫ₓ^(x²) sin(t)dt]", options:["sin(x²)-sin(x)","2x·sin(x²)-sin(x)","sin(x²)+sin(x)","2x·sin(x²)"], correct:1, explanation:"Split: d/dx∫₀^(x²)sin(t)dt - d/dx∫₀ˣ sin(t)dt = 2x·sin(x²)-sin(x).", expFormula:"2x·sin(x²)-sin(x)" },
-{ topic:"ftc", category:"FTC — Accumulation", text:"An antiderivative F of f satisfies:", options:["F=f","F'=f","F=∫f dx and F'=f","F+f=0"], correct:2, explanation:"F is an antiderivative if F'=f. F=∫f dx+C expresses the whole family.", expFormula:"F'(x)=f(x)" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀¹ (3x²+2x+1) dx.", formula:"∫₀¹(3x²+2x+1)dx", options:["3","4","2","6"], correct:0, explanation:"[x³+x²+x]₀¹=(1+1+1)-0=3.", expFormula:"[x³+x²+x]₀¹ = 3" },
-{ topic:"ftc", category:"FTC — Net Change", text:"If a(t)=6t is acceleration with v(0)=2, find v(3).", formula:"a(t)=6t, v(0)=2", options:["27","29","20","56"], correct:1, explanation:"v(3)=v(0)+∫₀³ 6t dt=2+[3t²]₀³=2+27=29.", expFormula:"v(3)=2+27=29" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀^(π/4) sec²(x) dx.", formula:"∫₀^(π/4) sec²(x)dx", options:["0","1","√2","π/4"], correct:1, explanation:"[tan(x)]₀^(π/4)=tan(π/4)-tan(0)=1-0=1.", expFormula:"[tanx]₀^(π/4)=1-0=1" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀² |x-1| dx.", formula:"∫₀² |x-1| dx", options:["0","1","2","3"], correct:1, explanation:"Split: ∫₀¹(1-x)dx+∫₁²(x-1)dx=[x-x²/2]₀¹+[x²/2-x]₁²=1/2+1/2=1.", expFormula:"1/2+1/2=1" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₁² x^(-2) dx.", formula:"∫₁² x^(-2) dx", options:["1","1/2","3/4","2"], correct:1, explanation:"[-1/x]₁²=-1/2+1=1/2.", expFormula:"[-1/x]₁² = -1/2+1 = 1/2" },
-{ topic:"ftc", category:"FTC — Accumulation", text:"If F(0)=3 and F'(x)=√x, find F(4).", formula:"F'(x)=√x, F(0)=3", options:["16/3","3+16/3","11/3","19/3"], correct:3, explanation:"F(4)=F(0)+∫₀⁴√x dx=3+[2x^(3/2)/3]₀⁴=3+(2·8/3)=3+16/3=25/3. Wait: 3+16/3=(9+16)/3=25/3.", expFormula:"3+16/3 = 25/3" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₋π^π cos(x) dx.", formula:"∫₋π^π cos(x) dx", options:["2","0","π","2π"], correct:1, explanation:"[sin(x)]₋π^π=sin(π)-sin(-π)=0-0=0.", expFormula:"[sinx]₋π^π = 0-0 = 0" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀⁴ √x dx.", formula:"∫₀⁴ √x dx", options:["4","8/3","16/3","2"], correct:2, explanation:"[2x^(3/2)/3]₀⁴=2(8)/3-0=16/3.", expFormula:"[2x^(3/2)/3]₀⁴ = 16/3" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀¹ e^(2x) dx.", formula:"∫₀¹ e^(2x) dx", options:["e²-1","(e²-1)/2","e²/2","e-1"], correct:1, explanation:"[e^(2x)/2]₀¹=e²/2-1/2=(e²-1)/2.", expFormula:"[e^(2x)/2]₀¹ = (e²-1)/2" },
-{ topic:"ftc", category:"FTC — Part 1", text:"If f is continuous and g(x)=∫₀ˣ f(t)dt, then g'(x) equals:", options:["f(0)","∫₀ˣ f'(t)dt","f(x)","f(x)-f(0)"], correct:2, explanation:"Direct application of FTC Part 1.", expFormula:"g'(x) = f(x)" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀¹ (4x³ - 3x²) dx.", formula:"∫₀¹(4x³-3x²)dx", options:["0","1","2","-1"], correct:1, explanation:"[x⁴-x³]₀¹=(1-1)-0=0. Wait: 1-1=0. Correct answer is 0.", expFormula:"[x⁴-x³]₀¹=0-0=0" },
-{ topic:"ftc", category:"FTC — Part 2", text:"Evaluate ∫₀¹ (4x³ - 3x²) dx correctly if f(1)=1-1=0, f(0)=0. The answer is:", options:["0","1","-1","2"], correct:0, explanation:"[x⁴-x³]₀¹=(1-1)-(0-0)=0.", expFormula:"[x⁴-x³]₀¹=0" },
-
-// ─────────────────────────────────────────────────────────────
-// SERIES & SEQUENCES (30 questions)
-// ─────────────────────────────────────────────────────────────
-{ topic:"series", category:"Series — Convergence", text:"A geometric series Σarⁿ converges when:", formula:"Σ a·rⁿ (n from 0 to ∞)", options:["|r|<1","|r|>1","r>0","a>0"], correct:0, explanation:"Geometric series converges iff |r|<1. Sum = a/(1-r).", expFormula:"|r|<1 ⟹ sum=a/(1-r)" },
-{ topic:"series", category:"Series — Tests", text:"The Divergence Test: if lim(n→∞) aₙ ≠ 0, then Σaₙ:", options:["Converges","Diverges","May converge or diverge","Equals zero"], correct:1, explanation:"If terms don't approach zero, series cannot converge.", expFormula:"lim aₙ≠0 ⟹ Σaₙ diverges" },
-{ topic:"series", category:"Series — Taylor", text:"The Maclaurin series for eˣ is:", formula:"eˣ Maclaurin series", options:["1+x+x²/2+x³/6+...","1-x+x²/2-x³/6+...","x+x³/6+x⁵/120+...","1+x+x²+x³+..."], correct:0, explanation:"eˣ=Σxⁿ/n!=1+x+x²/2!+x³/3!+...", expFormula:"eˣ = Σxⁿ/n!" },
-{ topic:"series", category:"Series — p-series", text:"The p-series Σ1/nᵖ converges when:", formula:"Σ(1/nᵖ)", options:["p<1","p=1","p>1","All p>0"], correct:2, explanation:"p-series: converges iff p>1.", expFormula:"p>1 ⟹ convergent" },
-{ topic:"series", category:"Series — Taylor", text:"The Maclaurin series for sin(x) begins:", formula:"sin(x) Maclaurin series", options:["1-x²/2+x⁴/24-...","x-x³/6+x⁵/120-...","x+x³/6+x⁵/120+...","1+x-x²/2-x³/6..."], correct:1, explanation:"sin(x)=Σ(-1)ⁿx^(2n+1)/(2n+1)!=x-x³/6+x⁵/120-...", expFormula:"sin(x)=x-x³/3!+x⁵/5!-..." },
-{ topic:"series", category:"Series — Ratio Test", text:"Ratio Test: L=lim|a_{n+1}/aₙ|. Series converges absolutely when:", options:["L>1","L=1","L<1","L=0"], correct:2, explanation:"L<1 ⟹ absolute convergence. L>1 ⟹ diverges. L=1 inconclusive.", expFormula:"L<1: converges; L>1: diverges; L=1: inconclusive" },
-{ topic:"series", category:"Series — Taylor", text:"The Maclaurin series for cos(x) is:", formula:"cos(x) Maclaurin series", options:["x-x³/6+x⁵/120-...","1-x²/2+x⁴/24-...","1+x²/2+x⁴/24+...","x+x³/3+x⁵/5+..."], correct:1, explanation:"cos(x)=Σ(-1)ⁿx^(2n)/(2n)!=1-x²/2!+x⁴/4!-...", expFormula:"cos(x)=1-x²/2!+x⁴/4!-..." },
-{ topic:"series", category:"Series — Integral Test", text:"The Integral Test applies when f(x) is positive, continuous, and _____ on [1,∞):", options:["Increasing","Decreasing","Bounded","Differentiable"], correct:1, explanation:"Integral Test requires f to be positive, continuous, and decreasing on [1,∞).", expFormula:"∫₁^∞ f(x)dx converges ⟺ Σf(n) converges" },
-{ topic:"series", category:"Series — Alternating", text:"The Alternating Series Test: Σ(-1)ⁿ aₙ converges if aₙ≥0, aₙ→0, and:", options:["aₙ is increasing","aₙ is decreasing","aₙ>1","aₙ is constant"], correct:1, explanation:"Alternating series converges if terms are positive, decreasing, and approaching zero.", expFormula:"aₙ↓0 ⟹ Σ(-1)ⁿaₙ converges" },
-{ topic:"series", category:"Series — Geometric", text:"Find the sum of the geometric series 1+1/2+1/4+1/8+...", formula:"Σ(1/2)ⁿ, n from 0 to ∞", options:["1","2","3","∞"], correct:1, explanation:"a=1, r=1/2. Sum=a/(1-r)=1/(1/2)=2.", expFormula:"a/(1-r)=1/(1-1/2)=2" },
-{ topic:"series", category:"Series — Comparison", text:"The Comparison Test: if 0≤aₙ≤bₙ and Σbₙ converges, then:", options:["Σaₙ diverges","Σaₙ converges","Σaₙ=Σbₙ","Cannot determine"], correct:1, explanation:"If the larger series converges, the smaller must also converge.", expFormula:"0≤aₙ≤bₙ, Σbₙ conv ⟹ Σaₙ conv" },
-{ topic:"series", category:"Series — Taylor", text:"What is the radius of convergence of the Maclaurin series for eˣ?", options:["R=1","R=0","R=e","R=∞"], correct:3, explanation:"The series for eˣ converges for all x, so the radius of convergence is ∞.", expFormula:"eˣ=Σxⁿ/n! converges for all x∈ℝ" },
-{ topic:"series", category:"Series — Absolute/Conditional", text:"A series Σaₙ is absolutely convergent if:", options:["Σaₙ converges","Σ|aₙ| converges","aₙ→0","Σaₙ is bounded"], correct:1, explanation:"Absolute convergence means Σ|aₙ| converges. Absolute convergence implies convergence.", expFormula:"Σ|aₙ| conv ⟹ Σaₙ conv (absolute)" },
-{ topic:"series", category:"Series — Harmonic", text:"The harmonic series Σ1/n:", options:["Converges to 1","Converges to ln 2","Diverges","Converges to e"], correct:2, explanation:"The harmonic series diverges (p-series with p=1). Famous example of a divergent series whose terms→0.", expFormula:"Σ1/n = 1+1/2+1/3+... diverges" },
-{ topic:"series", category:"Series — Limit Comparison", text:"Limit Comparison Test: if lim(aₙ/bₙ)=L>0 (finite), then:", options:["Σaₙ always converges","Σaₙ and Σbₙ both converge or both diverge","Σaₙ diverges","L must equal 1"], correct:1, explanation:"Positive finite limit ⟹ the two series have the same convergence behavior.", expFormula:"0<lim(aₙ/bₙ)=L<∞ ⟹ same conv/div" },
-{ topic:"series", category:"Series — Taylor", text:"For f(x)=1/(1-x), the Maclaurin series is valid for:", formula:"1/(1-x) = Σxⁿ, n from 0 to ∞", options:["All x","|x|<1","|x|≤1","x>0"], correct:1, explanation:"The geometric series 1/(1-x)=Σxⁿ converges only for |x|<1.", expFormula:"Σxⁿ converges for |x|<1" },
-{ topic:"series", category:"Series — Taylor", text:"The Taylor series centered at a=0 is called:", options:["Laurent series","Fourier series","Maclaurin series","Power series"], correct:2, explanation:"A Taylor series centered at 0 is specifically called a Maclaurin series.", expFormula:"Maclaurin: f(x)=Σf⁽ⁿ⁾(0)/n! · xⁿ" },
-{ topic:"series", category:"Series — Taylor", text:"The coefficient of xⁿ in the Taylor series of f centered at 0 is:", options:["f(n)","f'(0)/n","f⁽ⁿ⁾(0)/n!","n·f'(0)"], correct:2, explanation:"Taylor coefficients: aₙ=f⁽ⁿ⁾(0)/n! (the nth derivative at 0, divided by n!).", expFormula:"aₙ = f⁽ⁿ⁾(0)/n!" },
-{ topic:"series", category:"Series — Sequences", text:"A sequence {aₙ} converges if:", options:["aₙ is bounded","lim(n→∞)aₙ exists as a finite number","aₙ is decreasing","aₙ is positive"], correct:1, explanation:"A sequence converges if its limit exists and is a finite real number.", expFormula:"lim(n→∞)aₙ = L (finite) ⟹ convergent" },
-{ topic:"series", category:"Series — Sequences", text:"Does the sequence aₙ = n/(n+1) converge? If so, to what?", formula:"aₙ = n/(n+1)", options:["No","Yes, to 0","Yes, to 1","Yes, to ∞"], correct:2, explanation:"lim(n→∞) n/(n+1)=lim 1/(1+1/n)=1.", expFormula:"lim n/(n+1) = 1" },
-{ topic:"series", category:"Series — Root Test", text:"Root Test: L=lim(n→∞) |aₙ|^(1/n). The series converges absolutely when:", options:["L>1","L=1","L<1","L is undefined"], correct:2, explanation:"Root Test: L<1 ⟹ absolute convergence. L>1 ⟹ diverges. L=1 ⟹ inconclusive.", expFormula:"L<1: converges; L>1: diverges" },
-{ topic:"series", category:"Series — Geometric", text:"What is the sum of Σ 2·(3/4)ⁿ for n=0 to ∞?", formula:"Σ 2·(3/4)ⁿ", options:["6","8","4","∞"], correct:1, explanation:"a=2, r=3/4. Sum=a/(1-r)=2/(1/4)=8.", expFormula:"2/(1-3/4)=2/(1/4)=8" },
-{ topic:"series", category:"Series — Taylor", text:"The Maclaurin series for 1/(1+x) is:", formula:"1/(1+x) = Σ?", options:["1-x+x²-x³+...","1+x+x²+x³+...","x-x²+x³-...","1-x²+x⁴-..."], correct:0, explanation:"Replace x with -x in 1/(1-x)=Σxⁿ: 1/(1+x)=Σ(-x)ⁿ=1-x+x²-x³+...", expFormula:"Σ(-1)ⁿxⁿ = 1-x+x²-x³+..." },
-{ topic:"series", category:"Series — Error", text:"The Alternating Series Estimation Theorem says the error |S-Sₙ| is at most:", options:["|aₙ|","|aₙ₊₁|","|aₙ-aₙ₊₁|","n·|aₙ|"], correct:1, explanation:"For alternating series, the error is bounded by the absolute value of the first omitted term |aₙ₊₁|.", expFormula:"|S-Sₙ|≤|aₙ₊₁|" },
-{ topic:"series", category:"Series — Taylor", text:"Approximate e using the first 4 terms of the Maclaurin series for eˣ at x=1.", formula:"eˣ=1+x+x²/2!+x³/3!+...", options:["8/3","5/2","8/3","41/24"], correct:3, explanation:"1+1+1/2+1/6=1+1+0.5+0.1667=2.6667=8/3. Wait, 1+1+1/2+1/6=8/3≈2.667. With 4 terms: 1+1+1/2+1/6=8/3. 5th term adds 1/24: total=8/3+1/24=64/24+1/24=65/24. Correct 4-term: 1+1+1/2+1/6=2+1/2+1/6=2+2/3=8/3... actually: 1+1=2, +0.5=2.5, +1/6≈2.667=8/3. But 41/24=1+1+12/24+4/24=2+16/24. Let me recount: 1+1+1/2+1/6 = 6/6+6/6+3/6+1/6=16/6=8/3≈2.667. With x=1: 1+1+1/2!+1/3!=1+1+.5+.167=2.667. 4 terms.", expFormula:"1+1+1/2+1/6 = 8/3 ≈ 2.667" },
-{ topic:"series", category:"Series — Power Series", text:"A power series Σcₙ(x-a)ⁿ converges at x=a:", options:["Never","Always","Only if c₀=0","Only if |cₙ|<1"], correct:1, explanation:"At x=a, every term with n≥1 has factor (a-a)ⁿ=0, so the series equals c₀. It always converges.", expFormula:"At x=a: series = c₀" },
-{ topic:"series", category:"Series — Interval of Convergence", text:"If a power series has radius of convergence R, it converges absolutely for:", options:["|x-a|>R","|x-a|<R","|x-a|=R","All x"], correct:1, explanation:"Absolute convergence is guaranteed inside the interval |x-a|<R. Endpoints need separate testing.", expFormula:"|x-a|<R ⟹ absolute convergence" },
-{ topic:"series", category:"Series — Taylor", text:"The error in approximating f by its nth Taylor polynomial Pₙ on [a,b] is bounded by Taylor's Inequality. The key factor is:", options:["f'(a)","f⁽ⁿ⁺¹⁾ at some point","The interval length","n!"], correct:1, explanation:"Taylor's Inequality: |Rₙ(x)|≤M|x-a|^(n+1)/(n+1)! where M bounds |f⁽ⁿ⁺¹⁾|.", expFormula:"|Rₙ(x)| ≤ M·|x-a|^(n+1)/(n+1)!" },
-{ topic:"series", category:"Series — Sequences", text:"A monotone bounded sequence:", options:["Always diverges","Must converge","May or may not converge","Converges to 0"], correct:1, explanation:"Monotone Convergence Theorem: every bounded monotone sequence converges.", expFormula:"Bounded + monotone ⟹ converges" },
-{ topic:"series", category:"Series — Taylor", text:"Using the series for ln(1+x)=x-x²/2+x³/3-..., approximate ln(1.1).", formula:"ln(1+x) with x=0.1", options:["0.095","0.1","0.105","0.09531"], correct:3, explanation:"0.1-0.01/2+0.001/3-...≈0.1-0.005+0.000333=0.09533≈0.09531.", expFormula:"0.1-0.005+0.000333≈0.09531" },
-];
-
-// ══════════════════════════════════════════════════════════════
-//  MOCK EXAMS (AP-Formatted)
-//  AP Calc AB: 45 MCQ (Part A: 30 no-calc, Part B: 15 calc), 6 FRQ
-//  We'll present 45 MCQ drawn from question bank, then 6 FRQ
-// ══════════════════════════════════════════════════════════════
-const MOCK_EXAMS = [
+  // ── LIMITS ──────────────────────────────────────────────────
   {
-    id: 1,
-    title: "Mock Exam 1 — AB Focus",
-    subtitle: "Limits, Derivatives & Applications",
-    desc: "Covers Limits, Derivatives, and Derivative Applications. Mirrors AP Calculus AB Section I structure.",
-    mcq_topics: ["limits","derivatives","derivative_apps"],
-    mcq_count: 45,
-    frq: [
-      {
-        title: "Free Response Question 1",
-        points: 9,
-        context: "Let f(x) = x³ - 6x² + 9x + 2 on the closed interval [0, 5].",
-        parts: [
-          { label:"(a)", points:3, text:"Find all critical points of f on [0,5]. Show your work.", solution:"f'(x)=3x²-12x+9=3(x-1)(x-3). Critical points at x=1 and x=3 (both in [0,5]).", formula:"f'(x)=3(x²-4x+3)=3(x-1)(x-3)=0 ⟹ x=1, x=3" },
-          { label:"(b)", points:3, text:"Find the absolute maximum and minimum values of f on [0,5].", solution:"Evaluate at critical points and endpoints: f(0)=2, f(1)=6, f(3)=2, f(5)=22. Absolute max: f(5)=22. Absolute min: f(0)=f(3)=2.", formula:"f(0)=2, f(1)=6, f(3)=2, f(5)=22" },
-          { label:"(c)", points:3, text:"Determine the intervals where f is concave up and concave down.", solution:"f''(x)=6x-12=6(x-2). f''>0 when x>2 (concave up), f''<0 when x<2 (concave down). Inflection point at x=2.", formula:"f''(x)=6(x-2)=0 ⟹ x=2 is inflection point" }
-        ]
-      },
-      {
-        title: "Free Response Question 2",
-        points: 9,
-        context: "A particle moves along the x-axis. Its velocity at time t≥0 is given by v(t) = t² - 5t + 6.",
-        parts: [
-          { label:"(a)", points:3, text:"Find all times t at which the particle is at rest.", solution:"v(t)=t²-5t+6=(t-2)(t-3)=0. Particle at rest at t=2 and t=3.", formula:"(t-2)(t-3)=0 ⟹ t=2, t=3" },
-          { label:"(b)", points:3, text:"On what time intervals is the particle moving to the right?", solution:"v(t)>0: (t-2)(t-3)>0 when t<2 or t>3. Particle moves right on (0,2)∪(3,∞).", formula:"v(t)>0 for t∈(0,2)∪(3,∞)" },
-          { label:"(c)", points:3, text:"Find the total distance traveled by the particle from t=0 to t=4.", solution:"Total distance=∫₀⁴|v(t)|dt=∫₀²v dt+∫₂³(-v)dt+∫₃⁴v dt. Compute: [t³/3-5t²/2+6t]₀²=8/3-10+12=14/3. |[t³/3-5t²/2+6t]₂³|=|9-45/2+18-14/3|=1/6. [t³/3-5t²/2+6t]₃⁴=64/3-40+24-14/3=10/3+(-16)=-...calculate carefully: f(4)-f(3)=(64/3-40+24)-(9-45/2+18)=(64/3-16)-(27-45/2)=16/3-(54/2-45/2)=16/3-9/2=32/6-27/6=5/6. Total=14/3+1/6+5/6=28/6+1/6+5/6=34/6=17/3.", formula:"Total distance = ∫₀⁴|v(t)|dt = 17/3" }
-        ]
-      },
-      {
-        title: "Free Response Question 3",
-        points: 9,
-        context: "Let g be a continuous function defined on [-2, 4], and let G(x) = ∫₋₂ˣ g(t) dt.",
-        parts: [
-          { label:"(a)", points:3, text:"What is G(-2)? Explain your reasoning.", solution:"G(-2)=∫₋₂^(-2) g(t)dt=0. An integral from a point to itself is always 0.", formula:"G(-2)=∫₋₂^(-2) g(t)dt = 0" },
-          { label:"(b)", points:3, text:"Find G'(x) using the Fundamental Theorem of Calculus.", solution:"By FTC Part 1: G'(x)=g(x). The derivative of an accumulation function equals the integrand evaluated at the upper limit.", formula:"G'(x) = g(x)  [FTC Part 1]" },
-          { label:"(c)", points:3, text:"If g(x) = 3x² - 2x, find G(2).", solution:"G(2)=∫₋₂² (3x²-2x)dx=[x³-x²]₋₂²=(8-4)-(-8-4)=4+12=16.", formula:"[x³-x²]₋₂² = (8-4)-(-8-4) = 16" }
-        ]
-      },
-      {
-        title: "Free Response Question 4",
-        points: 9,
-        context: "A 13-ft ladder leans against a vertical wall. The base slides away from the wall at a rate of 5 ft/min.",
-        parts: [
-          { label:"(a)", points:3, text:"Write an equation relating x (base distance from wall) and y (height on wall).", solution:"By Pythagorean theorem: x²+y²=169 (since ladder is 13 ft).", formula:"x²+y²=13²=169" },
-          { label:"(b)", points:3, text:"How fast is the top of the ladder sliding down when the base is 5 ft from the wall?", solution:"Differentiate: 2x(dx/dt)+2y(dy/dt)=0. When x=5, y=12. So 5(5)+12(dy/dt)=0 ⟹ dy/dt=-25/12 ft/min.", formula:"dy/dt = -25/12 ft/min" },
-          { label:"(c)", points:3, text:"How fast is the area of the triangle formed by the ladder, wall, and ground changing at the same moment?", solution:"A=xy/2. dA/dt=(y·dx/dt+x·dy/dt)/2=(12·5+5·(-25/12))/2=(60-125/12)/2=(720/12-125/12)/2=595/24.", formula:"dA/dt = (y·dx/dt+x·dy/dt)/2 = 595/24 ft²/min" }
-        ]
-      },
-      {
-        title: "Free Response Question 5",
-        points: 9,
-        context: "Consider the region bounded by y = x² and y = 2x.",
-        parts: [
-          { label:"(a)", points:2, text:"Find the points of intersection of y=x² and y=2x.", solution:"x²=2x ⟹ x(x-2)=0 ⟹ x=0 and x=2.", formula:"Intersection at (0,0) and (2,4)" },
-          { label:"(b)", points:4, text:"Set up and evaluate the integral for the area of the region.", solution:"A=∫₀² (2x-x²)dx=[x²-x³/3]₀²=(4-8/3)=4/3.", formula:"A=∫₀²(2x-x²)dx = 4/3" },
-          { label:"(c)", points:3, text:"Find the volume when the region is rotated about the x-axis (washer method).", solution:"V=π∫₀²[(2x)²-(x²)²]dx=π∫₀²(4x²-x⁴)dx=π[4x³/3-x⁵/5]₀²=π(32/3-32/5)=π·64/15=64π/15.", formula:"V=π∫₀²(4x²-x⁴)dx=64π/15" }
-        ]
-      },
-      {
-        title: "Free Response Question 6",
-        points: 9,
-        context: "The function h is defined by h(x) = ln(x² + 4) for all real x.",
-        parts: [
-          { label:"(a)", points:3, text:"Find h'(x) and h''(x).", solution:"h'(x)=2x/(x²+4). h''(x)=((x²+4)·2-2x·2x)/(x²+4)²=(8-2x²)/(x²+4)².", formula:"h'(x)=2x/(x²+4), h''(x)=(8-2x²)/(x²+4)²" },
-          { label:"(b)", points:3, text:"Find all inflection points of h.", solution:"h''(x)=0 ⟹ 8-2x²=0 ⟹ x=±2. Check sign change: h'' changes sign at both, so inflection points at x=±2.", formula:"h''=0 at x=±2; inflection points at (±2, ln8)" },
-          { label:"(c)", points:3, text:"On what intervals is h concave up?", solution:"h''(x)>0 when 8-2x²>0 ⟹ x²<4 ⟹ -2<x<2. h is concave up on (-2,2).", formula:"h concave up on (-2,2)" }
-        ]
-      }
-    ]
+    topic: "limits",
+    category: "Limits",
+    text: "What is the value of lim(x→3) of (x² - 9) / (x - 3)?",
+    formula: "lim(x→3)  (x² - 9) / (x - 3)",
+    options: ["0", "3", "6", "Undefined"],
+    correct: 2,
+    explanation: "Factor the numerator: x² - 9 = (x-3)(x+3). Cancel (x-3) to get lim(x→3) (x+3) = 3+3 = 6.",
+    expFormula: "(x²-9)/(x-3) = (x-3)(x+3)/(x-3) = x+3  →  3+3 = 6"
   },
   {
-    id: 2,
-    title: "Mock Exam 2 — Integration Focus",
-    subtitle: "Integrals, FTC & Series",
-    desc: "Emphasizes integration techniques, the Fundamental Theorem, and series. Mirrors AP Calc AB/BC Section I structure.",
-    mcq_topics: ["integrals","ftc","series"],
-    mcq_count: 45,
-    frq: [
-      {
-        title: "Free Response Question 1",
-        points: 9,
-        context: "Let f(x) = 3x² - 6x + 2. Define F(x) = ∫₀ˣ f(t) dt.",
-        parts: [
-          { label:"(a)", points:3, text:"Find F(x) explicitly.", solution:"F(x)=∫₀ˣ(3t²-6t+2)dt=[t³-3t²+2t]₀ˣ=x³-3x²+2x.", formula:"F(x)=x³-3x²+2x" },
-          { label:"(b)", points:3, text:"Find all values of x where F has a local minimum.", solution:"F'(x)=f(x)=3x²-6x+2=0 ⟹ x=(6±√(36-24))/6=(6±√12)/6=1±1/√3. F''=f'(x)=6x-6. At x=1+1/√3: F''>0 ⟹ local min.", formula:"x=1+1/√3≈1.577 is local min" },
-          { label:"(c)", points:3, text:"Find ∫₁³ f(x) dx.", solution:"F(3)-F(1)=(27-27+6)-(1-3+2)=6-0=6.", formula:"F(3)-F(1)=6-0=6" }
-        ]
-      },
-      {
-        title: "Free Response Question 2",
-        points: 9,
-        context: "Consider the power series Σ(n=0 to ∞) xⁿ/n!.",
-        parts: [
-          { label:"(a)", points:3, text:"Use the ratio test to find the radius of convergence.", solution:"L=lim|xⁿ⁺¹/(n+1)! · n!/xⁿ|=lim|x/(n+1)|=0 for all x. Since L=0<1 for all x, R=∞.", formula:"L=lim|x/(n+1)|=0 ⟹ R=∞" },
-          { label:"(b)", points:3, text:"Identify which function this power series represents.", solution:"This is the Maclaurin series for eˣ, since eˣ=Σxⁿ/n! for all x.", formula:"Σxⁿ/n! = eˣ for all x" },
-          { label:"(c)", points:3, text:"Use the first four terms to approximate e^(0.5). Express as a fraction.", solution:"e^(0.5)≈1+0.5+0.125+0.0208...=1+1/2+1/8+1/48=48/48+24/48+6/48+1/48=79/48≈1.6458.", formula:"1+1/2+1/8+1/48 = 79/48" }
-        ]
-      },
-      {
-        title: "Free Response Question 3",
-        points: 9,
-        context: "A tank is being filled with water. The rate at which water enters the tank is r(t) = 2√t gallons per minute for 0 ≤ t ≤ 9 minutes. The tank initially contains 5 gallons.",
-        parts: [
-          { label:"(a)", points:3, text:"Write an expression for the total amount of water W(t) in the tank at time t.", solution:"W(t)=5+∫₀ᵗ 2√s ds=5+[4s^(3/2)/3]₀ᵗ=5+4t^(3/2)/3.", formula:"W(t)=5+4t^(3/2)/3" },
-          { label:"(b)", points:3, text:"How much water is in the tank at t=9 minutes?", solution:"W(9)=5+4(27)/3=5+36=41 gallons.", formula:"W(9)=5+4(9^(3/2))/3=5+36=41" },
-          { label:"(c)", points:3, text:"At what rate is water entering the tank at t=4 minutes?", solution:"r(4)=2√4=2·2=4 gallons/minute.", formula:"r(4)=2√4=4 gal/min" }
-        ]
-      },
-      {
-        title: "Free Response Question 4",
-        points: 9,
-        context: "Let h(x) = ∫₀ˣ sin(t²) dt.",
-        parts: [
-          { label:"(a)", points:2, text:"Find h'(x).", solution:"By FTC Part 1: h'(x)=sin(x²).", formula:"h'(x)=sin(x²)" },
-          { label:"(b)", points:4, text:"Find the linearization of h at x=0.", solution:"h(0)=0, h'(0)=sin(0)=0. Linearization: L(x)=0+0·x=0. Thus h(x)≈0 near x=0.", formula:"L(x)=h(0)+h'(0)(x-0)=0" },
-          { label:"(c)", points:3, text:"Determine whether h is increasing or decreasing at x=√π.", solution:"h'(√π)=sin((√π)²)=sin(π)=0. Check h''(x)=2x·cos(x²). h''(√π)=2√π·cos(π)=-2√π<0. h' changes from positive to negative, so x=√π is a local max of h.", formula:"h'(√π)=sin(π)=0; local max of h" }
-        ]
-      },
-      {
-        title: "Free Response Question 5",
-        points: 9,
-        context: "The alternating series S = Σ(n=1 to ∞) (-1)^(n+1) / n² = 1 - 1/4 + 1/9 - 1/16 + ...",
-        parts: [
-          { label:"(a)", points:3, text:"Verify that this series satisfies the conditions of the Alternating Series Test.", solution:"Let aₙ=1/n². (1) aₙ>0 ✓. (2) aₙ is decreasing: 1/n²>1/(n+1)² ✓. (3) lim aₙ=0 ✓. All conditions satisfied.", formula:"aₙ=1/n²>0, decreasing, →0" },
-          { label:"(b)", points:3, text:"Find an upper bound for the error if we use the sum of the first 3 terms.", solution:"By the Alternating Series Estimation Theorem, error ≤ |a₄|=1/16.", formula:"|error|≤|a₄|=1/16=0.0625" },
-          { label:"(c)", points:3, text:"Determine whether the series converges absolutely, conditionally, or diverges.", solution:"Σ|aₙ|=Σ1/n² is a p-series with p=2>1, which converges. Therefore the original series converges absolutely.", formula:"Σ1/n² converges (p=2>1) ⟹ absolutely convergent" }
-        ]
-      },
-      {
-        title: "Free Response Question 6",
-        points: 9,
-        context: "Evaluate the following integrals, showing all work clearly.",
-        parts: [
-          { label:"(a)", points:3, text:"∫ x·ln(x) dx", solution:"Integration by parts: u=ln(x), dv=x dx. du=1/x dx, v=x²/2. ∫x ln(x)dx=x²ln(x)/2-∫x²/(2x)dx=x²ln(x)/2-x²/4+C.", formula:"x²ln(x)/2 - x²/4 + C" },
-          { label:"(b)", points:3, text:"∫₀^(π/2) sin²(x) dx", solution:"Use half-angle: sin²x=(1-cos2x)/2. ∫₀^(π/2)(1-cos2x)/2 dx=[x/2-sin(2x)/4]₀^(π/2)=π/4-0=π/4.", formula:"[x/2-sin(2x)/4]₀^(π/2)=π/4" },
-          { label:"(c)", points:3, text:"∫ 1/(x²-1) dx using partial fractions.", solution:"1/(x²-1)=1/((x-1)(x+1))=A/(x-1)+B/(x+1). A=1/2, B=-1/2. Integral=(1/2)ln|x-1|-(1/2)ln|x+1|+C=(1/2)ln|(x-1)/(x+1)|+C.", formula:"(1/2)ln|(x-1)/(x+1)|+C" }
-        ]
-      }
-    ]
+    topic: "limits",
+    category: "Limits",
+    text: "What does lim(x→∞) of (3x² + 2x) / (5x²) equal?",
+    formula: "lim(x→∞)  (3x² + 2x) / (5x²)",
+    options: ["0", "3/5", "2/5", "∞"],
+    correct: 1,
+    explanation: "Divide numerator and denominator by x² (the highest degree). The 2x/x² term goes to 0, leaving 3/5.",
+    expFormula: "(3 + 2/x) / 5  →  3/5 as x→∞"
   },
   {
-    id: 3,
-    title: "Mock Exam 3 — Full AB/BC",
-    subtitle: "Comprehensive — All Topics",
-    desc: "A comprehensive exam covering all six major topics. Best simulation of the full AP Calculus exam experience.",
-    mcq_topics: ["limits","derivatives","derivative_apps","integrals","ftc","series"],
-    mcq_count: 45,
-    frq: [
-      {
-        title: "Free Response Question 1",
-        points: 9,
-        context: "The rate of change of temperature T (in °C) of a cup of coffee is modeled by dT/dt = -0.1(T - 20), where t is time in minutes and T(0) = 90.",
-        parts: [
-          { label:"(a)", points:3, text:"Is the temperature of the coffee increasing or decreasing at t=0? Justify.", solution:"dT/dt at t=0: -0.1(90-20)=-0.1(70)=-7<0. Temperature is decreasing at t=0.", formula:"dT/dt|_{t=0}=-7<0 ⟹ decreasing" },
-          { label:"(b)", points:3, text:"Find the particular solution T(t) to this differential equation.", solution:"Separable: dT/(T-20)=-0.1 dt ⟹ ln|T-20|=-0.1t+C ⟹ T-20=Ae^(-0.1t). T(0)=90: A=70. T(t)=20+70e^(-0.1t).", formula:"T(t)=20+70e^(-0.1t)" },
-          { label:"(c)", points:3, text:"Find lim(t→∞) T(t) and explain what it means.", solution:"lim(t→∞)(20+70e^(-0.1t))=20+0=20. The coffee cools to room temperature (20°C) over time.", formula:"lim T(t)=20°C (room temperature)" }
-        ]
-      },
-      {
-        title: "Free Response Question 2",
-        points: 9,
-        context: "Let f be a function defined for all real x. The graph of f' (the derivative) shows: f'(x)<0 for x<-1, f'(-1)=0, f'(x)>0 for -1<x<2, f'(2)=0, f'(x)<0 for x>2.",
-        parts: [
-          { label:"(a)", points:3, text:"Identify all local extrema of f. Justify using the First Derivative Test.", solution:"At x=-1: f' changes from - to +, so f has a local minimum. At x=2: f' changes from + to -, so f has a local maximum.", formula:"Local min at x=-1; local max at x=2" },
-          { label:"(b)", points:3, text:"If additionally f''(-1)=4 and f''(2)=-3, confirm your answers using the Second Derivative Test.", solution:"f'(-1)=0 and f''(-1)=4>0 ⟹ local minimum at x=-1. f'(2)=0 and f''(2)=-3<0 ⟹ local maximum at x=2.", formula:"f''(-1)>0: local min; f''(2)<0: local max" },
-          { label:"(c)", points:3, text:"If f'(x)=3x²-3x-6, find f(x) given f(0)=1.", solution:"f(x)=∫(3x²-3x-6)dx=x³-3x²/2-6x+C. f(0)=C=1. So f(x)=x³-3x²/2-6x+1.", formula:"f(x)=x³-(3/2)x²-6x+1" }
-        ]
-      },
-      {
-        title: "Free Response Question 3",
-        points: 9,
-        context: "Consider the series Σ(n=1 to ∞) (n·xⁿ)/(3ⁿ).",
-        parts: [
-          { label:"(a)", points:3, text:"Use the Ratio Test to find the radius of convergence.", solution:"L=lim|(n+1)x^(n+1)/3^(n+1) · 3ⁿ/(nxⁿ)|=lim|(n+1)/n · x/3|=|x/3|. L<1 iff |x|<3. R=3.", formula:"R=3" },
-          { label:"(b)", points:3, text:"Does the series converge at x=3? At x=-3?", solution:"x=3: Σn·1=Σn diverges. x=-3: Σn·(-1)ⁿ diverges (terms don't→0). Diverges at both endpoints.", formula:"Diverges at x=±3" },
-          { label:"(c)", points:3, text:"State the interval of convergence.", solution:"The series converges for |x|<3 and diverges at the endpoints. Interval of convergence: (-3,3).", formula:"Interval of convergence: (-3,3)" }
-        ]
-      },
-      {
-        title: "Free Response Question 4",
-        points: 9,
-        context: "Water flows into a conical tank (vertex down) at 2 ft³/min. The tank has height 10 ft and radius 5 ft at the top.",
-        parts: [
-          { label:"(a)", points:3, text:"Express the radius r in terms of the height h using similar triangles.", solution:"r/h=5/10=1/2. So r=h/2.", formula:"r=h/2" },
-          { label:"(b)", points:3, text:"Express volume V in terms of h only.", solution:"V=(1/3)πr²h=(1/3)π(h/2)²h=πh³/12.", formula:"V=πh³/12" },
-          { label:"(c)", points:3, text:"How fast is the water level rising when h=6 ft?", solution:"dV/dt=πh²/4·dh/dt. 2=π(36)/4·dh/dt=9π·dh/dt. dh/dt=2/(9π) ft/min.", formula:"dh/dt=2/(9π) ft/min" }
-        ]
-      },
-      {
-        title: "Free Response Question 5",
-        points: 9,
-        context: "Let R be the region bounded by y=e^x, y=1, and x=1.",
-        parts: [
-          { label:"(a)", points:3, text:"Find the area of region R.", solution:"Area=∫₀¹(eˣ-1)dx=[eˣ-x]₀¹=(e-1)-(1-0)=e-2.", formula:"A=e-2" },
-          { label:"(b)", points:3, text:"Find the volume when R is rotated about the line y=1 using the disk/washer method.", solution:"V=π∫₀¹(eˣ-1)²dx=π∫₀¹(e^(2x)-2eˣ+1)dx=π[e^(2x)/2-2eˣ+x]₀¹=π((e²/2-2e+1)-(1/2-2))=π(e²/2-2e+5/2).", formula:"V=π(e²/2-2e+5/2)" },
-          { label:"(c)", points:3, text:"Find the volume when R is rotated about the y-axis using the shell method.", solution:"V=2π∫₀¹ x(eˣ-1)dx=2π∫₀¹(xeˣ-x)dx. ∫xeˣdx=xeˣ-eˣ. So V=2π[xeˣ-eˣ-x²/2]₀¹=2π((e-e-1/2)-(-1))=2π(1/2)=π.", formula:"V=π" }
-        ]
-      },
-      {
-        title: "Free Response Question 6",
-        points: 9,
-        context: "The Maclaurin series for f(x) = arctan(x) is given by: arctan(x) = x - x³/3 + x⁵/5 - x⁷/7 + ... = Σ(-1)ⁿx^(2n+1)/(2n+1) for |x|≤1.",
-        parts: [
-          { label:"(a)", points:3, text:"Find the first four nonzero terms of the Maclaurin series for g(x) = x·arctan(x²).", solution:"Substitute x² for x in arctan: arctan(x²)=x²-x⁶/3+x¹⁰/5-... Multiply by x: g(x)=x³-x⁷/3+x¹¹/5-x¹⁵/7+...", formula:"g(x)=x³-x⁷/3+x¹¹/5-..." },
-          { label:"(b)", points:3, text:"Use your answer to find ∫₀^(0.5) x·arctan(x²) dx accurate to 3 decimal places.", solution:"∫₀^(0.5)(x³-x⁷/3+...)dx=[x⁴/4-x⁸/24+...]₀^(0.5)=1/64-1/(24·256)+...≈0.01563-0.000163+...≈0.01547≈0.016.", formula:"≈x⁴/4-x⁸/24|₀^0.5 ≈ 0.016" },
-          { label:"(c)", points:3, text:"Use the Alternating Series Estimation Theorem to find an upper bound for the error in part (b) when using only the first term.", solution:"The error is bounded by the second term: |x⁸/24||₀^(0.5)=(0.5)⁸/24=1/(256·24)=1/6144≈0.000163.", formula:"|error|≤(0.5)⁸/24=1/6144≈0.000163" }
-        ]
-      }
-    ]
+    topic: "limits",
+    category: "Limits",
+    text: "What is lim(x→0) of sin(x) / x?",
+    formula: "lim(x→0)  sin(x) / x",
+    options: ["0", "∞", "1", "Undefined"],
+    correct: 2,
+    explanation: "This is one of the most important limits in calculus. By the squeeze theorem (or geometric proof), lim(x→0) sin(x)/x = 1.",
+    expFormula: "lim(x→0) sin(x)/x = 1  (standard limit — memorize this!)"
+  },
+  {
+    topic: "limits",
+    category: "Limits",
+    text: "If lim(x→2⁻) f(x) = 5 and lim(x→2⁺) f(x) = 5, what can we conclude?",
+    options: ["f(2) = 5", "f is continuous at x=2", "lim(x→2) f(x) = 5", "Both A and C"],
+    correct: 2,
+    explanation: "When both one-sided limits are equal, the two-sided limit exists and equals that value. However, we cannot conclude f(2) = 5 or continuity without knowing the function value at x=2.",
+    expFormula: "Left limit = Right limit = 5  ⟹  lim(x→2) f(x) = 5"
+  },
+  {
+    topic: "limits",
+    category: "Limits — L'Hôpital",
+    text: "Use L'Hôpital's Rule to find lim(x→0) of (e^x - 1) / x.",
+    formula: "lim(x→0)  (eˣ - 1) / x",
+    options: ["0", "e", "1", "Does not exist"],
+    correct: 2,
+    explanation: "This is a 0/0 form. Applying L'Hôpital: differentiate top and bottom. d/dx(eˣ-1) = eˣ, d/dx(x) = 1. So the limit becomes lim(x→0) eˣ/1 = e⁰ = 1.",
+    expFormula: "lim(x→0) eˣ/1 = e⁰ = 1"
+  },
+  {
+    topic: "limits",
+    category: "Limits",
+    text: "What is lim(x→∞) of (2x³ - x) / (x³ + 7)?",
+    formula: "lim(x→∞)  (2x³ - x) / (x³ + 7)",
+    options: ["0", "1", "2", "∞"],
+    correct: 2,
+    explanation: "The leading terms dominate as x→∞. Both numerator and denominator have degree 3, so divide: ratio of leading coefficients = 2/1 = 2.",
+    expFormula: "Leading terms: 2x³ / x³ = 2"
+  },
+  {
+    topic: "limits",
+    category: "Limits — Continuity",
+    text: "A function f is continuous at x = a if which of the following holds?",
+    options: [
+      "f(a) is defined only",
+      "lim(x→a) f(x) exists only",
+      "f(a) = lim(x→a) f(x) and both exist",
+      "f'(a) exists"
+    ],
+    correct: 2,
+    explanation: "Three conditions must hold for continuity at x=a: (1) f(a) is defined, (2) the limit exists, (3) they are equal: f(a) = lim(x→a) f(x).",
+    expFormula: "Continuity: f(a) defined, lim exists, and f(a) = lim(x→a) f(x)"
+  },
+  {
+    topic: "limits",
+    category: "Limits",
+    text: "What is lim(x→0⁺) of ln(x)?",
+    options: ["0", "1", "-∞", "∞"],
+    correct: 2,
+    explanation: "As x approaches 0 from the right, ln(x) decreases without bound. The natural log has a vertical asymptote at x = 0, going to -∞.",
+    expFormula: "lim(x→0⁺) ln(x) = -∞"
+  },
+
+  // ── DERIVATIVES ─────────────────────────────────────────────
+  {
+    topic: "derivatives",
+    category: "Derivatives — Power Rule",
+    text: "Find f'(x) if f(x) = 4x³ - 2x² + 7x - 5.",
+    formula: "f(x) = 4x³ - 2x² + 7x - 5",
+    options: ["12x² - 4x + 7", "4x² - 2x + 7", "12x² - 4x - 5", "12x³ - 4x² + 7"],
+    correct: 0,
+    explanation: "Apply the power rule term by term: d/dx(4x³) = 12x², d/dx(-2x²) = -4x, d/dx(7x) = 7, d/dx(-5) = 0.",
+    expFormula: "f'(x) = 12x² - 4x + 7"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Chain Rule",
+    text: "Find the derivative of f(x) = sin(3x²).",
+    formula: "f(x) = sin(3x²)",
+    options: ["cos(3x²)", "6x·cos(3x²)", "3x·cos(3x²)", "-6x·cos(3x²)"],
+    correct: 1,
+    explanation: "Chain rule: d/dx[sin(g(x))] = cos(g(x))·g'(x). Here g(x) = 3x², so g'(x) = 6x. Result: cos(3x²)·6x = 6x·cos(3x²).",
+    expFormula: "f'(x) = cos(3x²) · 6x = 6x cos(3x²)"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Product Rule",
+    text: "Find the derivative of f(x) = x²·eˣ.",
+    formula: "f(x) = x²eˣ",
+    options: ["2x·eˣ", "x²·eˣ + 2x·eˣ", "2x·eˣ + x²", "2x + eˣ"],
+    correct: 1,
+    explanation: "Product rule: (uv)' = u'v + uv'. Here u = x², v = eˣ. So f'(x) = 2x·eˣ + x²·eˣ = eˣ(2x + x²).",
+    expFormula: "f'(x) = 2x·eˣ + x²·eˣ = eˣ(x² + 2x)"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Quotient Rule",
+    text: "Find f'(x) if f(x) = (x² + 1) / (x - 1).",
+    formula: "f(x) = (x² + 1) / (x - 1)",
+    options: [
+      "(2x(x-1) - (x²+1)) / (x-1)²",
+      "(2x + 1) / 1",
+      "(x² - 2x - 1) / (x-1)²",
+      "2x / 1"
+    ],
+    correct: 0,
+    explanation: "Quotient rule: (u/v)' = (u'v - uv') / v². Here u = x²+1, u' = 2x, v = x-1, v' = 1. So f'(x) = (2x(x-1) - (x²+1)) / (x-1)².",
+    expFormula: "f'(x) = [2x(x-1) - (x²+1)] / (x-1)²"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Trig",
+    text: "What is d/dx[tan(x)]?",
+    options: ["sin(x)", "-csc²(x)", "sec²(x)", "cos(x)"],
+    correct: 2,
+    explanation: "The derivative of tan(x) = sin(x)/cos(x). Using quotient rule: (cos²x + sin²x)/cos²x = 1/cos²x = sec²(x).",
+    expFormula: "d/dx[tan(x)] = sec²(x)"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Exponential",
+    text: "What is d/dx[eˣ]?",
+    options: ["x·eˣ⁻¹", "eˣ", "e", "eˣ · ln(e)"],
+    correct: 1,
+    explanation: "The exponential function eˣ is its own derivative — this is one of its defining properties. d/dx[eˣ] = eˣ.",
+    expFormula: "d/dx[eˣ] = eˣ  (unique to base e)"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Logarithm",
+    text: "What is d/dx[ln(x)]?",
+    formula: "f(x) = ln(x),  x > 0",
+    options: ["ln(x)", "1/x²", "1/x", "x·ln(x)"],
+    correct: 2,
+    explanation: "The derivative of the natural logarithm is d/dx[ln(x)] = 1/x, for x > 0.",
+    expFormula: "d/dx[ln(x)] = 1/x"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives — Implicit",
+    text: "For the curve x² + y² = 25, find dy/dx using implicit differentiation.",
+    formula: "x² + y² = 25",
+    options: ["x/y", "-x/y", "2x/2y", "-2x"],
+    correct: 1,
+    explanation: "Differentiate both sides with respect to x: 2x + 2y(dy/dx) = 0. Solve for dy/dx: dy/dx = -2x/(2y) = -x/y.",
+    expFormula: "2x + 2y(dy/dx) = 0  ⟹  dy/dx = -x/y"
+  },
+  {
+    topic: "derivatives",
+    category: "Derivatives",
+    text: "What is the slope of the tangent line to f(x) = x³ at x = 2?",
+    formula: "f(x) = x³  at  x = 2",
+    options: ["4", "8", "12", "6"],
+    correct: 2,
+    explanation: "First find f'(x) = 3x². Then evaluate at x = 2: f'(2) = 3(2)² = 3·4 = 12. The tangent line has slope 12.",
+    expFormula: "f'(x) = 3x²  →  f'(2) = 3(4) = 12"
+  },
+
+  // ── DERIVATIVE APPLICATIONS ─────────────────────────────────
+  {
+    topic: "derivative_apps",
+    category: "Applications — Increasing/Decreasing",
+    text: "For f(x) = x³ - 3x, on which interval is f increasing?",
+    formula: "f(x) = x³ - 3x",
+    options: ["(-1, 1)", "(-∞, -1) and (1, ∞)", "All reals", "(0, ∞)"],
+    correct: 1,
+    explanation: "Find f'(x) = 3x² - 3 = 3(x²-1) = 3(x-1)(x+1). f'(x) > 0 when x < -1 or x > 1. So f is increasing on (-∞,-1) ∪ (1,∞).",
+    expFormula: "f'(x) = 3(x-1)(x+1) > 0  ⟹  x < -1 or x > 1"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Critical Points",
+    text: "How do you find critical points of a function f(x)?",
+    options: [
+      "Set f(x) = 0 and solve",
+      "Set f'(x) = 0 or find where f'(x) is undefined",
+      "Set f''(x) = 0 and solve",
+      "Find where f is continuous"
+    ],
+    correct: 1,
+    explanation: "Critical points occur where f'(x) = 0 OR where f'(x) is undefined (but f(x) is defined). These are candidates for local maxima and minima.",
+    expFormula: "Critical points: f'(x) = 0  OR  f'(x) undefined"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Second Derivative Test",
+    text: "If f'(c) = 0 and f''(c) > 0, what can we conclude about c?",
+    options: ["Local maximum at c", "Local minimum at c", "Inflection point at c", "Cannot determine"],
+    correct: 1,
+    explanation: "The second derivative test: if f'(c) = 0 and f''(c) > 0, the function is concave up at c, indicating a local minimum. Think of it as the curve 'holding water' at that point.",
+    expFormula: "f'(c)=0 and f''(c)>0  ⟹  local minimum at c"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Related Rates",
+    text: "A ladder 10 ft long leans against a wall. Its base slides away at 2 ft/s. When the base is 6 ft from the wall, how fast is the top sliding down?",
+    options: ["-3/2 ft/s", "-2/3 ft/s", "-3/4 ft/s", "-4/3 ft/s"],
+    correct: 0,
+    explanation: "By Pythagorean: x² + y² = 100. Differentiate: 2x(dx/dt) + 2y(dy/dt) = 0. When x=6: y=8. So 6(2) + 8(dy/dt) = 0 → dy/dt = -12/8 = -3/2 ft/s.",
+    expFormula: "6(2) + 8(dy/dt) = 0  ⟹  dy/dt = -3/2 ft/s"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Mean Value Theorem",
+    text: "The Mean Value Theorem guarantees a point c in (a,b) where f'(c) equals what?",
+    options: ["f(a) + f(b)", "f(b) - f(a)", "[f(b) - f(a)] / (b - a)", "f'(a) + f'(b)"],
+    correct: 2,
+    explanation: "MVT states: if f is continuous on [a,b] and differentiable on (a,b), there exists c in (a,b) such that f'(c) = [f(b)-f(a)]/(b-a). This is the instantaneous rate equaling the average rate.",
+    expFormula: "f'(c) = [f(b) - f(a)] / (b - a)"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Concavity",
+    text: "An inflection point occurs where:",
+    options: ["f'(x) = 0", "f(x) = 0", "f''(x) changes sign", "f'(x) changes sign"],
+    correct: 2,
+    explanation: "An inflection point is where concavity changes — the second derivative changes sign (from positive to negative or vice versa). f''(x) = 0 is a necessary but not sufficient condition.",
+    expFormula: "Inflection point: f''(x) changes sign"
+  },
+  {
+    topic: "derivative_apps",
+    category: "Applications — Optimization",
+    text: "To maximize area of a rectangle with fixed perimeter P = 100, what dimensions give the maximum area?",
+    options: ["10 × 40", "25 × 25", "20 × 30", "50 × 0"],
+    correct: 1,
+    explanation: "With perimeter 2l + 2w = 100, so l + w = 50. Area = l·w = l(50-l). Maximize: dA/dl = 50 - 2l = 0, so l = 25, w = 25. A square gives maximum area.",
+    expFormula: "A = l(50-l), dA/dl = 50-2l = 0  ⟹  l = w = 25"
+  },
+
+  // ── INTEGRALS ───────────────────────────────────────────────
+  {
+    topic: "integrals",
+    category: "Integrals — Basic",
+    text: "Find ∫ 3x² dx.",
+    formula: "∫ 3x² dx",
+    options: ["6x + C", "x³ + C", "3x³ + C", "x²/2 + C"],
+    correct: 1,
+    explanation: "Power rule for integration: ∫ xⁿ dx = xⁿ⁺¹/(n+1) + C. Here ∫ 3x² dx = 3·x³/3 + C = x³ + C.",
+    expFormula: "∫ 3x² dx = 3·(x³/3) + C = x³ + C"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Basic",
+    text: "Evaluate ∫₀² (2x + 1) dx.",
+    formula: "∫₀² (2x + 1) dx",
+    options: ["4", "5", "6", "3"],
+    correct: 2,
+    explanation: "Antiderivative: x² + x. Evaluate from 0 to 2: (2² + 2) - (0² + 0) = 4 + 2 - 0 = 6.",
+    expFormula: "[x² + x]₀² = (4+2) - (0+0) = 6"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — u-substitution",
+    text: "Evaluate ∫ 2x·cos(x²) dx using substitution.",
+    formula: "∫ 2x cos(x²) dx",
+    options: ["sin(x²) + C", "2cos(x²) + C", "-sin(x²) + C", "cos(2x) + C"],
+    correct: 0,
+    explanation: "Let u = x², then du = 2x dx. The integral becomes ∫ cos(u) du = sin(u) + C = sin(x²) + C.",
+    expFormula: "u = x², du = 2x dx  ⟹  ∫ cos(u)du = sin(u)+C = sin(x²)+C"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Basic",
+    text: "What is ∫ eˣ dx?",
+    formula: "∫ eˣ dx",
+    options: ["eˣ/x + C", "eˣ + C", "x·eˣ + C", "eˣ·ln(x) + C"],
+    correct: 1,
+    explanation: "The exponential function eˣ is its own antiderivative, just like it's its own derivative. ∫ eˣ dx = eˣ + C.",
+    expFormula: "∫ eˣ dx = eˣ + C"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Area",
+    text: "The definite integral ∫ₐᵇ f(x) dx represents:",
+    options: [
+      "The length of f from a to b",
+      "The net signed area between f and the x-axis from a to b",
+      "The average value of f",
+      "The slope of f at b"
+    ],
+    correct: 1,
+    explanation: "The definite integral represents the net signed area — areas above the x-axis are positive, areas below are negative. Total area would use |f(x)|.",
+    expFormula: "∫ₐᵇ f(x) dx = net signed area under f from a to b"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Basic",
+    text: "Find ∫ (1/x) dx.",
+    formula: "∫ (1/x) dx",
+    options: ["x⁻² + C", "ln|x| + C", "-1/x² + C", "1/(2x²) + C"],
+    correct: 1,
+    explanation: "∫ (1/x) dx = ln|x| + C. The absolute value is needed since ln is only defined for positive numbers, but 1/x can integrate over negative domains too.",
+    expFormula: "∫ (1/x) dx = ln|x| + C"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — Average Value",
+    text: "The average value of f(x) on [a, b] is given by:",
+    options: [
+      "[f(a) + f(b)] / 2",
+      "1/(b-a) · ∫ₐᵇ f(x) dx",
+      "∫ₐᵇ f(x) dx",
+      "f((a+b)/2)"
+    ],
+    correct: 1,
+    explanation: "The average value formula is f_avg = 1/(b-a) · ∫ₐᵇ f(x) dx. This divides the total 'area' by the length of the interval.",
+    expFormula: "f_avg = (1/(b-a)) · ∫ₐᵇ f(x) dx"
+  },
+  {
+    topic: "integrals",
+    category: "Integrals — u-substitution",
+    text: "Evaluate ∫ sin(x)·cos(x) dx.",
+    formula: "∫ sin(x)cos(x) dx",
+    options: ["-cos²(x) + C", "sin²(x)/2 + C", "cos(2x)/2 + C", "-sin(x)cos(x) + C"],
+    correct: 1,
+    explanation: "Let u = sin(x), du = cos(x) dx. Integral becomes ∫ u du = u²/2 + C = sin²(x)/2 + C. (Also: use sin(2x) = 2sin(x)cos(x) identity.)",
+    expFormula: "u = sin(x), du = cos(x)dx  ⟹  u²/2 + C = sin²(x)/2 + C"
+  },
+
+  // ── FTC ─────────────────────────────────────────────────────
+  {
+    topic: "ftc",
+    category: "FTC — Part 1",
+    text: "If F(x) = ∫₀ˣ sin(t) dt, what is F'(x)?",
+    formula: "F(x) = ∫₀ˣ sin(t) dt",
+    options: ["cos(x)", "sin(x)", "-cos(x)", "∫sin(x)dx"],
+    correct: 1,
+    explanation: "By FTC Part 1: if F(x) = ∫ₐˣ f(t) dt, then F'(x) = f(x). Here f(t) = sin(t), so F'(x) = sin(x).",
+    expFormula: "FTC Part 1: d/dx ∫ₐˣ f(t)dt = f(x)  ⟹  F'(x) = sin(x)"
+  },
+  {
+    topic: "ftc",
+    category: "FTC — Part 2",
+    text: "Evaluate ∫₁⁴ (2x) dx using the Fundamental Theorem.",
+    formula: "∫₁⁴ 2x dx",
+    options: ["8", "12", "15", "16"],
+    correct: 2,
+    explanation: "Antiderivative of 2x is x². By FTC Part 2: [x²]₁⁴ = 4² - 1² = 16 - 1 = 15.",
+    expFormula: "[x²]₁⁴ = 16 - 1 = 15"
+  },
+  {
+    topic: "ftc",
+    category: "FTC — Chain Rule Version",
+    text: "Find d/dx[∫₀^(x³) sin(t) dt].",
+    formula: "d/dx [ ∫₀^(x³) sin(t) dt ]",
+    options: ["sin(x³)", "3x²·sin(x³)", "cos(x³)", "3x²·cos(x³)"],
+    correct: 1,
+    explanation: "FTC Part 1 with chain rule: if F(x) = ∫ₐ^g(x) f(t) dt, then F'(x) = f(g(x))·g'(x). Here g(x) = x³, g'(x) = 3x². So answer is sin(x³)·3x².",
+    expFormula: "sin(x³)·(3x²) = 3x² sin(x³)"
+  },
+  {
+    topic: "ftc",
+    category: "FTC — Net Change",
+    text: "If v(t) represents velocity, what does ∫ₐᵇ v(t) dt represent?",
+    options: ["Total speed traveled", "Net displacement from a to b", "Average velocity", "Acceleration at b"],
+    correct: 1,
+    explanation: "By FTC, ∫ₐᵇ v(t) dt = position(b) - position(a) = net displacement. Total distance (not displacement) would require ∫|v(t)|dt.",
+    expFormula: "∫ₐᵇ v(t) dt = position(b) - position(a) = net displacement"
+  },
+  {
+    topic: "ftc",
+    category: "FTC",
+    text: "What does the Fundamental Theorem of Calculus establish?",
+    options: [
+      "That all functions are integrable",
+      "The relationship between differentiation and integration",
+      "That limits always exist",
+      "Derivatives are always positive"
+    ],
+    correct: 1,
+    explanation: "The FTC is the central theorem of calculus — it proves that differentiation and integration are inverse operations. This bridges the two major branches of calculus.",
+    expFormula: "∫ₐᵇ f(x)dx = F(b) - F(a)  where F' = f"
+  },
+  {
+    topic: "ftc",
+    category: "FTC — Accumulation",
+    text: "Given F(x) = ∫₂ˣ (3t²) dt, find F(3).",
+    formula: "F(x) = ∫₂ˣ 3t² dt",
+    options: ["27", "19", "8", "25"],
+    correct: 1,
+    explanation: "Antiderivative of 3t² is t³. By FTC: F(3) = [t³]₂³ = 3³ - 2³ = 27 - 8 = 19.",
+    expFormula: "[t³]₂³ = 27 - 8 = 19"
+  },
+
+  // ── SERIES & SEQUENCES ──────────────────────────────────────
+  {
+    topic: "series",
+    category: "Series — Convergence",
+    text: "A geometric series Σar^n converges when:",
+    formula: "Σ a·rⁿ  (n from 0 to ∞)",
+    options: ["|r| < 1", "|r| > 1", "r > 0", "a > 0"],
+    correct: 0,
+    explanation: "A geometric series converges if and only if |r| < 1 (the common ratio has absolute value less than 1). When it converges, the sum is a/(1-r).",
+    expFormula: "|r| < 1  ⟹  sum = a/(1-r)"
+  },
+  {
+    topic: "series",
+    category: "Series — Tests",
+    text: "The nth-Term Test (Divergence Test) says: if lim(n→∞) aₙ ≠ 0, then Σaₙ:",
+    options: ["Converges", "Diverges", "May converge or diverge", "Equals zero"],
+    correct: 1,
+    explanation: "If the terms don't approach zero, the series cannot possibly converge. However, the converse is false: if aₙ → 0, the series might still diverge (e.g. harmonic series).",
+    expFormula: "lim aₙ ≠ 0  ⟹  Σaₙ diverges"
+  },
+  {
+    topic: "series",
+    category: "Series — Taylor",
+    text: "The Taylor series for eˣ centered at 0 is:",
+    formula: "eˣ  (Maclaurin series)",
+    options: [
+      "1 + x + x²/2 + x³/6 + ...",
+      "1 - x + x²/2 - x³/6 + ...",
+      "x + x³/6 + x⁵/120 + ...",
+      "1 + x + x² + x³ + ..."
+    ],
+    correct: 0,
+    explanation: "The Maclaurin series (Taylor at 0) for eˣ = Σ xⁿ/n! = 1 + x + x²/2! + x³/3! + ... This converges for all x.",
+    expFormula: "eˣ = Σ xⁿ/n! = 1 + x + x²/2! + x³/3! + ..."
+  },
+  {
+    topic: "series",
+    category: "Series — p-series",
+    text: "The p-series Σ 1/nᵖ converges when:",
+    formula: "Σ (1/nᵖ)  (n from 1 to ∞)",
+    options: ["p < 1", "p = 1", "p > 1", "All p > 0"],
+    correct: 2,
+    explanation: "The p-series Σ 1/nᵖ converges if and only if p > 1. When p = 1, it's the harmonic series which diverges. When p ≤ 1 it diverges.",
+    expFormula: "p > 1  ⟹  Σ 1/nᵖ converges"
+  },
+  {
+    topic: "series",
+    category: "Series — Taylor",
+    text: "The Taylor series for sin(x) centered at 0 begins:",
+    formula: "sin(x)  Maclaurin series",
+    options: [
+      "1 - x²/2 + x⁴/24 - ...",
+      "x - x³/6 + x⁵/120 - ...",
+      "x + x³/6 + x⁵/120 + ...",
+      "1 + x - x²/2 - x³/6 ..."
+    ],
+    correct: 1,
+    explanation: "sin(x) = Σ (-1)ⁿ x^(2n+1)/(2n+1)! = x - x³/3! + x⁵/5! - ... Note: only odd powers, alternating signs.",
+    expFormula: "sin(x) = x - x³/6 + x⁵/120 - ..."
+  },
+  {
+    topic: "series",
+    category: "Series — Ratio Test",
+    text: "The Ratio Test uses L = lim|a_{n+1}/aₙ|. The series converges absolutely when:",
+    options: ["L > 1", "L = 1", "L < 1", "L = 0"],
+    correct: 2,
+    explanation: "Ratio Test: if L < 1, the series converges absolutely. If L > 1, it diverges. If L = 1, the test is inconclusive.",
+    expFormula: "L = lim|a_{n+1}/aₙ|: L<1 converges, L>1 diverges, L=1 inconclusive"
   }
 ];
 
-// ══════════════════════════════════════════════════════════════
-//  COUNT & STATE
-// ══════════════════════════════════════════════════════════════
-// Count per topic
-Object.keys(TOPICS).forEach(k => { TOPICS[k].count = QUESTIONS.filter(q=>q.topic===k).length; });
+// Count questions per topic
+QUESTIONS.forEach(q => { if (TOPICS[q.topic]) TOPICS[q.topic].count++; });
 
+// ══════════════════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════════════════
 let currentQuestions = [];
 let currentIndex = 0;
 let score = 0;
+let answered = 0;
 let streak = 0;
 let bestStreak = 0;
 let lives = 3;
 let answered_total = 0;
 let correct_total = 0;
 let currentTopic = 'all';
+let sessionAnswered = 0;
 let sessionCorrect = 0;
 let sessionWrong = 0;
-let sessionAnswered = 0;
-let currentExam = null;
-let examMode = false;
 
 // ══════════════════════════════════════════════════════════════
 //  RENDER HOME
 // ══════════════════════════════════════════════════════════════
 function renderHome() {
-  // Topic cards
   const grid = document.getElementById('topic-grid');
   grid.innerHTML = '';
-  const colorMap = { orange:'tc-orange', teal:'tc-teal', purple:'tc-purple', blue:'tc-blue' };
-  const iconMap  = { orange:'ti-orange', teal:'ti-teal', purple:'ti-purple', blue:'ti-blue' };
-  const diffMap  = { easy:'diff-easy', med:'diff-med', hard:'diff-hard' };
-  const diffLabel = { easy:'Easier', med:'Medium', hard:'Hard' };
   Object.entries(TOPICS).forEach(([key, t]) => {
+    const colorMap = { orange: 'tc-orange', teal: 'tc-teal', purple: 'tc-purple' };
+    const iconMap  = { orange: 'ti-orange', teal: 'ti-teal', purple: 'ti-purple' };
+    const diffMap  = { easy: 'diff-easy', med: 'diff-med', hard: 'diff-hard' };
+    const diffLabel = { easy: 'Easier', med: 'Medium', hard: 'Hard' };
     grid.innerHTML += `
       <div class="topic-card ${colorMap[t.color]}" onclick="startQuiz('${key}')">
         <span class="topic-difficulty ${diffMap[t.difficulty]}">${diffLabel[t.difficulty]}</span>
@@ -1412,88 +1238,6 @@ function renderHome() {
         <div class="topic-count">${t.count} questions</div>
       </div>`;
   });
-
-  // Exam cards
-  const examGrid = document.getElementById('exam-grid');
-  examGrid.innerHTML = '';
-  const examColors = ['ec-1','ec-2','ec-3'];
-  MOCK_EXAMS.forEach((ex, i) => {
-    examGrid.innerHTML += `
-      <div class="exam-card ${examColors[i]}" onclick="showExamIntro(${ex.id})">
-        <div class="exam-num">0${ex.id}</div>
-        <div class="exam-title">${ex.title}</div>
-        <div class="exam-meta">${ex.desc}</div>
-        <div class="exam-chips">
-          <span class="exam-chip chip-mcq">45 MCQ</span>
-          <span class="exam-chip chip-frq">6 FRQ</span>
-        </div>
-      </div>`;
-  });
-}
-
-function scrollToExams() {
-  document.getElementById('exams-anchor').scrollIntoView({ behavior:'smooth' });
-}
-
-// ══════════════════════════════════════════════════════════════
-//  EXAM INTRO
-// ══════════════════════════════════════════════════════════════
-function showExamIntro(examId) {
-  currentExam = MOCK_EXAMS.find(e => e.id === examId);
-  document.getElementById('home-screen').style.display = 'none';
-  document.getElementById('exam-intro-screen').style.display = 'block';
-
-  document.getElementById('exam-intro-title').textContent = currentExam.title;
-  document.getElementById('exam-intro-meta').innerHTML =
-    `<strong>${currentExam.subtitle}</strong><br>${currentExam.desc}<br><br>
-     This exam follows the AP Calculus format: <strong>Section I</strong> is multiple choice (45 questions), followed by <strong>Section II</strong> which is free response (6 questions). Work through the MCQ first, then proceed to the FRQ.`;
-
-  document.getElementById('exam-info-grid').innerHTML = `
-    <div class="exam-info-box">
-      <div class="exam-info-box-title">Section I — MCQ</div>
-      <div class="exam-info-box-val" style="color:var(--orange)">45</div>
-      <div class="exam-info-box-sub">Multiple Choice Questions<br>~105 minutes</div>
-    </div>
-    <div class="exam-info-box">
-      <div class="exam-info-box-title">Section II — FRQ</div>
-      <div class="exam-info-box-val" style="color:var(--teal)">6</div>
-      <div class="exam-info-box-sub">Free Response Questions<br>~90 minutes</div>
-    </div>
-    <div class="exam-info-box">
-      <div class="exam-info-box-title">Total Questions</div>
-      <div class="exam-info-box-val" style="color:var(--purple)">51</div>
-      <div class="exam-info-box-sub">MCQ + FRQ combined</div>
-    </div>
-    <div class="exam-info-box">
-      <div class="exam-info-box-title">Scoring (MCQ)</div>
-      <div class="exam-info-box-val" style="color:var(--green)">45 pts</div>
-      <div class="exam-info-box-sub">1 pt per MCQ question<br>54 pts FRQ</div>
-    </div>`;
-
-  document.getElementById('exam-start-mcq-btn').onclick = () => startExamMCQ();
-}
-
-function startExamMCQ() {
-  examMode = true;
-  const topicPool = currentExam.mcq_topics;
-  let pool = topicPool.length > 0
-    ? QUESTIONS.filter(q => topicPool.includes(q.topic))
-    : QUESTIONS;
-  currentQuestions = shuffle(pool).slice(0, Math.min(45, pool.length));
-  currentIndex = 0;
-  score = 0; streak = 0; bestStreak = 0; lives = 99; // no life limit in exam
-  sessionCorrect = 0; sessionWrong = 0; sessionAnswered = 0;
-  currentTopic = 'exam';
-
-  document.getElementById('exam-intro-screen').style.display = 'none';
-  document.getElementById('quiz-screen').style.display = 'block';
-
-  const badge = document.getElementById('quiz-topic-badge');
-  badge.textContent = currentExam.title + ' — Section I MCQ';
-  badge.style.cssText = 'background:rgba(255,107,53,0.12);color:#ff6b35;border:1px solid rgba(255,107,53,0.3);padding:4px 12px;border-radius:12px;font-size:0.73rem;font-weight:600;';
-
-  document.getElementById('hearts-display').style.display = 'none';
-  renderQuestion();
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1501,56 +1245,69 @@ function startExamMCQ() {
 // ══════════════════════════════════════════════════════════════
 function shuffle(arr) {
   const a = [...arr];
-  for (let i = a.length-1; i>0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
 }
 
 function startQuiz(topic) {
-  examMode = false;
-  currentExam = null;
   currentTopic = topic;
-  currentQuestions = shuffle(topic === 'all' ? QUESTIONS : QUESTIONS.filter(q=>q.topic===topic));
-  currentIndex = 0; score = 0; streak = 0; bestStreak = 0; lives = 3;
-  sessionCorrect = 0; sessionWrong = 0; sessionAnswered = 0;
+  currentQuestions = shuffle(topic === 'all' ? QUESTIONS : QUESTIONS.filter(q => q.topic === topic));
+  currentIndex = 0;
+  score = 0;
+  streak = 0;
+  bestStreak = 0;
+  lives = 3;
+  sessionAnswered = 0;
+  sessionCorrect = 0;
+  sessionWrong = 0;
 
   document.getElementById('home-screen').style.display = 'none';
   document.getElementById('results-screen').style.display = 'none';
-  document.getElementById('exam-intro-screen').style.display = 'none';
   document.getElementById('quiz-screen').style.display = 'block';
 
   const badge = document.getElementById('quiz-topic-badge');
   badge.textContent = topic === 'all' ? 'All Topics' : TOPICS[topic].name;
-  const colorMap = { all:'#ff6b35', limits:'#00c9a7', derivatives:'#ff6b35', derivative_apps:'#a78bfa', integrals:'#00c9a7', ftc:'#ff6b35', series:'#a78bfa' };
-  const c = colorMap[topic]||'#ff6b35';
-  badge.style.cssText = `background:${c}22;color:${c};border:1px solid ${c}44;padding:4px 12px;border-radius:12px;font-size:0.75rem;font-weight:600;`;
+  const colorMap = { all: '#ff6b35', limits: '#00c9a7', derivatives: '#ff6b35', derivative_apps: '#a78bfa', integrals: '#00c9a7', ftc: '#ff6b35', series: '#a78bfa' };
+  badge.style.background = colorMap[topic] + '22';
+  badge.style.color = colorMap[topic];
+  badge.style.border = `1px solid ${colorMap[topic]}44`;
+  badge.style.padding = '4px 12px';
+  badge.style.borderRadius = '12px';
+  badge.style.fontSize = '0.75rem';
+  badge.style.fontWeight = '600';
 
-  document.getElementById('hearts-display').style.display = 'flex';
   updateHearts();
   renderQuestion();
 }
 
 function updateHearts() {
-  if (examMode) return;
   const h = document.getElementById('hearts-display');
   h.innerHTML = '';
-  for (let i=0; i<3; i++) {
-    h.innerHTML += `<span class="heart${i>=lives?' lost':''}">♥</span>`;
+  for (let i = 0; i < 3; i++) {
+    h.innerHTML += `<span class="heart${i >= lives ? ' lost' : ''}">♥</span>`;
   }
 }
 
 function renderQuestion() {
-  if (currentIndex >= currentQuestions.length) { showResults(); return; }
+  if (currentIndex >= currentQuestions.length) {
+    showResults();
+    return;
+  }
 
   const q = currentQuestions[currentIndex];
   document.getElementById('q-category').textContent = q.category;
   document.getElementById('q-text').textContent = q.text;
 
   const formulaEl = document.getElementById('q-formula');
-  if (q.formula) { formulaEl.textContent = q.formula; formulaEl.style.display = 'block'; }
-  else formulaEl.style.display = 'none';
+  if (q.formula) {
+    formulaEl.textContent = q.formula;
+    formulaEl.style.display = 'block';
+  } else {
+    formulaEl.style.display = 'none';
+  }
 
   const opts = document.getElementById('options-grid');
   opts.innerHTML = '';
@@ -1564,67 +1321,90 @@ function renderQuestion() {
   });
 
   const fb = document.getElementById('feedback-box');
-  fb.style.display = 'none'; fb.className = 'feedback-box';
+  fb.style.display = 'none';
+  fb.className = 'feedback-box';
+
   document.getElementById('btn-next').style.display = 'none';
   document.getElementById('btn-skip').style.display = 'inline-flex';
 
-  const pct = (currentIndex/currentQuestions.length)*100;
-  document.getElementById('progress-fill').style.width = pct+'%';
-  document.getElementById('progress-text').textContent = `Question ${currentIndex+1} of ${currentQuestions.length}`;
+  const progress = ((currentIndex) / currentQuestions.length) * 100;
+  document.getElementById('progress-fill').style.width = progress + '%';
+  document.getElementById('progress-text').textContent = `Question ${currentIndex + 1} of ${currentQuestions.length}`;
   document.getElementById('score-text').textContent = `${sessionCorrect} correct`;
-  document.getElementById('q-counter').textContent = `${currentIndex+1} / ${currentQuestions.length}`;
-  document.getElementById('streak-display').textContent = streak>0 ? `${streak} in a row 🔥` : '0 in a row';
+  document.getElementById('q-counter').textContent = `${currentIndex + 1} / ${currentQuestions.length}`;
+
+  document.getElementById('streak-display').textContent = streak > 0 ? `${streak} in a row 🔥` : '0 in a row';
 
   document.getElementById('question-card').style.animation = 'none';
-  setTimeout(()=>{ document.getElementById('question-card').style.animation='cardIn 0.35s ease'; }, 10);
+  setTimeout(() => { document.getElementById('question-card').style.animation = 'cardIn 0.35s ease'; }, 10);
 }
 
 function selectOption(selected) {
   const q = currentQuestions[currentIndex];
   const btns = document.querySelectorAll('.option-btn');
+
   btns.forEach((btn, i) => {
     btn.classList.add('answered');
-    if (i===q.correct) btn.classList.add('correct');
-    else if (i===selected && selected!==q.correct) btn.classList.add('wrong');
+    if (i === q.correct) btn.classList.add('correct');
+    else if (i === selected && selected !== q.correct) btn.classList.add('wrong');
     else btn.classList.add('dimmed');
   });
 
-  sessionAnswered++; answered_total++;
+  sessionAnswered++;
+  answered_total++;
 
   const fb = document.getElementById('feedback-box');
   const fbHeader = document.getElementById('feedback-header');
   const fbExp = document.getElementById('feedback-explanation');
   const fbFormula = document.getElementById('feedback-formula');
 
-  if (selected===q.correct) {
-    score++; streak++; bestStreak=Math.max(bestStreak,streak);
-    sessionCorrect++; correct_total++;
-    fb.className='feedback-box correct';
-    fbHeader.className='feedback-header correct';
-    fbHeader.textContent='✓ Correct!';
+  if (selected === q.correct) {
+    score++;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+    sessionCorrect++;
+    correct_total++;
+    fb.className = 'feedback-box correct';
+    fbHeader.className = 'feedback-header correct';
+    fbHeader.textContent = '✓ Correct!';
   } else {
-    if (!examMode) { lives--; updateHearts(); }
-    streak=0; sessionWrong++;
-    fb.className='feedback-box wrong';
-    fbHeader.className='feedback-header wrong';
-    fbHeader.textContent=`✗ Incorrect — answer was ${['A','B','C','D'][q.correct]}: ${q.options[q.correct]}`;
+    lives--;
+    streak = 0;
+    sessionWrong++;
+    updateHearts();
+    fb.className = 'feedback-box wrong';
+    fbHeader.className = 'feedback-header wrong';
+    fbHeader.textContent = `✗ Incorrect — the answer was ${['A','B','C','D'][q.correct]}: ${q.options[q.correct]}`;
   }
 
   fbExp.textContent = q.explanation;
-  if (q.expFormula) { fbFormula.textContent=q.expFormula; fbFormula.style.display='inline-block'; }
-  else fbFormula.style.display='none';
+  if (q.expFormula) {
+    fbFormula.textContent = q.expFormula;
+    fbFormula.style.display = 'inline-block';
+  } else {
+    fbFormula.style.display = 'none';
+  }
 
-  fb.style.display='block';
-  document.getElementById('btn-next').style.display='inline-flex';
-  document.getElementById('btn-skip').style.display='none';
-  document.getElementById('streak-display').textContent = streak>0 ? `${streak} in a row 🔥` : '0 in a row';
+  fb.style.display = 'block';
+  document.getElementById('btn-next').style.display = 'inline-flex';
+  document.getElementById('btn-skip').style.display = 'none';
+  document.getElementById('streak-display').textContent = streak > 0 ? `${streak} in a row 🔥` : '0 in a row';
   updateNavStats();
 
-  if (!examMode && lives<=0) { setTimeout(()=>showResults(), 1200); }
+  if (lives <= 0) {
+    setTimeout(() => showResults(), 1200);
+  }
 }
 
-function skipQuestion() { currentIndex++; renderQuestion(); }
-function nextQuestion() { currentIndex++; renderQuestion(); }
+function skipQuestion() {
+  currentIndex++;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  currentIndex++;
+  renderQuestion();
+}
 
 // ══════════════════════════════════════════════════════════════
 //  RESULTS
@@ -1633,116 +1413,40 @@ function showResults() {
   document.getElementById('quiz-screen').style.display = 'none';
   document.getElementById('results-screen').style.display = 'block';
 
-  const total = sessionAnswered;
-  const pct = total>0 ? Math.round((sessionCorrect/total)*100) : 0;
+  const pct = sessionAnswered > 0 ? Math.round((sessionCorrect / sessionAnswered) * 100) : 0;
   const scoreEl = document.getElementById('results-score');
-  scoreEl.textContent = pct+'%';
-  scoreEl.style.color = pct>=80?'var(--green)':pct>=60?'var(--orange)':'var(--red)';
+  scoreEl.textContent = pct + '%';
+  scoreEl.style.color = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--orange)' : 'var(--red)';
 
   const msgs = {
-    high:["Excellent! AP 5-level performance. 🎉","Outstanding — you clearly know this material.","AP exam ready! Keep up the great work."],
-    mid: ["Good effort! Review the questions you missed.","Solid work — a bit more practice and you'll ace it.","Getting there! Study the explanations carefully."],
-    low: ["Keep going — every question makes you stronger.","Don't give up! Review the concepts and retry.","Calculus takes practice. Read explanations carefully."]
+    high: ["Excellent! You're AP-exam ready. 🎉", "That's a 5-level performance! Keep it up.", "Outstanding! You clearly know this material."],
+    mid:  ["Good effort! Review the ones you missed.", "Solid work — a bit more practice and you'll ace it.", "Getting there! Focus on the explanations for wrong answers."],
+    low:  ["Keep going — every question makes you stronger.", "Don't give up! Review the concepts and try again.", "Calculus takes practice. Read through the explanations carefully."]
   };
-  const cat = pct>=80?'high':pct>=60?'mid':'low';
-  document.getElementById('results-msg').textContent = msgs[cat][Math.floor(Math.random()*3)];
+
+  const cat = pct >= 80 ? 'high' : pct >= 60 ? 'mid' : 'low';
+  document.getElementById('results-msg').textContent = msgs[cat][Math.floor(Math.random() * 3)];
+
   document.getElementById('res-correct').textContent = sessionCorrect;
   document.getElementById('res-wrong').textContent = sessionWrong;
   document.getElementById('res-streak').textContent = bestStreak;
-
-  // Show FRQ button if exam mode
-  const frqBtn = document.getElementById('frq-continue-btn');
-  if (examMode && currentExam) {
-    frqBtn.style.display = 'inline-block';
-  } else {
-    frqBtn.style.display = 'none';
-  }
 }
 
 function restartSame() {
-  if (examMode && currentExam) {
-    startExamMCQ();
-  } else {
-    startQuiz(currentTopic);
-  }
-}
-
-// ══════════════════════════════════════════════════════════════
-//  FRQ
-// ══════════════════════════════════════════════════════════════
-function startFRQ() {
-  document.getElementById('results-screen').style.display = 'none';
-  document.getElementById('frq-screen').style.display = 'block';
-
-  document.getElementById('frq-topic-badge').textContent = currentExam.title + ' — Section II FRQ';
-
-  let html = `
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.4rem 1.8rem;margin-bottom:2rem;">
-      <div style="font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;">AP FORMAT — SECTION II</div>
-      <div style="font-size:0.95rem;color:var(--muted2);line-height:1.7;">
-        <strong style="color:var(--text);">Free Response Section — 6 Questions</strong><br>
-        Show all work clearly. Write your solutions in the workspace below each part. Use the "Show Solution" button to check your work after attempting each part. On the real AP exam, partial credit is awarded for correct reasoning even with arithmetic errors.
-      </div>
-    </div>`;
-
-  currentExam.frq.forEach((frq, qi) => {
-    html += `
-      <div class="frq-question-card">
-        <div class="frq-q-num">Question ${qi+1} of ${currentExam.frq.length} <span class="frq-points-badge">${frq.points} pts total</span></div>
-        <div class="frq-section-label">Context</div>
-        <div class="frq-q-text">${frq.context}</div>`;
-
-    frq.parts.forEach((part, pi) => {
-      const id = `frq-${qi}-${pi}`;
-      html += `
-        <div class="frq-part">
-          <div class="frq-part-label">${part.label} <span class="frq-points-badge">${part.points} pts</span></div>
-          <div class="frq-part-text">${part.text}</div>
-          <textarea class="frq-workspace" id="ws-${id}" placeholder="Write your work here..."></textarea>
-          <div>
-            <button class="frq-show-sol-btn" onclick="toggleSolution('${id}')">Show Solution</button>
-          </div>
-          <div class="frq-solution" id="sol-${id}">
-            <div class="frq-solution-label">&#10003; Model Solution</div>
-            <div class="frq-solution-text">${part.solution}</div>
-            <code class="frq-formula">${part.formula}</code>
-          </div>
-        </div>`;
-    });
-
-    html += `</div>`;
-  });
-
-  document.getElementById('frq-content').innerHTML = html;
-}
-
-function toggleSolution(id) {
-  const sol = document.getElementById('sol-'+id);
-  const btn = sol.previousElementSibling.querySelector('button');
-  if (sol.style.display === 'block') {
-    sol.style.display = 'none';
-    btn.textContent = 'Show Solution';
-  } else {
-    sol.style.display = 'block';
-    btn.textContent = 'Hide Solution';
-  }
+  startQuiz(currentTopic);
 }
 
 function goHome() {
-  examMode = false;
-  currentExam = null;
-  ['quiz-screen','results-screen','frq-screen','exam-intro-screen'].forEach(id => {
-    document.getElementById(id).style.display = 'none';
-  });
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('results-screen').style.display = 'none';
   document.getElementById('home-screen').style.display = 'block';
-  document.getElementById('hearts-display').style.display = 'flex';
 }
 
 function updateNavStats() {
-  document.getElementById('total-answered').textContent = answered_total+' answered';
-  document.getElementById('total-correct-nav').textContent = correct_total+' correct';
+  document.getElementById('total-answered').textContent = answered_total + ' answered';
+  document.getElementById('total-correct-nav').textContent = correct_total + ' correct';
 }
-<!-- Site content and questions generated with the assistance of Claude by Anthropic (https://claude.ai) -->
+
 // ══════════════════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════════════════
@@ -1750,4 +1454,3 @@ renderHome();
 </script>
 </body>
 </html>
-
